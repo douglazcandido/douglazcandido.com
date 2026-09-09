@@ -1,5 +1,4 @@
 import BackgroundEffects from "./components/BackgroundEffects";
-import CustomCursor from "./components/CustomCursor";
 import Nav from "./components/Nav";
 import Hero from "./sections/Hero";
 import About from "./sections/About";
@@ -11,7 +10,6 @@ import Contact from "./sections/Contact";
 export default function App() {
   return (
     <div className="relative isolate min-h-screen overflow-x-hidden bg-bg text-text">
-      <CustomCursor />
       <BackgroundEffects />
       <div className="relative z-1 mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-[clamp(16px,4vw,40px)]">
         <Nav />

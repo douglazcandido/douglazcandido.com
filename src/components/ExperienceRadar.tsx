@@ -68,6 +68,7 @@ function AxisTick({ x = 0, y = 0, payload, textAnchor, fontSize = 11.5 }: AxisTi
 export default function ExperienceRadar({ data }: ExperienceRadarProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(400);
+  const [revealedCount, setRevealedCount] = useState(0);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -80,6 +81,42 @@ export default function ExperienceRadar({ data }: ExperienceRadarProps) {
     return () => observer.disconnect();
   }, []);
 
+  // Walks the axes one by one once the chart scrolls into view: each tick
+  // reveals the next point's real value (recharts tweens it out from 0),
+  // so the polygon and its fill build up point by point instead of all at once.
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    let interval: ReturnType<typeof setInterval> | undefined;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        observer.unobserve(el);
+        interval = setInterval(() => {
+          setRevealedCount((count) => {
+            if (count >= data.length) {
+              if (interval) clearInterval(interval);
+              return count;
+            }
+            return count + 1;
+          });
+        }, 260);
+      }
+    }, { threshold: 0.4 });
+
+    observer.observe(el);
+    return () => {
+      observer.disconnect();
+      if (interval) clearInterval(interval);
+    };
+  }, [data.length]);
+
+  const chartData = data.map((axis, index) => ({
+    ...axis,
+    value: index < revealedCount ? axis.value : 0,
+  }));
+
   const compact = width < 340;
   const fontSize = compact ? 9 : 10.5;
   const margin = compact ? 8 : 10;
@@ -88,7 +125,7 @@ export default function ExperienceRadar({ data }: ExperienceRadarProps) {
     <div ref={containerRef} className="mx-auto aspect-square w-full max-w-[300px] md:max-w-[400px]">
       <ResponsiveContainer width="100%" height="100%">
         <RadarChart
-          data={data}
+          data={chartData}
           outerRadius={compact ? "50%" : "60%"}
           margin={{ top: margin, right: margin, bottom: margin, left: margin }}
         >
@@ -111,7 +148,9 @@ export default function ExperienceRadar({ data }: ExperienceRadarProps) {
             fill={ACCENT}
             fillOpacity={0.18}
             dot={{ r: 3, fill: ACCENT, strokeWidth: 0 }}
-            isAnimationActive={false}
+            isAnimationActive
+            animationDuration={450}
+            animationEasing="ease-out"
           />
         </RadarChart>
       </ResponsiveContainer>

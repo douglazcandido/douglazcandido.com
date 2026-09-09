@@ -1,3 +1,5 @@
+import ThemeToggle from "./ThemeToggle";
+
 const links = [
   { href: "#sobre", label: "sobre" },
   { href: "#projetos", label: "projetos" },
@@ -8,7 +10,7 @@ const links = [
 
 export default function Nav() {
   return (
-    <nav className="flex flex-wrap items-baseline justify-end gap-5 pt-6 sm:gap-7 sm:pt-7">
+    <nav className="flex flex-wrap items-center justify-end gap-5 pt-6 sm:gap-7 sm:pt-7">
       {links.map((link) => (
         <a
           key={link.href}
@@ -19,6 +21,7 @@ export default function Nav() {
           <span className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-accent transition-transform duration-300 ease-out group-hover:scale-x-100" />
         </a>
       ))}
+      <ThemeToggle />
     </nav>
   );
 }

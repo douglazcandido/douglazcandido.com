@@ -9,10 +9,10 @@ import {
 } from "recharts";
 import type { ExperienceAxis } from "../data/projects";
 
-const ACCENT = "#4d8ff0";
-const GRID = "#292b31";
-const LABEL = "#e4e7f5";
-const SCALE_LABEL = "#595d6c";
+const ACCENT = "var(--color-accent)";
+const GRID = "var(--color-neutral-900)";
+const LABEL = "var(--color-neutral-200)";
+const SCALE_LABEL = "var(--color-neutral-700)";
 const FONT_MONO = '"JetBrains Mono", ui-monospace, monospace';
 
 interface ExperienceRadarProps {

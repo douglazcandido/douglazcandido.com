@@ -20,10 +20,30 @@
   --color-neutral-800: #3f424d;
   --color-neutral-900: #292b31;
 
-  --color-divider: color-mix(in srgb, #e9e9ed 16%, transparent);
+  --color-divider: color-mix(in srgb, var(--color-text) 16%, transparent);
 
   --animate-marquee: marquee 25s linear infinite;
   --animate-portrait-glow: portrait-glow 9s linear infinite;
+}
+
+/* Light theme: same tokens, values flipped so low neutral numbers stay
+   close to --color-text and high numbers stay close to --color-bg,
+   matching the dark theme's semantics (see components for usage). */
+:root[data-theme="light"] {
+  --color-bg: #d6d9de;
+  --color-surface: #e0e2e7;
+  --color-text: #14151a;
+  --color-accent: #2f6fe0;
+
+  --color-neutral-100: #14151a;
+  --color-neutral-200: #24252c;
+  --color-neutral-300: #383a42;
+  --color-neutral-400: #4a4c56;
+  --color-neutral-500: #616370;
+  --color-neutral-600: #7a7c88;
+  --color-neutral-700: #93969f;
+  --color-neutral-800: #b6b9c2;
+  --color-neutral-900: #c6c9d1;
 }
 
 html {
@@ -35,6 +55,11 @@ body {
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-sans);
+}
+
+body,
+body :where(*) {
+  transition: background-color 0.35s ease, border-color 0.35s ease, color 0.35s ease, fill 0.35s ease;
 }
 
 @layer base {
@@ -118,6 +143,11 @@ body {
   .reveal {
     opacity: 1;
     transform: none;
+    transition: none;
+  }
+
+  body,
+  body :where(*) {
     transition: none;
   }
 }

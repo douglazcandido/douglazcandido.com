@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@300;400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-sans: "Inter", system-ui, sans-serif;
+
+  --color-bg: #0b0c0d;
+  --color-surface: #141517;
+  --color-text: #e9e9ed;
+  --color-accent: #4d8ff0;
+
+  --color-neutral-100: #f3f5fe;
+  --color-neutral-200: #e4e7f5;
+  --color-neutral-300: #cfd3e5;
+  --color-neutral-400: #b2b6ca;
+  --color-neutral-500: #9397ab;
+  --color-neutral-600: #75798c;
+  --color-neutral-700: #595d6c;
+  --color-neutral-800: #3f424d;
+  --color-neutral-900: #292b31;
+
+  --color-divider: color-mix(in srgb, #e9e9ed 16%, transparent);
+
+  --animate-marquee: marquee 25s linear infinite;
+  --animate-portrait-glow: portrait-glow 9s linear infinite;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+}
+
+@layer base {
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  html.custom-cursor-active,
+  html.custom-cursor-active * {
+    cursor: none;
+  }
+}
+
+.cursor-ring.cursor-ring-active {
+  width: 2.75rem;
+  height: 2.75rem;
+  background-color: color-mix(in srgb, var(--color-accent) 12%, transparent);
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-accent) 30%, transparent);
+}
+
+*:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+@keyframes drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-6%, 4%, 0);
+  }
+}
+
+.grain-layer {
+  animation: drift 24s linear infinite alternate;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* A bright, tight beam sweeps around the portrait frame's exact outline
+   (masked to a thin ring via mask-composite). The ring box itself never
+   rotates - only the conic-gradient's angle does - so a non-square frame
+   stays perfectly aligned instead of swinging out at in-between angles. */
+@property --portrait-glow-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes portrait-glow {
+  from {
+    --portrait-glow-angle: 0deg;
+  }
+  to {
+    --portrait-glow-angle: 360deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grain-layer {
+    animation: none;
+  }
+
+  .animate-portrait-glow {
+    animation: none;
+  }
+}

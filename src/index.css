@@ -91,6 +91,22 @@ body :where(*) {
   animation: drift 24s linear infinite alternate;
 }
 
+@keyframes graph-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+    r: 3;
+  }
+  50% {
+    opacity: 1;
+    r: 4;
+  }
+}
+
+.data-graph-pulse {
+  animation: graph-pulse 2.6s ease-in-out infinite;
+}
+
 @keyframes marquee {
   from {
     transform: translateX(0);
@@ -133,6 +149,10 @@ body :where(*) {
 
 @media (prefers-reduced-motion: reduce) {
   .grain-layer {
+    animation: none;
+  }
+
+  .data-graph-pulse {
     animation: none;
   }
 

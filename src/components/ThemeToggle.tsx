@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FiMoon, FiSun } from "react-icons/fi";
+import { useI18n } from "../i18n/context";
 
 type Theme = "dark" | "light";
 
@@ -10,14 +11,26 @@ function getInitialTheme(): Theme {
 
 export default function ThemeToggle() {
   const [theme, setTheme] = useState<Theme>(getInitialTheme);
+  const first = useRef(true);
+  const { t } = useI18n();
 
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
+    const root = document.documentElement;
+    root.setAttribute("data-theme", theme);
     try {
       localStorage.setItem("theme", theme);
     } catch {
       // localStorage may be unavailable (private mode, disabled storage) - theme just won't persist.
     }
+
+    // Fade colors only for the toggle itself, not on first paint.
+    if (first.current) {
+      first.current = false;
+      return;
+    }
+    root.classList.add("theme-fade");
+    const t = setTimeout(() => root.classList.remove("theme-fade"), 500);
+    return () => clearTimeout(t);
   }, [theme]);
 
   const toggle = () => setTheme((current) => (current === "dark" ? "light" : "dark"));
@@ -26,9 +39,9 @@ export default function ThemeToggle() {
     <button
       type="button"
       onClick={toggle}
-      aria-label={theme === "dark" ? "Ativar tema claro" : "Ativar tema escuro"}
-      title={theme === "dark" ? "Tema claro" : "Tema escuro"}
-      className="inline-flex h-7 w-7 items-center justify-center text-neutral-400 transition-colors hover:text-accent"
+      aria-label={theme === "dark" ? t.a11y.toLightTheme : t.a11y.toDarkTheme}
+      title={theme === "dark" ? t.a11y.lightTheme : t.a11y.darkTheme}
+      className="inline-flex h-8 w-8 items-center justify-center text-neutral-300 transition-colors hover:text-accent"
     >
       {theme === "dark" ? <FiSun className="h-4 w-4" /> : <FiMoon className="h-4 w-4" />}
     </button>

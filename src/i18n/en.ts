@@ -1,0 +1,133 @@
+import type { Dict } from "./pt";
+
+export const en: Dict = {
+  meta: {
+    title: "Douglas Candido | Data & Backend Engineer",
+    description:
+      "Douglas Candido — Data & Backend Engineer. Pipelines, APIs and data infrastructure running in production.",
+  },
+  a11y: {
+    progress: "Page progress",
+    toLightTheme: "Switch to light theme",
+    toDarkTheme: "Switch to dark theme",
+    lightTheme: "Light theme",
+    darkTheme: "Dark theme",
+    language: "Language",
+    tools: "Tools and technologies",
+  },
+  nav: {
+    about: "about",
+    projects: "projects",
+    skills: "skills",
+    education: "education",
+    contact: "contact",
+    home: "home",
+    menu: "menu",
+    close: "close",
+  },
+  hero: {
+    role: "Data & Backend Engineer",
+    summary:
+      "I build pipelines that hold up under real volume, from ingestion to insight, with observability built in and costs under control.",
+    ctaContact: "Let's talk",
+    ctaStack: "Tech stack",
+  },
+  about: {
+    label: "about",
+    title: "About",
+    lead: "For over 4 years I've been working on integrations with banks and fintechs, and today I'm an IT Supervisor. Day to day, that means designing data pipelines, building APIs and solving real performance problems in production.",
+    accent: ["banks", "fintechs", "pipelines", "APIs", "performance", "production"],
+    body: "I work end to end: data modeling, pipeline orchestration and Python services. I like systems that are explicit, tested and well documented.",
+    statYears: "Working with banks and fintechs",
+    statYearsUnit: "years",
+    statDb: "PostgreSQL database optimized",
+    statDbWas: "was 112 GB",
+    statTools: "Tools in the stack",
+  },
+  projects: {
+    label: "projects",
+    title: "Projects",
+    intro:
+      "The kinds of problems I've solved in practice, without going into client- or company-specific details.",
+    before: "before",
+    after: "after",
+    metricCaption: "database size after the restructuring",
+    radarTitle: ["", "Experience", " map"],
+    radarScale: "scale 0–10",
+    axes: [
+      "Data Engineering",
+      "Automation & Integration",
+      "Backend & APIs",
+      "Cloud & Infrastructure",
+      "Machine Learning",
+    ],
+    items: [
+      {
+        title: "Near real-time lead ingestion, processing and integration",
+        description:
+          "A pipeline that receives leads from multiple external sources, each with its own data layout and API contract. It detects the format automatically, then validates and deduplicates before segmentation. It integrates with several external APIs in parallel, each with its own rate limits and response format, handling partial failures and processing asynchronously on AWS to absorb volume spikes without degrading.",
+        tags: ["AWS", "Async", "External APIs", "Deduplication"],
+      },
+      {
+        title: "An analytics layer decoupled from operations",
+        description:
+          "A medallion-style data architecture (raw, validated, analytical) on AWS, publishing events to a dedicated analytics database. This makes business reports and dashboards possible without touching or slowing down the transactional database in production.",
+        tags: ["AWS", "Medallion", "Events", "Analytics"],
+      },
+      {
+        title: "Leading the rollout of a system for a payroll-loan originator",
+        description:
+          "I led a team in rolling out a complete system for a payroll-loan originator, coordinating the work from requirements gathering all the way to production deployment, across backend, external integrations and database modeling.",
+        tags: ["Leadership", "Backend", "Integrations", "Deploy"],
+      },
+      {
+        title: "Large-scale production database optimization",
+        description:
+          "Diagnosis and redesign of the data model on PostgreSQL databases on AWS holding tens of millions of records. Restructuring schemas, data types and indexes shrank one database from 112GB to 15GB, along with rewriting complex queries with zero downtime.",
+        tags: ["PostgreSQL", "AWS", "Schema", "Indexes"],
+      },
+      {
+        title: "Backend and API development",
+        description:
+          "Python/FastAPI services and APIs hosted on AWS, with authentication, data validation and asynchronous processing, powering the internal systems the operation relies on every day.",
+        tags: ["Python", "FastAPI", "AWS", "Authentication"],
+      },
+      {
+        title: "Data collection through web scraping",
+        description:
+          "Automated extraction of data from external sources that have no API, using scripts that stay resilient to layout changes and scheduled collection jobs.",
+        tags: ["Python", "Web scraping", "Scheduled jobs"],
+      },
+      {
+        title: "Anomaly detection and failure prediction (AIOps)",
+        description:
+          "Orchestration of a data pipeline with multiple machine learning models (time series and clustering) served through an API, plus a management dashboard to follow predictions and export results. An academic project in partnership with FIAP × Locaweb.",
+        tags: ["Machine Learning", "Time series", "Clustering", "FIAP × Locaweb"],
+      },
+    ],
+  },
+  skills: {
+    label: "skills",
+    title: "Skills",
+    text: "Data & pipelines, backend, automation and cloud: the tools that make up my stack. Scroll the page to speed up the rows.",
+  },
+  education: {
+    label: "education",
+    title: "Education",
+    items: [
+      { title: "Technologist Degree in Data Science", school: "FIAP" },
+      { title: "Technical Diploma in Computer Networking", school: "ETEC" },
+      { title: "Technical Diploma in Systems Development", school: "ETEC" },
+    ],
+  },
+  contact: {
+    label: "contact",
+    title: "Let's talk",
+    copy: "copy",
+    copied: "copied",
+    copyAria: "Copy email",
+    copiedAria: "Email copied",
+    backToTop: "back to top",
+    rights: "All rights reserved.",
+  },
+};

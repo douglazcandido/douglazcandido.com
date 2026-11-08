@@ -31,7 +31,6 @@ export default function Hero() {
             className="fade-up m-0 flex items-center gap-3 font-mono text-[11px] tracking-[0.22em] text-neutral-400 uppercase"
             style={{ "--d": "100ms" } as React.CSSProperties}
           >
-            <span className="h-px w-8 bg-accent" />
             <ScrambleText text={t.hero.role} delay={400} />
           </p>
 

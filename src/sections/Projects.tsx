@@ -114,10 +114,7 @@ function RadarCard({ className = "" }: { className?: string }) {
   return (
     <Reveal className={`h-full ${className}`} delay={110}>
       <SpotlightCard className="flex h-full flex-col p-[clamp(20px,2.2vw,36px)]">
-        <div className="flex items-center justify-between font-mono text-[11px] tracking-[0.2em] text-neutral-500 uppercase">
-          <span>
-            <span className="text-accent">R—</span>00
-          </span>
+        <div className="flex items-center justify-end font-mono text-[11px] tracking-[0.2em] text-neutral-500 uppercase">
           <span>{t.projects.radarScale}</span>
         </div>
         <h3 className="m-0 mt-[clamp(20px,3vw,44px)] font-display text-[clamp(20px,1.7vw,28px)] leading-[1.15] font-semibold tracking-[-0.02em]">

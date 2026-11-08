@@ -4,7 +4,7 @@ export const en: Dict = {
   meta: {
     title: "Douglas Candido | Data & Backend Engineer",
     description:
-      "Douglas Candido — Data & Backend Engineer. Pipelines, APIs and data infrastructure running in production.",
+      "Douglas Candido, Data & Backend Engineer. Pipelines, APIs and data infrastructure running in production.",
   },
   a11y: {
     progress: "Page progress",
@@ -49,7 +49,7 @@ export const en: Dict = {
     after: "after",
     metricCaption: "database size after the restructuring",
     radarTitle: ["", "Experience", " map"],
-    radarScale: "scale 0–10",
+    radarScale: "scale 0 to 10",
     axes: [
       "Data Engineering",
       "Automation & Integration",

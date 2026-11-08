@@ -6,7 +6,7 @@ export const pt = {
   meta: {
     title: "Douglas Candido | Engenheiro de Dados & Backend",
     description:
-      "Douglas Candido — Engenheiro de Dados & Backend. Pipelines, APIs e infraestrutura de dados em produção.",
+      "Douglas Candido, Engenheiro de Dados & Backend. Pipelines, APIs e infraestrutura de dados em produção.",
   },
   a11y: {
     progress: "Progresso da página",
@@ -51,7 +51,7 @@ export const pt = {
     after: "depois",
     metricCaption: "tamanho da base após a reestruturação",
     radarTitle: ["Mapa de ", "experiência", ""],
-    radarScale: "escala 0–10",
+    radarScale: "escala 0 a 10",
     axes: [
       "Engenharia de Dados",
       "Automação & Integração",
@@ -106,7 +106,7 @@ export const pt = {
   },
   skills: {
     title: "Skills",
-    text: "Dados & pipelines, backend, automação e cloud — as ferramentas que compõem minha stack. Role a página para acelerar as fileiras.",
+    text: "Dados & pipelines, backend, automação e cloud: as ferramentas que compõem minha stack. Role a página para acelerar as fileiras.",
   },
   education: {
     title: "Educação",

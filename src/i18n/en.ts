@@ -28,7 +28,7 @@ export const en: Dict = {
   },
   hero: {
     summary:
-      "I build pipelines that hold up under real volume, from ingestion to insight, with observability built in and costs under control.",
+      "Data and software engineer. From data model to deploy: modeling, pipeline, API and infrastructure.",
   },
   about: {
     title: "About",

@@ -30,7 +30,7 @@ export const pt = {
   },
   hero: {
     summary:
-      "Construo pipelines que aguentam volume, da ingestão à informação, com observabilidade e custo sob controle.",
+      "Engenheiro de dados e software. Do modelo de dados ao deploy: modelagem, pipeline, API e infraestrutura.",
   },
   about: {
     title: "Sobre",

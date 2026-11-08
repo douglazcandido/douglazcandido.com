@@ -28,7 +28,7 @@ export const es: Dict = {
   },
   hero: {
     summary:
-      "Construyo pipelines que aguantan volumen de verdad, de la ingesta a la información, con observabilidad y costos bajo control.",
+      "Ingeniero de datos y software. Del modelo de datos al deploy: modelado, pipeline, API e infraestructura.",
   },
   about: {
     title: "Sobre mí",

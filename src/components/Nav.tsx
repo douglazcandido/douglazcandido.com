@@ -75,7 +75,7 @@ export default function Nav() {
                       {s.label}
                       <span
                         aria-hidden="true"
-                        className={`absolute inset-x-0 -bottom-0.5 h-px origin-left bg-accent transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${
+                        className={`absolute inset-x-0 -bottom-1 h-[2px] origin-left bg-accent transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${
                           isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
                         }`}
                       />

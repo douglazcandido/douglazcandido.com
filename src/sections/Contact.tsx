@@ -28,7 +28,7 @@ export default function Contact() {
               </span>
             </span>
           </h2>
-          <span aria-hidden="true" className="rule-draw mt-[clamp(14px,1.6vw,22px)] block h-[3px] w-[clamp(40px,4.5vw,72px)] bg-accent" />
+          <span aria-hidden="true" className="rule-draw mt-[clamp(14px,1.6vw,22px)] block h-[4px] w-[clamp(40px,4.5vw,72px)] bg-accent" />
         </div>
 
         <Reveal className="mt-[clamp(28px,4vw,56px)] flex flex-wrap items-center gap-x-6 gap-y-4">

@@ -19,7 +19,7 @@ export default function Portrait({ src, className = "" }: PortraitProps) {
         {/* Floating accent frame: only the right and bottom edges, offset behind the corner. */}
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute -right-[2.5%] -bottom-[2.5%] h-[68%] w-[43%] rounded-br-[14px] border-r-2 border-b-2 border-accent lg:-right-[4.4%] lg:-bottom-[3.8%]"
+          className="pointer-events-none absolute -right-[2.5%] -bottom-[2.5%] h-[68%] w-[43%] rounded-br-[14px] border-r-[3px] border-b-[3px] border-accent lg:-right-[4.4%] lg:-bottom-[3.8%]"
         />
       </div>
     </figure>

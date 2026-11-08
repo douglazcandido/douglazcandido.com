@@ -38,7 +38,7 @@ export default function Nav() {
   return (
     <>
       <header
-        className={`px-page fixed inset-x-0 top-0 z-50 transition-colors duration-500 ease-out ${
+        className={`px-nav fixed inset-x-0 top-0 z-50 transition-colors duration-500 ease-out ${
           scrolled || open ? "bg-bg/90" : ""}`}
       >
         <nav className="flex items-center justify-end py-4">

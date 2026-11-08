@@ -116,9 +116,22 @@ html.theme-fade *::after {
   padding-right: var(--gutter);
 }
 
+/* Top bar keeps its own, tighter padding. */
+.px-nav {
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
 @media (min-width: 1280px) {
-  .px-page {
+  .px-nav {
     padding-left: calc(var(--gutter) + 30px);
+    padding-right: var(--gutter);
+  }
+
+  /* Page content: wider side margins that grow with the viewport. */
+  .px-page {
+    padding-left: max(calc(var(--gutter) + 30px), 7.5vw);
+    padding-right: max(calc(var(--gutter) + 30px), 7.5vw);
   }
 }
 

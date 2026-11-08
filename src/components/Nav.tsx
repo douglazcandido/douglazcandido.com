@@ -38,25 +38,47 @@ export default function Nav() {
   return (
     <>
       <header
-        className={`px-nav fixed inset-x-0 top-0 z-50 transition-colors duration-500 ease-out ${
-          scrolled || open ? "bg-bg/90" : ""}`}
+        className={`px-nav fixed inset-x-0 top-0 z-50 border-b transition-[background-color,border-color,backdrop-filter] duration-500 ease-out ${
+          scrolled || open
+            ? "border-divider bg-bg/80 backdrop-blur-md"
+            : "border-transparent"
+        }`}
       >
-        <nav className="flex items-center justify-end py-4">
-          <div className="ml-auto flex items-center gap-4 sm:gap-6 md:gap-9">
-            <ul className="m-0 hidden list-none items-center gap-7 p-0 md:flex">
-              {sections.map((s) => (
-                <li key={s.id}>
-                  <a
-                    href={`#${s.id}`}
-                    className={`inline-flex items-baseline gap-1.5 font-mono text-xs tracking-[0.1em] uppercase transition-colors ${
-                      active === s.id ? "text-accent" : "text-neutral-400 hover:text-neutral-100"
-                    }`}
-                  >
-                    {s.label}
-                  </a>
-                </li>
-              ))}
+        <nav className="flex items-center justify-end py-[18px]">
+          <div className="ml-auto flex items-center gap-4 sm:gap-6 md:gap-8">
+            <ul className="m-0 hidden list-none items-center gap-8 p-0 md:flex">
+              {sections.map((s, i) => {
+                const isActive = active === s.id;
+                return (
+                  <li key={s.id}>
+                    <a
+                      href={`#${s.id}`}
+                      aria-current={isActive ? "true" : undefined}
+                      className={`group relative inline-flex items-baseline gap-2 py-1 font-mono text-[11px] tracking-[0.18em] uppercase transition-colors duration-300 ${
+                        isActive ? "text-neutral-100" : "text-neutral-500 hover:text-neutral-100"
+                      }`}
+                    >
+                      <span
+                        aria-hidden="true"
+                        className={`text-[9px] tracking-[0.1em] tabular-nums transition-colors duration-300 ${
+                          isActive ? "text-accent" : "text-neutral-700 group-hover:text-accent"
+                        }`}
+                      >
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      {s.label}
+                      <span
+                        aria-hidden="true"
+                        className={`absolute inset-x-0 -bottom-0.5 h-px origin-left bg-accent transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${
+                          isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                        }`}
+                      />
+                    </a>
+                  </li>
+                );
+              })}
             </ul>
+            <span aria-hidden="true" className="hidden h-3.5 w-px bg-divider md:block" />
             <LanguageSwitcher />
             <ThemeToggle />
             <button
@@ -64,7 +86,7 @@ export default function Nav() {
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
               aria-controls="menu-overlay"
-              className="font-mono text-xs tracking-[0.14em] uppercase md:hidden"
+              className="font-mono text-[11px] tracking-[0.18em] uppercase md:hidden"
             >
               {open ? t.nav.close : t.nav.menu}
             </button>
@@ -73,7 +95,7 @@ export default function Nav() {
         <div
           aria-hidden="true"
           data-scroll-progress="x"
-          className="h-px origin-left bg-accent"
+          className="absolute inset-x-0 -bottom-px h-px origin-left bg-accent"
           style={{ transform: "scaleX(0)" }}
         />
       </header>

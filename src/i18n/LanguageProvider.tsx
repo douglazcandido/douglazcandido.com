@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { flushSync } from "react-dom";
 import { I18nContext, LANGS, LANG_META, type Lang } from "./context";
 import { pt } from "./pt";
 import { en } from "./en";
@@ -21,12 +22,26 @@ function getInitialLang(): Lang {
 export default function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>(getInitialLang);
 
+  const langRef = useRef(lang);
+  langRef.current = lang;
+
   const setLang = useCallback((next: Lang) => {
-    setLangState(next);
+    if (next === langRef.current) return;
+
     try {
       localStorage.setItem(STORAGE_KEY, next);
     } catch {
       // Choice just won't persist.
+    }
+
+    // Cross-fade the whole page (see ::view-transition rules in index.css) so the
+    // text swap isn't an abrupt cut. Browsers without the API just switch instantly.
+    const doc = document as Document & { startViewTransition?: (cb: () => void) => unknown };
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (doc.startViewTransition && !reduceMotion) {
+      doc.startViewTransition(() => flushSync(() => setLangState(next)));
+    } else {
+      setLangState(next);
     }
   }, []);
 

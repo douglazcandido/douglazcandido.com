@@ -41,9 +41,9 @@ export default function ThemeToggle() {
       onClick={toggle}
       aria-label={theme === "dark" ? t.a11y.toLightTheme : t.a11y.toDarkTheme}
       title={theme === "dark" ? t.a11y.lightTheme : t.a11y.darkTheme}
-      className="inline-flex h-8 w-8 items-center justify-center text-neutral-300 transition-colors hover:text-accent"
+      className="inline-flex h-8 w-8 items-center justify-center text-neutral-500 transition-colors duration-300 hover:text-neutral-100"
     >
-      {theme === "dark" ? <FiSun className="h-4 w-4" /> : <FiMoon className="h-4 w-4" />}
+      {theme === "dark" ? <FiSun className="h-[15px] w-[15px]" strokeWidth={1.5} /> : <FiMoon className="h-[15px] w-[15px]" strokeWidth={1.5} />}
     </button>
   );
 }

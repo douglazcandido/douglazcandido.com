@@ -81,6 +81,19 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Language switch: plain, quick cross-fade (View Transitions). Both layers run
+   together with the default additive blend, so there's no dip in between. */
+::view-transition-group(root) {
+  animation-duration: 0.32s;
+  animation-timing-function: ease-in-out;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.32s;
+  animation-timing-function: ease-in-out;
+}
+
 /* Only animate colors while the theme is being toggled (class set by
    ThemeToggle) so the global fade doesn't fight hover effects. */
 html.theme-fade,

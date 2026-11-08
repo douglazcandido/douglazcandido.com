@@ -40,11 +40,7 @@ function ProjectCard({ project, index, className = "" }: ProjectCardProps) {
   return (
     <Reveal className={`h-full ${className}`} delay={(index % 3) * 110}>
       <SpotlightCard className="group flex h-full flex-col p-[clamp(20px,2.2vw,36px)]">
-        <div className="flex items-center justify-between font-mono text-[11px] tracking-[0.2em] text-neutral-500 uppercase">
-          <span>
-            <span className="text-accent">P—</span>
-            {String(index + 1).padStart(2, "0")}
-          </span>
+        <div className="flex items-center justify-end text-neutral-500">
           <FiArrowUpRight
             aria-hidden="true"
             className="h-4 w-4 -translate-x-1 translate-y-1 opacity-0 transition-all duration-500 group-hover:translate-0 group-hover:text-accent group-hover:opacity-100"

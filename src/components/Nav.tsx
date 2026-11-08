@@ -47,25 +47,17 @@ export default function Nav() {
         <nav className="flex items-center justify-end py-[18px]">
           <div className="ml-auto flex items-center gap-4 sm:gap-6 md:gap-8">
             <ul className="m-0 hidden list-none items-center gap-8 p-0 md:flex">
-              {sections.map((s, i) => {
+              {sections.map((s) => {
                 const isActive = active === s.id;
                 return (
                   <li key={s.id}>
                     <a
                       href={`#${s.id}`}
                       aria-current={isActive ? "true" : undefined}
-                      className={`group relative inline-flex items-baseline gap-2 py-1 font-mono text-[11px] tracking-[0.18em] uppercase transition-colors duration-300 ${
-                        isActive ? "text-neutral-100" : "text-neutral-500 hover:text-neutral-100"
+                      className={`group relative inline-flex items-baseline gap-2 py-1 text-[13px] leading-none font-medium tracking-[0.08em] uppercase transition-colors duration-300 ${
+                        isActive ? "text-neutral-100" : "text-neutral-400 hover:text-neutral-100"
                       }`}
                     >
-                      <span
-                        aria-hidden="true"
-                        className={`text-[9px] tracking-[0.1em] tabular-nums transition-colors duration-300 ${
-                          isActive ? "text-accent" : "text-neutral-700 group-hover:text-accent"
-                        }`}
-                      >
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
                       {s.label}
                       <span
                         aria-hidden="true"
@@ -86,7 +78,7 @@ export default function Nav() {
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
               aria-controls="menu-overlay"
-              className="font-mono text-[11px] tracking-[0.18em] uppercase md:hidden"
+              className="text-[13px] font-medium tracking-[0.08em] uppercase md:hidden"
             >
               {open ? t.nav.close : t.nav.menu}
             </button>

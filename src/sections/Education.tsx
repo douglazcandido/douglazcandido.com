@@ -13,9 +13,6 @@ export default function Education() {
         {items.map((item, index) => (
           <Reveal as="li" key={item.title} delay={index * 110} className="border-b border-divider">
             <div className="row-sweep group flex items-center gap-[clamp(14px,3vw,48px)] py-[clamp(18px,2.2vw,32px)] hover:px-[clamp(12px,1.5vw,24px)]">
-              <span className="row-muted w-8 shrink-0 font-mono text-xs tracking-[0.2em] text-accent">
-                {String(index + 1).padStart(2, "0")}
-              </span>
               <h3 className="row-title m-0 flex-1 font-display text-[clamp(20px,2.6vw,40px)] leading-[1.1] font-semibold tracking-[-0.03em] text-pretty transition-colors duration-300">
                 {item.title}
               </h3>

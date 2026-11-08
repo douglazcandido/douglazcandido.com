@@ -5,7 +5,7 @@ export default function LanguageSwitcher() {
   const { lang, setLang, t } = useI18n();
 
   return (
-    <div role="group" aria-label={t.a11y.language} className="flex items-center gap-3.5 font-mono text-[11px] tracking-[0.18em]">
+    <div role="group" aria-label={t.a11y.language} className="flex items-center gap-3.5 text-[13px] font-medium tracking-[0.06em]">
       {LANGS.map((code) => {
         const isActive = lang === code;
         return (
@@ -18,7 +18,7 @@ export default function LanguageSwitcher() {
             aria-pressed={isActive}
             onClick={() => setLang(code)}
             className={`relative py-1 transition-colors duration-300 ${
-              isActive ? "text-neutral-100" : "text-neutral-600 hover:text-neutral-200"
+              isActive ? "text-neutral-100" : "text-neutral-500 hover:text-neutral-200"
             }`}
           >
             {LANG_META[code].label}

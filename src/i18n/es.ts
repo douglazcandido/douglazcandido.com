@@ -26,7 +26,6 @@ export const es: Dict = {
     close: "cerrar",
   },
   hero: {
-    role: "Ingeniero de Datos y Backend",
     summary:
       "Construyo pipelines que aguantan volumen de verdad, de la ingesta a la información, con observabilidad y costos bajo control.",
   },

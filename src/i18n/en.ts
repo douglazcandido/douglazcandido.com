@@ -26,7 +26,6 @@ export const en: Dict = {
     close: "close",
   },
   hero: {
-    role: "Data & Backend Engineer",
     summary:
       "I build pipelines that hold up under real volume, from ingestion to insight, with observability built in and costs under control.",
   },

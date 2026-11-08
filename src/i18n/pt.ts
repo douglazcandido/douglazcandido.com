@@ -28,7 +28,6 @@ export const pt = {
     close: "fechar",
   },
   hero: {
-    role: "Engenheiro de Dados & Backend",
     summary:
       "Construo pipelines que aguentam volume, da ingestão à informação, com observabilidade e custo sob controle.",
   },

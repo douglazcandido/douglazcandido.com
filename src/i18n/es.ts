@@ -55,10 +55,11 @@ export const es: Dict = {
         title: "Analista de Datos",
         period: "abr/2024 - ene/2026",
         items: [
-          "PostgreSQL de mailings: modelado, ETL orquestado y consultas de extracción",
-          "Scrapers con Playwright e integraciones REST con bancos socios",
-          "Flujo de leads por WhatsApp (WABA)",
-          "Power BI sobre un data mart de propuestas; apps en Streamlit",
+          "Primera base de datos relacional de la empresa, en lugar de CSVs sin estandarizar: más control de la base de mailing y consultas más ágiles, con una app en Streamlit para uso sin perfil técnico",
+          "Pipeline ETL que automatizó la actualización mensual de contratos, antes hecha a mano y muy lenta",
+          "Dashboard en Power BI para análisis de propuestas, del modelo de datos y ETL al panel",
+          "Workflows en n8n que automatizan el embudo de leads, del chatbot a la propuesta final, con un agente de IA en el flujo",
+          "Robots RPA, integraciones REST con bancos y fintechs y APIs propias en Flask",
         ],
       },
       {

@@ -57,10 +57,11 @@ export const pt = {
         title: "Analista de Dados",
         period: "abr/2024 - jan/2026",
         items: [
-          "PostgreSQL de mailings: modelagem, ETL orquestrado e queries de extração",
-          "Scrapers com Playwright e integrações REST com bancos parceiros",
-          "Fluxo de leads via WhatsApp (WABA)",
-          "Power BI sobre data mart de propostas; apps em Streamlit",
+          "Primeiro banco relacional da empresa, no lugar de CSVs despadronizados: mais controle da base de mailing e consultas mais ágeis, com app em Streamlit para uso sem perfil técnico",
+          "Pipeline ETL que automatizou a atualização mensal de contratos, antes feita à mão e muito demorada",
+          "Dashboard em Power BI para análise de propostas, do modelo de dados e ETL ao painel",
+          "Workflows no n8n que automatizam o funil de leads, do chatbot à proposta final, com agente de IA no fluxo",
+          "Robôs RPA, integrações REST com bancos e fintechs e APIs próprias em Flask",
         ],
       },
       {

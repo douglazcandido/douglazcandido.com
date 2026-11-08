@@ -55,10 +55,11 @@ export const en: Dict = {
         title: "Data Analyst",
         period: "Apr/2024 - Jan/2026",
         items: [
-          "Mailing PostgreSQL: data modeling, orchestrated ETL and extraction queries",
-          "Playwright scrapers and REST integrations with partner banks",
-          "Lead flow through WhatsApp (WABA)",
-          "Power BI on a proposals data mart; Streamlit apps",
+          "The company's first relational database, replacing inconsistent CSVs: more control over the mailing base and faster queries, with a Streamlit app for non-technical users",
+          "ETL pipeline that automated the monthly contract update, previously done by hand and very time-consuming",
+          "Power BI dashboard for proposal analysis, from the data model and ETL to the dashboard",
+          "n8n workflows that automate the lead funnel, from the chatbot to the final proposal, with an AI agent in the flow",
+          "RPA bots, REST integrations with banks and fintechs, and in-house APIs in Flask",
         ],
       },
       {

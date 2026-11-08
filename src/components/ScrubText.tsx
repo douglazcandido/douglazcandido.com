@@ -2,20 +2,17 @@ import { useEffect, useMemo, useRef } from "react";
 import { prefersReducedMotion } from "../hooks/useReducedMotion";
 
 interface ScrubTextProps {
-  text: string;
-  /** Words (case/punctuation-insensitive) rendered in accent serif italic. */
-  accent?: readonly string[];
+  /** One or more paragraphs; the highlight sweeps through all of them as a single text. */
+  paragraphs: readonly string[];
   className?: string;
 }
 
-const normalize = (word: string) => word.toLowerCase().replace(/[^\p{L}\p{N}]/gu, "");
-
-/** Words light up one by one as the paragraph scrolls through the viewport. */
-export default function ScrubText({ text, accent = [], className = "" }: ScrubTextProps) {
-  const rootRef = useRef<HTMLParagraphElement>(null);
+/** Words light up one by one as the text scrolls through the viewport. */
+export default function ScrubText({ paragraphs, className = "" }: ScrubTextProps) {
+  const rootRef = useRef<HTMLDivElement>(null);
   const wordRefs = useRef<(HTMLSpanElement | null)[]>([]);
-  const words = useMemo(() => text.split(/\s+/), [text]);
-  const accentSet = useMemo(() => new Set(accent.map(normalize)), [accent]);
+  const split = useMemo(() => paragraphs.map((p) => p.split(/\s+/)), [paragraphs]);
+  const words = useMemo(() => split.flat(), [split]);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -30,15 +27,16 @@ export default function ScrubText({ text, accent = [], className = "" }: ScrubTe
       raf = 0;
       const rect = root.getBoundingClientRect();
       const vh = window.innerHeight;
-      // 0 once the block's top reaches 88% of the viewport, 1 when its bottom passes 45%.
-      const start = vh * 0.88;
-      const end = vh * 0.45;
+      // 0 once the block's top reaches 92% of the viewport, 1 as soon as its bottom is on
+      // screen (85%), so everything on screen is fully lit and nothing stays dimmed.
+      const start = vh * 0.92;
+      const end = vh * 0.85;
       const progress = Math.min(1, Math.max(0, (start - rect.top) / (start - end + rect.height)));
       const count = words.length;
       wordRefs.current.forEach((el, i) => {
         if (!el) return;
         const local = Math.min(1, Math.max(0, progress * (count + 4) - i) / 4);
-        el.style.opacity = (0.16 + local * 0.84).toFixed(3);
+        el.style.opacity = (0.3 + local * 0.7).toFixed(3);
       });
     };
     const onScroll = () => {
@@ -65,21 +63,32 @@ export default function ScrubText({ text, accent = [], className = "" }: ScrubTe
     };
   }, [words]);
 
+  let offset = 0;
   return (
-    <p ref={rootRef} className={className}>
-      {words.map((word, i) => (
-        <span
-          key={`${word}-${i}`}
-          ref={(el) => {
-            wordRefs.current[i] = el;
-          }}
-          className={accentSet.has(normalize(word)) ? "text-accent" : undefined}
-          style={{ opacity: 0.16 }}
-        >
-          {word}
-          {i < words.length - 1 ? " " : ""}
-        </span>
-      ))}
-    </p>
+    <div ref={rootRef} className={className}>
+      {split.map((para, pi) => {
+        const start = offset;
+        offset += para.length;
+        return (
+          <p key={pi} className="m-0">
+            {para.map((word, wi) => {
+              const i = start + wi;
+              return (
+                <span
+                  key={`${word}-${i}`}
+                  ref={(el) => {
+                    wordRefs.current[i] = el;
+                  }}
+                  style={{ opacity: 0.3 }}
+                >
+                  {word}
+                  {wi < para.length - 1 ? " " : ""}
+                </span>
+              );
+            })}
+          </p>
+        );
+      })}
+    </div>
   );
 }

@@ -32,8 +32,11 @@ export const es: Dict = {
   },
   about: {
     title: "Sobre mí",
-    lead: "Hace más de 4 años trabajo en la integración con bancos y fintechs, y hoy soy Supervisor de TI. En el día a día, eso significa diseñar pipelines de datos, construir APIs y resolver problemas reales de rendimiento en producción.",
-    accent: ["bancos", "fintechs", "pipelines", "APIs", "rendimiento", "producción"],
+    paragraphs: [
+      "Trabajo con ingeniería y arquitectura de datos y con backend de aplicaciones web. Mi experiencia es práctica: automatización de procesos, integración de sistemas, pipelines ETL, paneles analíticos y agentes de IA.",
+      "Hoy soy Supervisor de TI y lidero al equipo responsable de los sistemas críticos de captación y distribución de datos. Además de la gestión, diseño arquitecturas escalables en AWS y consolido sistemas fragmentados en stacks unificados y stateless.",
+      "Soy egresado en Ciencia de Datos de FIAP, donde estudié modelado de datos, ingeniería de datos y modelos predictivos, como series temporales, clasificación y clustering.",
+    ],
   },
   career: {
     title: "Carrera",

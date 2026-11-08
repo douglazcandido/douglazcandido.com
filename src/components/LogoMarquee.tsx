@@ -34,7 +34,7 @@ function LogoTile({ skill }: { skill: Skill }) {
           className="h-full w-full object-contain opacity-70 grayscale transition-[filter,opacity] duration-300 group-hover:opacity-100 group-hover:grayscale-0"
         />
       )}
-      <span className="absolute top-2 left-2.5 font-mono text-[9px] tracking-[0.18em] text-neutral-600 uppercase opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+      <span className="absolute top-2 left-2.5 text-[9px] tracking-[0.18em] text-neutral-600 uppercase opacity-0 transition-opacity duration-300 group-hover:opacity-100">
         {skill.name}
       </span>
     </div>

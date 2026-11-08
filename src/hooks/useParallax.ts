@@ -21,7 +21,9 @@ export function useParallax<T extends HTMLElement>({ x = 0, y = 0 }: { x?: numbe
       const rect = el.getBoundingClientRect();
       const vh = window.innerHeight;
       const p = Math.max(-1.5, Math.min(1.5, (rect.top + rect.height / 2 - vh / 2) / vh));
-      el.style.transform = `translate3d(${(p * x).toFixed(1)}px, ${(p * y).toFixed(1)}px, 0)`;
+      // Horizontal drift would push text off the content column on narrow screens.
+      const px = window.innerWidth < 768 ? 0 : x;
+      el.style.transform = `translate3d(${(Math.max(0, p) * px).toFixed(1)}px, ${(p * y).toFixed(1)}px, 0)`;
     };
     const onScroll = () => {
       if (near && !raf) raf = requestAnimationFrame(update);

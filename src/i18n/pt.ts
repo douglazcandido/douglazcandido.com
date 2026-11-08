@@ -34,8 +34,11 @@ export const pt = {
   },
   about: {
     title: "Sobre",
-    lead: "Há mais de 4 anos trabalho na integração com bancos e fintechs, hoje como Supervisor de TI. No dia a dia, isso significa desenhar pipelines de dados, construir APIs e resolver problemas reais de performance em produção.",
-    accent: ["bancos", "fintechs", "pipelines", "APIs", "performance", "produção"],
+    paragraphs: [
+      "Atuo com engenharia e arquitetura de dados e com backend de aplicações web. Minha experiência é prática: automação de processos, integração de sistemas, pipelines ETL, painéis analíticos e agentes de IA.",
+      "Hoje sou Supervisor de TI e lidero a equipe responsável pelos sistemas críticos de captação e distribuição de dados. Além da gestão, desenho arquiteturas escaláveis na AWS e consolido sistemas fragmentados em stacks unificadas e stateless.",
+      "Sou formado em Ciência de Dados pela FIAP, onde estudei modelagem de dados, engenharia de dados e modelos preditivos, como séries temporais, classificação e clusterização.",
+    ],
   },
   career: {
     title: "Carreira",

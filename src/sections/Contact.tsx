@@ -26,6 +26,7 @@ export default function Contact() {
               </span>
             </span>
           </h2>
+          <span aria-hidden="true" className="rule-draw mt-[clamp(14px,1.6vw,22px)] block h-[3px] w-[clamp(40px,4.5vw,72px)] bg-accent" />
         </div>
 
         <Reveal className="mt-[clamp(28px,4vw,56px)] flex flex-wrap items-center gap-x-6 gap-y-4">
@@ -51,7 +52,7 @@ export default function Contact() {
                 <span className="row-title flex-1 font-display text-[clamp(20px,2.4vw,36px)] leading-none font-semibold tracking-[-0.03em] transition-colors duration-300">
                   {label}
                 </span>
-                <span className="hidden font-mono text-xs tracking-[0.14em] text-neutral-500 sm:block">{handle}</span>
+                <span className="hidden text-xs tracking-[0.14em] text-neutral-500 sm:block">{handle}</span>
                 <FiArrowUpRight
                   aria-hidden="true"
                   className="h-6 w-6 shrink-0 transition-all duration-500 group-hover:rotate-45 group-hover:text-accent"
@@ -61,7 +62,7 @@ export default function Contact() {
           ))}
         </ul>
 
-        <div className="mt-[clamp(32px,4vw,56px)] flex flex-wrap items-center justify-between gap-4 font-mono text-[11px] tracking-[0.16em] text-neutral-600 capitalize">
+        <div className="mt-[clamp(32px,4vw,56px)] flex flex-wrap items-center justify-between gap-4 text-[11px] tracking-[0.16em] text-neutral-600 capitalize">
           <p className="m-0">
             © {profile.year} {profile.name}. {t.contact.rights}
           </p>

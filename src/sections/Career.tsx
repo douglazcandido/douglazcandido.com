@@ -52,7 +52,7 @@ export default function Career() {
               <Reveal className="h-full" delay={i * 160}>
                 <SpotlightCard className="flex h-full flex-col p-[clamp(20px,2.2vw,32px)]">
                   <p
-                    className={`m-0 font-mono text-[11px] tracking-[0.16em] uppercase ${
+                    className={`m-0 text-[11px] tracking-[0.16em] uppercase ${
                       isCurrent ? "text-accent" : "text-neutral-500"
                     }`}
                   >

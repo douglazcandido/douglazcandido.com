@@ -14,7 +14,7 @@ export default function PortraitPlaceholder({ src, alt = "Douglas Candido" }: Po
 
   return (
     <div className="flex h-full w-full items-center justify-center p-6 text-center">
-      <span className="font-mono text-[11px] tracking-[0.14em] text-neutral-700 uppercase">
+      <span className="text-[11px] tracking-[0.14em] text-neutral-700 uppercase">
         Adicione seu retrato (P&amp;B)
       </span>
     </div>

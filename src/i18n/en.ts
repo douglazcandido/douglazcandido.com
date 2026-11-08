@@ -32,8 +32,11 @@ export const en: Dict = {
   },
   about: {
     title: "About",
-    lead: "For over 4 years I've been working on integrations with banks and fintechs, and today I'm an IT Supervisor. Day to day, that means designing data pipelines, building APIs and solving real performance problems in production.",
-    accent: ["banks", "fintechs", "pipelines", "APIs", "performance", "production"],
+    paragraphs: [
+      "I work in data engineering and architecture and in web application backend. My experience is hands-on: process automation, systems integration, ETL pipelines, analytics dashboards and AI agents.",
+      "Today I am an IT Supervisor and lead the team responsible for the critical systems that capture and distribute data. Beyond management, I design scalable architectures on AWS and consolidate fragmented systems into unified, stateless stacks.",
+      "I hold a degree in Data Science from FIAP, where I studied data modeling, data engineering and predictive models such as time series, classification and clustering.",
+    ],
   },
   career: {
     title: "Career",

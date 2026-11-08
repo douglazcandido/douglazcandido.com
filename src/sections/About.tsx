@@ -9,9 +9,8 @@ export default function About() {
   return (
     <Section id="sobre" title={a.title}>
       <ScrubText
-        text={a.lead}
-        accent={a.accent}
-        className="m-0 text-[clamp(22px,2.9vw,46px)] leading-[1.25] font-medium tracking-[-0.02em] text-pretty"
+        paragraphs={a.paragraphs}
+        className="flex max-w-[60ch] flex-col gap-[clamp(20px,2.4vw,36px)] text-[clamp(20px,2.1vw,32px)] leading-[1.35] font-medium tracking-[-0.015em] text-pretty lg:max-w-[68ch]"
       />
     </Section>
   );

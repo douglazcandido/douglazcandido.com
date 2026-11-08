@@ -18,7 +18,7 @@ export default function Education() {
               <span className="display hidden text-[clamp(18px,2vw,30px)] leading-none text-neutral-500 sm:block">
                 {item.school}
               </span>
-              <span className="font-mono text-[11px] tracking-[0.18em] text-neutral-500 uppercase sm:hidden">
+              <span className="text-[11px] tracking-[0.18em] text-neutral-500 uppercase sm:hidden">
                 {item.school}
               </span>
             </div>

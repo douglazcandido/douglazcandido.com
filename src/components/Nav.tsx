@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { FiHome } from "react-icons/fi";
 import ThemeToggle from "./ThemeToggle";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useActiveSection } from "../hooks/useActiveSection";
@@ -13,7 +14,8 @@ const sectionDefs = [
   { id: "contato", key: "contact" },
 ] as const;
 
-const sectionIds = sectionDefs.map((s) => s.id);
+// "inicio" is tracked too so nothing stays highlighted once you are back at the top.
+const sectionIds = ["inicio", ...sectionDefs.map((s) => s.id)];
 
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
@@ -47,7 +49,18 @@ export default function Nav() {
       >
         <nav className="flex items-center justify-end py-[18px]">
           <div className="ml-auto flex items-center gap-4 sm:gap-6 md:gap-8">
-            <ul className="m-0 hidden list-none items-center gap-8 p-0 md:flex">
+            <a
+              href="#inicio"
+              aria-label={t.nav.home}
+              title={t.nav.home}
+              aria-current={active === "inicio" ? "true" : undefined}
+              className={`inline-flex h-8 w-8 items-center justify-center transition-colors duration-300 ${
+                active === "inicio" ? "text-neutral-100" : "text-neutral-500 hover:text-neutral-100"
+              }`}
+            >
+              <FiHome aria-hidden="true" className="h-[15px] w-[15px]" strokeWidth={1.5} />
+            </a>
+            <ul className="m-0 hidden list-none items-center gap-8 p-0 lg:flex">
               {sections.map((s) => {
                 const isActive = active === s.id;
                 return (
@@ -71,7 +84,7 @@ export default function Nav() {
                 );
               })}
             </ul>
-            <span aria-hidden="true" className="hidden h-3.5 w-px bg-divider md:block" />
+            <span aria-hidden="true" className="hidden h-3.5 w-px bg-divider lg:block" />
             <LanguageSwitcher />
             <ThemeToggle />
             <button
@@ -79,7 +92,7 @@ export default function Nav() {
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
               aria-controls="menu-overlay"
-              className="text-[13px] font-medium tracking-[0.08em] uppercase md:hidden"
+              className="text-[13px] font-medium tracking-[0.08em] uppercase lg:hidden"
             >
               {open ? t.nav.close : t.nav.menu}
             </button>
@@ -95,7 +108,7 @@ export default function Nav() {
 
       <div
         id="menu-overlay"
-        className={`fixed inset-0 z-40 flex flex-col justify-center bg-bg px-[var(--gutter)] transition-[clip-path] duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] md:hidden ${
+        className={`fixed inset-0 z-40 flex flex-col justify-center bg-bg px-[var(--gutter)] transition-[clip-path] duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] lg:hidden ${
           open ? "[clip-path:inset(0_0_0_0)]" : "pointer-events-none [clip-path:inset(0_0_100%_0)]"
         }`}
       >

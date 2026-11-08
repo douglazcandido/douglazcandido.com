@@ -5,9 +5,9 @@ import { useParallax } from "../hooks/useParallax";
 import portrait from "../assets/douglas-candido-retrato.jpg";
 
 /** One headline line whose letters rise out of a clipped mask, staggered. */
-function HeroLine({ text, base }: { text: string; base: number }) {
+function HeroLine({ text, base, className = "" }: { text: string; base: number; className?: string }) {
   return (
-    <span className="hero-line" aria-hidden="true">
+    <span className={`hero-line ${className}`} aria-hidden="true">
       {text.split("").map((char, i) => (
         <span key={i} className="hero-char" style={{ "--i": i, "--base": `${base}ms` } as React.CSSProperties}>
           {char}
@@ -31,7 +31,7 @@ export default function Hero() {
             className="display m-0 text-[clamp(52px,9.2vw,152px)] leading-[0.95] font-semibold tracking-[-0.045em]"
           >
             <HeroLine text="Douglas" base={150} />
-            <HeroLine text="Candido" base={380} />
+            <HeroLine text="Candido" base={380} className="text-accent" />
           </h1>
 
           <div className="fade-up mt-[clamp(24px,3vw,44px)]" style={{ "--d": "800ms" } as React.CSSProperties}>

@@ -16,7 +16,7 @@ export default function Section({ id, title, children, bleed, className = "" }: 
   const { ref, isInView } = useInView<HTMLDivElement>();
 
   return (
-    <section id={id} className={`relative py-[clamp(56px,8vw,112px)] ${className}`}>
+    <section id={id} className={`screen relative py-[clamp(56px,8vw,112px)] ${className}`}>
       <SectionRule />
       <div className="px-page">
         <div ref={ref} className={isInView ? "mask-visible" : ""}>

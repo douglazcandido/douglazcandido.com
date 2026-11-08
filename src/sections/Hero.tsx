@@ -20,7 +20,7 @@ export default function Hero() {
   const titleRef = useParallax<HTMLDivElement>({ y: 30 });
 
   return (
-    <header id="inicio" className="px-page pt-[clamp(88px,10vw,128px)] pb-[clamp(48px,7vw,104px)]">
+    <header id="inicio" className="screen px-page pt-[clamp(88px,10vw,128px)] pb-[clamp(48px,7vw,104px)]">
       <div ref={titleRef} className="will-change-transform">
         <h1
           aria-label={profile.name}

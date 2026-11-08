@@ -147,6 +147,18 @@ html.theme-fade *::after {
   }
 }
 
+/* Landscape screens: every section fills at least one full screen, content centered.
+   (Portrait stays natural height; sections taller than the screen simply grow.) */
+@media (orientation: landscape) {
+  .screen {
+    display: flex;
+    min-height: 100vh;
+    min-height: 100svh;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
 /* Stretched width with the display face's condensed axis. */
 .display {
   font-family: var(--font-display);

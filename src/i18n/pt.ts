@@ -117,7 +117,6 @@ export const pt = {
   },
   contact: {
     title: "Vamos conversar",
-    backToTop: "voltar ao topo",
     rights: "Todos os direitos reservados.",
   },
 };

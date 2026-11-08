@@ -61,13 +61,10 @@ export default function Contact() {
           ))}
         </ul>
 
-        <div className="mt-[clamp(32px,4vw,56px)] flex flex-wrap items-center justify-between gap-4 font-mono text-[11px] tracking-[0.16em] text-neutral-600 uppercase">
+        <div className="mt-[clamp(32px,4vw,56px)] flex flex-wrap items-center justify-between gap-4 font-mono text-[11px] tracking-[0.16em] text-neutral-600 capitalize">
           <p className="m-0">
             © {profile.year} {profile.name}. {t.contact.rights}
           </p>
-          <a href="#inicio" className="inline-flex items-center gap-2 text-neutral-400 transition-colors hover:text-accent">
-            {t.contact.backToTop} <FiArrowUpRight aria-hidden="true" className="h-3.5 w-3.5 -rotate-45" />
-          </a>
         </div>
       </div>
 

@@ -115,7 +115,6 @@ export const en: Dict = {
   },
   contact: {
     title: "Let's talk",
-    backToTop: "back to top",
     rights: "All rights reserved.",
   },
 };

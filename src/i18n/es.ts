@@ -115,7 +115,6 @@ export const es: Dict = {
   },
   contact: {
     title: "Hablemos",
-    backToTop: "volver arriba",
     rights: "Todos los derechos reservados.",
   },
 };

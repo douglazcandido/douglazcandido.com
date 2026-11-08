@@ -31,7 +31,6 @@ export const en: Dict = {
       "I build pipelines that hold up under real volume, from ingestion to insight, with observability built in and costs under control.",
   },
   about: {
-    label: "about",
     title: "About",
     lead: "For over 4 years I've been working on integrations with banks and fintechs, and today I'm an IT Supervisor. Day to day, that means designing data pipelines, building APIs and solving real performance problems in production.",
     accent: ["banks", "fintechs", "pipelines", "APIs", "performance", "production"],
@@ -43,7 +42,6 @@ export const en: Dict = {
     statTools: "Tools in the stack",
   },
   projects: {
-    label: "projects",
     title: "Projects",
     intro:
       "The kinds of problems I've solved in practice, without going into client- or company-specific details.",
@@ -105,12 +103,10 @@ export const en: Dict = {
     ],
   },
   skills: {
-    label: "skills",
     title: "Skills",
     text: "Data & pipelines, backend, automation and cloud: the tools that make up my stack. Scroll the page to speed up the rows.",
   },
   education: {
-    label: "education",
     title: "Education",
     items: [
       { title: "Technologist Degree in Data Science", school: "FIAP" },
@@ -119,7 +115,6 @@ export const en: Dict = {
     ],
   },
   contact: {
-    label: "contact",
     title: "Let's talk",
     copy: "copy",
     copied: "copied",

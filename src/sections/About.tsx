@@ -10,7 +10,7 @@ export default function About() {
   const a = t.about;
 
   return (
-    <Section id="sobre" number="01" label={a.label} title={a.title}>
+    <Section id="sobre" title={a.title}>
       <ScrubText
         text={a.lead}
         accent={a.accent}

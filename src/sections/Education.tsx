@@ -8,7 +8,7 @@ export default function Education() {
   const items = t.education.items;
 
   return (
-    <Section id="educacao" number="04" label={t.education.label} title={t.education.title} count={items.length}>
+    <Section id="educacao" title={t.education.title}>
       <ol className="m-0 list-none border-t border-divider p-0">
         {items.map((item, index) => (
           <Reveal as="li" key={item.title} delay={index * 110} className="border-b border-divider">

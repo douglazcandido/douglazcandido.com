@@ -10,10 +10,7 @@ export default function Skills() {
   return (
     <Section
       id="skills"
-      number="03"
-      label={t.skills.label}
       title={t.skills.title}
-      count={skills.length}
       bleed={
         <Reveal className="mt-[clamp(32px,5vw,72px)]">
           <LogoMarquee skills={skills} />

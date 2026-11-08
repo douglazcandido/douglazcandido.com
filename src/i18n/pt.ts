@@ -33,7 +33,6 @@ export const pt = {
       "Construo pipelines que aguentam volume, da ingestão à informação, com observabilidade e custo sob controle.",
   },
   about: {
-    label: "sobre",
     title: "Sobre",
     lead: "Há mais de 4 anos trabalho na integração com bancos e fintechs, hoje como Supervisor de TI. No dia a dia, isso significa desenhar pipelines de dados, construir APIs e resolver problemas reais de performance em produção.",
     accent: ["bancos", "fintechs", "pipelines", "APIs", "performance", "produção"],
@@ -45,7 +44,6 @@ export const pt = {
     statTools: "Ferramentas na stack",
   },
   projects: {
-    label: "projetos",
     title: "Projetos",
     intro:
       "Tipos de problema que já resolvi na prática, sem entrar em detalhes específicos de cliente ou empresa.",
@@ -107,12 +105,10 @@ export const pt = {
     ],
   },
   skills: {
-    label: "skills",
     title: "Skills",
     text: "Dados & pipelines, backend, automação e cloud — as ferramentas que compõem minha stack. Role a página para acelerar as fileiras.",
   },
   education: {
-    label: "educação",
     title: "Educação",
     items: [
       { title: "Tecnólogo em Ciência de Dados", school: "FIAP" },
@@ -121,7 +117,6 @@ export const pt = {
     ],
   },
   contact: {
-    label: "contato",
     title: "Vamos conversar",
     copy: "copiar",
     copied: "copiado",

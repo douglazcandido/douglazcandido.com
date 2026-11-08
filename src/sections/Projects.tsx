@@ -150,7 +150,7 @@ export default function Projects() {
 
   // The radar sits right after the first card and spans two rows (12-col bento keeps every row full).
   return (
-    <Section id="projetos" number="02" label={t.projects.label} title={t.projects.title} count={items.length}>
+    <Section id="projetos" title={t.projects.title}>
       <Reveal as="p" className="m-0 mb-[clamp(28px,4vw,56px)] max-w-[60ch] text-[clamp(17px,1.5vw,22px)] leading-[1.55] text-neutral-400">
         {t.projects.intro}
       </Reveal>

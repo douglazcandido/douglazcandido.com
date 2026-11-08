@@ -51,13 +51,7 @@ export default function Contact() {
     <section id="contato" className="relative overflow-hidden border-t border-divider pt-[clamp(56px,8vw,112px)] pb-[clamp(24px,3vw,40px)]">
       <div className="px-page">
         <div ref={ref} className={isInView ? "mask-visible" : ""}>
-          <div className="flex items-center gap-4 font-mono text-[11px] tracking-[0.22em] uppercase">
-            <span className="text-accent">05</span>
-            <span className="rule-draw h-px flex-1 bg-divider" />
-            <span className="text-neutral-500">{t.contact.label}</span>
-          </div>
-
-          <h2 className="display m-0 mt-[clamp(16px,2vw,28px)] text-[clamp(38px,5.8vw,92px)] leading-[1.05] tracking-[-0.04em]">
+          <h2 className="display m-0 text-[clamp(38px,5.8vw,92px)] leading-[1.05] tracking-[-0.04em]">
             <span className="mask-line">
               <span className="mask-inner">
                 {t.contact.title}<span className="text-accent">.</span>

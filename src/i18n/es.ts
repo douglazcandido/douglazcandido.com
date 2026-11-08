@@ -31,7 +31,6 @@ export const es: Dict = {
       "Construyo pipelines que aguantan volumen de verdad, de la ingesta a la información, con observabilidad y costos bajo control.",
   },
   about: {
-    label: "sobre mí",
     title: "Sobre mí",
     lead: "Hace más de 4 años trabajo en la integración con bancos y fintechs, y hoy soy Supervisor de TI. En el día a día, eso significa diseñar pipelines de datos, construir APIs y resolver problemas reales de rendimiento en producción.",
     accent: ["bancos", "fintechs", "pipelines", "APIs", "rendimiento", "producción"],
@@ -43,7 +42,6 @@ export const es: Dict = {
     statTools: "Herramientas en el stack",
   },
   projects: {
-    label: "proyectos",
     title: "Proyectos",
     intro:
       "Tipos de problemas que ya resolví en la práctica, sin entrar en detalles específicos de clientes o empresas.",
@@ -105,12 +103,10 @@ export const es: Dict = {
     ],
   },
   skills: {
-    label: "habilidades",
     title: "Habilidades",
     text: "Datos y pipelines, backend, automatización y cloud: las herramientas que componen mi stack. Desplázate por la página para acelerar las filas.",
   },
   education: {
-    label: "educación",
     title: "Educación",
     items: [
       { title: "Tecnólogo en Ciencia de Datos", school: "FIAP" },
@@ -119,7 +115,6 @@ export const es: Dict = {
     ],
   },
   contact: {
-    label: "contacto",
     title: "Hablemos",
     copy: "copiar",
     copied: "copiado",

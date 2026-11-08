@@ -88,12 +88,6 @@ export const en: Dict = {
         tags: ["Python", "FastAPI", "AWS", "Authentication"],
       },
       {
-        title: "Data collection through web scraping",
-        description:
-          "Automated extraction of data from external sources that have no API, using scripts that stay resilient to layout changes and scheduled collection jobs.",
-        tags: ["Python", "Web scraping", "Scheduled jobs"],
-      },
-      {
         title: "Anomaly detection and failure prediction (AIOps)",
         description:
           "Orchestration of a data pipeline with multiple machine learning models (time series and clustering) served through an API, plus a management dashboard to follow predictions and export results. An academic project in partnership with FIAP × Locaweb.",

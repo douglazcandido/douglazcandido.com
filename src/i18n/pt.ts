@@ -90,12 +90,6 @@ export const pt = {
         tags: ["Python", "FastAPI", "AWS", "Autenticação"],
       },
       {
-        title: "Coleta de dados via web scraping",
-        description:
-          "Extração automatizada de dados de fontes externas sem API disponível, com scripts resilientes a mudanças de layout e rotinas programadas de coleta.",
-        tags: ["Python", "Web scraping", "Rotinas agendadas"],
-      },
-      {
         title: "Detecção de anomalias e previsão de falhas (AIOps)",
         description:
           "Orquestração de pipeline de dados com múltiplos modelos de machine learning (séries temporais e clustering) servidos por API, com painel de gestão para acompanhar previsões e exportar resultados. Projeto acadêmico em parceria FIAP × Locaweb.",

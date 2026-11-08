@@ -136,9 +136,8 @@ export default function Projects() {
     "md:col-span-7",
     "md:col-span-5 lg:col-span-4",
     "md:col-span-7 lg:col-span-8",
-    "md:col-span-4",
-    "md:col-span-4",
-    "md:col-span-4",
+    "md:col-span-6",
+    "md:col-span-6",
   ];
 
   // The radar sits right after the first card and spans two rows (12-col bento keeps every row full).

@@ -1,6 +1,7 @@
 import { FaGithub, FaInstagram, FaLinkedin } from "react-icons/fa";
 import { FiArrowUpRight } from "react-icons/fi";
 import Reveal from "../components/Reveal";
+import SectionRule from "../components/SectionRule";
 import { useInView } from "../hooks/useInView";
 import { profile } from "../data/profile";
 import { useI18n } from "../i18n/context";
@@ -16,7 +17,8 @@ export default function Contact() {
   const { ref, isInView } = useInView<HTMLDivElement>();
 
   return (
-    <section id="contato" className="relative overflow-hidden border-t border-divider pt-[clamp(56px,8vw,112px)] pb-[clamp(24px,3vw,40px)]">
+    <section id="contato" className="relative overflow-hidden pt-[clamp(56px,8vw,112px)] pb-[clamp(24px,3vw,40px)]">
+      <SectionRule />
       <div className="px-page">
         <div ref={ref} className={isInView ? "mask-visible" : ""}>
           <h2 className="display m-0 text-[clamp(38px,5.8vw,92px)] leading-[1.05] tracking-[-0.04em]">

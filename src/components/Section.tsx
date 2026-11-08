@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { useInView } from "../hooks/useInView";
+import SectionRule from "./SectionRule";
 
 interface SectionProps {
   id: string;
@@ -15,7 +16,8 @@ export default function Section({ id, title, children, bleed, className = "" }: 
   const { ref, isInView } = useInView<HTMLDivElement>();
 
   return (
-    <section id={id} className={`relative border-t border-divider py-[clamp(56px,8vw,112px)] ${className}`}>
+    <section id={id} className={`relative py-[clamp(56px,8vw,112px)] ${className}`}>
+      <SectionRule />
       <div className="px-page">
         <div ref={ref} className={isInView ? "mask-visible" : ""}>
           <h2 className="display m-0 text-[clamp(38px,5.8vw,92px)] leading-[1.05] tracking-[-0.04em]">

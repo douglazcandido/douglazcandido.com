@@ -47,10 +47,10 @@ export const pt = {
         title: "Assistente Administrativo",
         period: "set/2022 - abr/2024",
         items: [
+          "Robôs de web scraping coletaram dados que viabilizaram novas estratégias de venda e aumentaram as vendas de forma considerável",
+          "Robôs em Python eliminaram tarefas repetitivas e consultas manuais em sistemas de bancos parceiros",
           "Tratamento de grandes bases de mailing para discador, SMS e URA",
-          "Robôs em Python para automação e consulta em sistemas de bancos parceiros",
-          "Dashboards e relatórios automatizados a partir de dados brutos",
-          "Administração de discador, CRM e rotas VoIP",
+          "Relatórios e planilhas no Google Sheets para análise de vendas e controle de custos",
         ],
       },
       {

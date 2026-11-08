@@ -45,10 +45,10 @@ export const es: Dict = {
         title: "Asistente Administrativo",
         period: "sep/2022 - abr/2024",
         items: [
+          "Robots de web scraping recopilaron datos que permitieron nuevas estrategias de venta y aumentaron las ventas de forma considerable",
+          "Robots en Python eliminaron tareas repetitivas y consultas manuales en sistemas de bancos socios",
           "Tratamiento de grandes bases de mailing para discador, SMS y URA",
-          "Robots en Python para automatizar y consultar sistemas de bancos socios",
-          "Dashboards e informes automatizados a partir de datos en bruto",
-          "Administración de discador, CRM y rutas VoIP",
+          "Informes y hojas de cálculo en Google Sheets para análisis de ventas y control de costos",
         ],
       },
       {

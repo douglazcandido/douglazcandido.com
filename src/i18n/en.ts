@@ -45,10 +45,10 @@ export const en: Dict = {
         title: "Administrative Assistant",
         period: "Sep/2022 - Apr/2024",
         items: [
+          "Web scraping bots collected data that enabled new sales strategies and significantly increased sales",
+          "Python bots eliminated repetitive tasks and manual lookups in partner bank systems",
           "Handling large mailing databases for dialer, SMS and IVR campaigns",
-          "Python bots to automate and query partner bank systems",
-          "Automated dashboards and reports built from raw data",
-          "Administration of the dialer, CRM and VoIP routes",
+          "Reports and spreadsheets in Google Sheets for sales analysis and cost control",
         ],
       },
       {

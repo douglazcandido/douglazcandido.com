@@ -49,15 +49,6 @@ export const pt = {
     before: "antes",
     after: "depois",
     metricCaption: "tamanho da base após a reestruturação",
-    radarTitle: ["Mapa de ", "experiência", ""],
-    radarScale: "escala 0 a 10",
-    axes: [
-      "Engenharia de Dados",
-      "Automação & Integração",
-      "Backend & APIs",
-      "Cloud & Infraestrutura",
-      "Machine Learning",
-    ],
     items: [
       {
         title: "Ingestão, processamento e integração de leads em tempo quase real",

@@ -47,15 +47,6 @@ export const en: Dict = {
     before: "before",
     after: "after",
     metricCaption: "database size after the restructuring",
-    radarTitle: ["", "Experience", " map"],
-    radarScale: "scale 0 to 10",
-    axes: [
-      "Data Engineering",
-      "Automation & Integration",
-      "Backend & APIs",
-      "Cloud & Infrastructure",
-      "Machine Learning",
-    ],
     items: [
       {
         title: "Near real-time lead ingestion, processing and integration",

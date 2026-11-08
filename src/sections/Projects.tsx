@@ -3,28 +3,8 @@ import { useInView } from "../hooks/useInView";
 import Section from "../components/Section";
 import Reveal from "../components/Reveal";
 import SpotlightCard from "../components/SpotlightCard";
-import { Fragment, lazy, Suspense } from "react";
-import { metricProject, radarValues } from "../data/projects";
+import { metricProject } from "../data/projects";
 import { useI18n } from "../i18n/context";
-
-const ExperienceRadar = lazy(() => import("../components/ExperienceRadar"));
-const NEAR_VIEWPORT = { threshold: 0, rootMargin: "600px 0px" } as const;
-
-/** Mounts the (heavy) chart library only once the card is close to the screen. */
-function LazyRadar() {
-  const { t } = useI18n();
-  const { ref, isInView } = useInView<HTMLDivElement>(NEAR_VIEWPORT);
-  const data = t.projects.axes.map((subject, i) => ({ subject, value: radarValues[i], fullMark: 10 }));
-  return (
-    <div ref={ref} className="aspect-square w-full max-w-[360px] md:max-w-[460px]">
-      {isInView && (
-        <Suspense fallback={null}>
-          <ExperienceRadar data={data} />
-        </Suspense>
-      )}
-    </div>
-  );
-}
 
 interface ProjectCardProps {
   project: { title: string; description: string; tags: string[] };
@@ -107,40 +87,19 @@ function ProjectCard({ project, index, className = "" }: ProjectCardProps) {
   );
 }
 
-function RadarCard({ className = "" }: { className?: string }) {
-  const { t } = useI18n();
-  const [pre, accent, post] = t.projects.radarTitle;
-
-  return (
-    <Reveal className={`h-full ${className}`} delay={110}>
-      <SpotlightCard className="flex h-full flex-col p-[clamp(20px,2.2vw,36px)]">
-        <div className="flex items-center justify-end font-mono text-[11px] tracking-[0.2em] text-neutral-500 uppercase">
-          <span>{t.projects.radarScale}</span>
-        </div>
-        <h3 className="m-0 mt-[clamp(20px,3vw,44px)] font-display text-[clamp(20px,1.7vw,28px)] leading-[1.15] font-semibold tracking-[-0.02em]">
-          {pre}<span className="text-accent">{accent}</span>{post}
-        </h3>
-        <div className="flex flex-1 items-center justify-center py-6">
-          <LazyRadar />
-        </div>
-      </SpotlightCard>
-    </Reveal>
-  );
-}
-
 export default function Projects() {
   const { t } = useI18n();
   const items = t.projects.items;
   const spans = [
     "md:col-span-7",
-    "md:col-span-7",
+    "md:col-span-5",
     "md:col-span-5 lg:col-span-4",
     "md:col-span-7 lg:col-span-8",
     "md:col-span-6",
     "md:col-span-6",
   ];
 
-  // The radar sits right after the first card and spans two rows (12-col bento keeps every row full).
+  // 12-col bento: every row sums to 12.
   return (
     <Section id="projetos" title={t.projects.title}>
       <Reveal as="p" className="m-0 mb-[clamp(28px,4vw,56px)] max-w-[60ch] text-[clamp(17px,1.5vw,22px)] leading-[1.55] text-neutral-400">
@@ -149,10 +108,7 @@ export default function Projects() {
 
       <div className="grid grid-cols-1 gap-[clamp(12px,1.4vw,20px)] md:grid-cols-12">
         {items.map((project, i) => (
-          <Fragment key={i}>
-            <ProjectCard project={project} index={i} className={spans[i]} />
-            {i === 0 && <RadarCard className="md:col-span-5 md:row-span-2" />}
-          </Fragment>
+          <ProjectCard key={i} project={project} index={i} className={spans[i]} />
         ))}
       </div>
     </Section>

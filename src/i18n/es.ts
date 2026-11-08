@@ -47,15 +47,6 @@ export const es: Dict = {
     before: "antes",
     after: "después",
     metricCaption: "tamaño de la base tras la reestructuración",
-    radarTitle: ["Mapa de ", "experiencia", ""],
-    radarScale: "escala 0 a 10",
-    axes: [
-      "Ingeniería de Datos",
-      "Automatización e Integración",
-      "Backend y APIs",
-      "Cloud e Infraestructura",
-      "Machine Learning",
-    ],
     items: [
       {
         title: "Ingesta, procesamiento e integración de leads en tiempo casi real",

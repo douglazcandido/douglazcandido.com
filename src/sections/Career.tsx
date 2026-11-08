@@ -8,11 +8,13 @@ import { useI18n } from "../i18n/context";
 /**
  * Career as a pipeline: one node per stage, joined by a line that draws in as
  * the section scrolls into view. Vertical on mobile, horizontal from md up.
- * The last stage is the current one (pulsing node, line fading out).
+ * Most recent role first: the first stage is the current one (pulsing node) and
+ * the line runs back in time towards the oldest.
  */
 export default function Career() {
   const { t } = useI18n();
-  const items = t.career.items;
+  // Dictionaries list roles oldest to newest; show the newest first.
+  const items = [...t.career.items].reverse();
   const { ref, isInView } = useInView<HTMLOListElement>({ threshold: 0.1 });
 
   return (
@@ -22,7 +24,8 @@ export default function Career() {
         className={`m-0 grid list-none grid-cols-1 gap-x-[clamp(16px,2vw,28px)] gap-y-8 p-0 md:grid-cols-3 ${isInView ? "pipe-visible" : ""}`}
       >
         {items.map((role, i) => {
-          const isCurrent = i === items.length - 1;
+          const isCurrent = i === 0;
+          const isLast = i === items.length - 1;
           const delay = `${i * 320}ms`;
 
           return (
@@ -31,15 +34,13 @@ export default function Career() {
               className="relative flex flex-col pl-8 md:pt-9 md:pl-0"
               style={{ "--d": delay } as React.CSSProperties}
             >
-              {/* Connector to the next stage (fades out on the current one). */}
-              <span
-                aria-hidden="true"
-                className={`pipe-line absolute top-3 -bottom-[40px] left-[4px] w-px md:top-[4px] md:right-[calc(-1*clamp(16px,2vw,28px))] md:bottom-auto md:left-[18px] md:h-px md:w-auto ${
-                  isCurrent
-                    ? "bg-linear-to-b from-accent to-transparent md:bg-linear-to-r"
-                    : "bg-accent/60"
-                }`}
-              />
+              {/* Connector to the next (older) stage. */}
+              {!isLast && (
+                <span
+                  aria-hidden="true"
+                  className="pipe-line absolute top-3 -bottom-[40px] left-[4px] w-px bg-accent/60 md:top-[4px] md:right-[calc(-1*clamp(16px,2vw,28px))] md:bottom-auto md:left-[18px] md:h-px md:w-auto"
+                />
+              )}
 
               {/* Node */}
               <span

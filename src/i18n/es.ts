@@ -34,12 +34,6 @@ export const es: Dict = {
     title: "Sobre mí",
     lead: "Hace más de 4 años trabajo en la integración con bancos y fintechs, y hoy soy Supervisor de TI. En el día a día, eso significa diseñar pipelines de datos, construir APIs y resolver problemas reales de rendimiento en producción.",
     accent: ["bancos", "fintechs", "pipelines", "APIs", "rendimiento", "producción"],
-    body: "Trabajo de punta a punta: modelado de datos, orquestación de pipelines y servicios en Python. Me gustan los sistemas explícitos, probados y bien documentados.",
-    statYears: "Integrando bancos y fintechs",
-    statYearsUnit: "años",
-    statDb: "Base PostgreSQL optimizada",
-    statDbWas: "antes 112 GB",
-    statTools: "Herramientas en el stack",
   },
   career: {
     title: "Carrera",

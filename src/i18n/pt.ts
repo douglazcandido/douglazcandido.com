@@ -36,12 +36,6 @@ export const pt = {
     title: "Sobre",
     lead: "Há mais de 4 anos trabalho na integração com bancos e fintechs, hoje como Supervisor de TI. No dia a dia, isso significa desenhar pipelines de dados, construir APIs e resolver problemas reais de performance em produção.",
     accent: ["bancos", "fintechs", "pipelines", "APIs", "performance", "produção"],
-    body: "Trabalho de ponta a ponta: modelagem de dados, orquestração de pipelines e serviços em Python. Gosto de sistemas explícitos, testados e documentados.",
-    statYears: "Integrando bancos e fintechs",
-    statYearsUnit: "anos",
-    statDb: "Base PostgreSQL otimizada",
-    statDbWas: "era 112 GB",
-    statTools: "Ferramentas na stack",
   },
   career: {
     title: "Carreira",

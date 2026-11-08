@@ -5,7 +5,7 @@ interface PortraitProps {
   className?: string;
 }
 
-/** Framed portrait. */
+/** Framed portrait with a floating accent edge at the bottom-right. */
 export default function Portrait({ src, className = "" }: PortraitProps) {
   return (
     <figure className={`group relative m-0 ${className}`}>
@@ -15,6 +15,12 @@ export default function Portrait({ src, className = "" }: PortraitProps) {
             <PortraitPlaceholder src={src} />
           </div>
         </div>
+
+        {/* Floating accent frame: only the right and bottom edges, offset behind the corner. */}
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-[2.5%] -bottom-[2.5%] h-[68%] w-[43%] rounded-br-[14px] border-r-2 border-b-2 border-accent lg:-right-[4.4%] lg:-bottom-[3.8%]"
+        />
       </div>
     </figure>
   );

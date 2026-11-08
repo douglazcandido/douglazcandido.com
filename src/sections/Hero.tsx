@@ -1,4 +1,3 @@
-import { FiArrowDown, FiArrowUpRight } from "react-icons/fi";
 import { profile } from "../data/profile";
 import { useI18n } from "../i18n/context";
 import Portrait from "../components/Portrait";
@@ -44,18 +43,10 @@ export default function Hero() {
             <HeroLine text="Candido" base={380} />
           </h1>
 
-          <div className="fade-up mt-[clamp(24px,3vw,44px)] flex flex-col gap-8" style={{ "--d": "800ms" } as React.CSSProperties}>
+          <div className="fade-up mt-[clamp(24px,3vw,44px)]" style={{ "--d": "800ms" } as React.CSSProperties}>
             <p className="m-0 max-w-[40ch] text-[clamp(18px,1.8vw,26px)] leading-[1.45] font-light text-neutral-300 text-pretty">
               {t.hero.summary}
             </p>
-            <div className="flex flex-wrap gap-3.5">
-              <a href="#contato" className="btn btn-primary">
-                {t.hero.ctaContact} <FiArrowUpRight aria-hidden="true" className="h-4 w-4" />
-              </a>
-              <a href="#skills" className="btn">
-                {t.hero.ctaStack} <FiArrowDown aria-hidden="true" className="h-4 w-4" />
-              </a>
-            </div>
           </div>
         </div>
 

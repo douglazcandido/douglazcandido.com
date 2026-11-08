@@ -31,8 +31,6 @@ export const pt = {
     role: "Engenheiro de Dados & Backend",
     summary:
       "Construo pipelines que aguentam volume, da ingestão à informação, com observabilidade e custo sob controle.",
-    ctaContact: "Falar comigo",
-    ctaStack: "Stack técnica",
   },
   about: {
     label: "sobre",

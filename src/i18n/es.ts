@@ -29,8 +29,6 @@ export const es: Dict = {
     role: "Ingeniero de Datos y Backend",
     summary:
       "Construyo pipelines que aguantan volumen de verdad, de la ingesta a la información, con observabilidad y costos bajo control.",
-    ctaContact: "Hablemos",
-    ctaStack: "Stack técnico",
   },
   about: {
     label: "sobre mí",

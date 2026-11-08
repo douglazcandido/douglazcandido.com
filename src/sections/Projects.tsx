@@ -100,7 +100,7 @@ function ProjectCard({ project, index, className = "" }: ProjectCardProps) {
           {project.tags.map((tag) => (
             <li
               key={tag}
-              className="border border-divider px-2.5 py-1 font-mono text-[10.5px] tracking-[0.12em] text-neutral-400 uppercase transition-colors group-hover:border-accent/50"
+              className="rounded-md border border-divider px-2.5 py-1 font-mono text-[10.5px] tracking-[0.12em] text-neutral-400 uppercase transition-colors group-hover:border-accent/50"
             >
               {tag}
             </li>

@@ -42,7 +42,7 @@ export default function ScrollRail() {
             className="group pointer-events-auto relative block h-2 w-2"
           >
             <span
-              className={`absolute inset-0 border transition-all duration-500 ${
+              className={`absolute inset-0 rounded-full border transition-all duration-500 ${
                 i === activeIndex
                   ? "scale-150 border-accent bg-accent"
                   : i < activeIndex
@@ -50,7 +50,7 @@ export default function ScrollRail() {
                     : "border-neutral-700 bg-bg"
               }`}
             />
-            <span className="absolute top-1/2 left-5 -translate-y-1/2 border border-divider bg-bg px-2 py-1 font-mono text-[10px] tracking-[0.16em] whitespace-nowrap text-neutral-300 uppercase opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            <span className="absolute top-1/2 left-5 -translate-y-1/2 rounded-md border border-divider bg-bg px-2 py-1 font-mono text-[10px] tracking-[0.16em] whitespace-nowrap text-neutral-300 uppercase opacity-0 transition-opacity duration-300 group-hover:opacity-100">
               {t.nav[stop.key]}
             </span>
           </a>

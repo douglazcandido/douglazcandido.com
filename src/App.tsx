@@ -8,10 +8,12 @@ import Education from "./sections/Education";
 import Contact from "./sections/Contact";
 import { useScrollProgress } from "./hooks/useScrollProgress";
 import { useSmoothScroll } from "./hooks/useSmoothScroll";
+import { useDocumentTitle } from "./hooks/useDocumentTitle";
 
 export default function App() {
   useScrollProgress();
   useSmoothScroll();
+  useDocumentTitle();
 
   return (
     <div className="relative isolate min-h-screen overflow-x-clip bg-bg text-text">

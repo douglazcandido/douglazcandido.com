@@ -251,6 +251,7 @@ html.theme-fade *::after {
   position: relative;
   background: color-mix(in srgb, var(--color-surface) 82%, transparent);
   border: 1px solid var(--color-divider);
+  border-radius: 14px;
   transition: border-color 0.4s ease, background-color 0.4s ease;
 }
 

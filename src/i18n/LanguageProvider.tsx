@@ -47,10 +47,10 @@ export default function LanguageProvider({ children }: { children: ReactNode }) 
 
   const t = dictionaries[lang];
 
-  // Keep the document in sync: <html lang>, tab title and meta description.
+  // Keep the document in sync: <html lang> and meta description
+  // (the tab title follows the active section, see useDocumentTitle).
   useEffect(() => {
     document.documentElement.lang = LANG_META[lang].htmlLang;
-    document.title = t.meta.title;
     document.querySelector('meta[name="description"]')?.setAttribute("content", t.meta.description);
   }, [lang, t]);
 

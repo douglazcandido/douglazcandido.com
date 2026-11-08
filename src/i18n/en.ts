@@ -115,10 +115,6 @@ export const en: Dict = {
   },
   contact: {
     title: "Let's talk",
-    copy: "copy",
-    copied: "copied",
-    copyAria: "Copy email",
-    copiedAria: "Email copied",
     backToTop: "back to top",
     rights: "All rights reserved.",
   },

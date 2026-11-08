@@ -115,10 +115,6 @@ export const es: Dict = {
   },
   contact: {
     title: "Hablemos",
-    copy: "copiar",
-    copied: "copiado",
-    copyAria: "Copiar correo",
-    copiedAria: "Correo copiado",
     backToTop: "volver arriba",
     rights: "Todos los derechos reservados.",
   },

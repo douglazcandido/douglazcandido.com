@@ -117,10 +117,6 @@ export const pt = {
   },
   contact: {
     title: "Vamos conversar",
-    copy: "copiar",
-    copied: "copiado",
-    copyAria: "Copiar e-mail",
-    copiedAria: "E-mail copiado",
     backToTop: "voltar ao topo",
     rights: "Todos os direitos reservados.",
   },

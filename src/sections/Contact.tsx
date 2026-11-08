@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState } from "react";
 import { FaGithub, FaInstagram, FaLinkedin } from "react-icons/fa";
-import { FiArrowUpRight, FiCheck, FiCopy } from "react-icons/fi";
+import { FiArrowUpRight } from "react-icons/fi";
 import Reveal from "../components/Reveal";
 import { useInView } from "../hooks/useInView";
 import { profile } from "../data/profile";
@@ -11,37 +10,6 @@ const socials = [
   { href: profile.linkedin, label: "LinkedIn", handle: "in/douglazcandido", Icon: FaLinkedin },
   { href: profile.instagram, label: "Instagram", handle: "@douglazcandido", Icon: FaInstagram },
 ];
-
-function CopyEmail() {
-  const { t } = useI18n();
-  const [copied, setCopied] = useState(false);
-  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-
-  useEffect(() => () => clearTimeout(timer.current), []);
-
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(profile.email);
-      setCopied(true);
-      clearTimeout(timer.current);
-      timer.current = setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // Clipboard can be blocked (insecure context / permissions); the mailto link still works.
-    }
-  };
-
-  return (
-    <button
-      type="button"
-      onClick={copy}
-      aria-label={copied ? t.contact.copiedAria : t.contact.copyAria}
-      className="inline-flex shrink-0 items-center gap-2 border border-divider px-3.5 py-2.5 font-mono text-[11px] tracking-[0.16em] text-neutral-300 uppercase transition-colors hover:border-accent hover:text-accent"
-    >
-      {copied ? <FiCheck aria-hidden="true" className="h-3.5 w-3.5" /> : <FiCopy aria-hidden="true" className="h-3.5 w-3.5" />}
-      {copied ? t.contact.copied : t.contact.copy}
-    </button>
-  );
-}
 
 export default function Contact() {
   const { t } = useI18n();
@@ -68,7 +36,6 @@ export default function Contact() {
             {profile.email}
             <span className="absolute -bottom-2 left-0 h-[3px] w-full origin-left scale-x-0 bg-accent transition-transform duration-500 ease-out group-hover:scale-x-100" />
           </a>
-          <CopyEmail />
         </Reveal>
 
         <ul className="m-0 mt-[clamp(32px,4.5vw,64px)] list-none border-t border-divider p-0">

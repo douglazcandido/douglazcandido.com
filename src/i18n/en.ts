@@ -17,6 +17,7 @@ export const en: Dict = {
   },
   nav: {
     about: "about",
+    career: "career",
     projects: "projects",
     skills: "skills",
     education: "education",
@@ -39,6 +40,41 @@ export const en: Dict = {
     statDb: "PostgreSQL database optimized",
     statDbWas: "was 112 GB",
     statTools: "Tools in the stack",
+  },
+  career: {
+    title: "Career",
+    items: [
+      {
+        title: "Administrative Assistant",
+        period: "Sep/2022 - Apr/2024",
+        items: [
+          "Handling large mailing databases for dialer, SMS and IVR campaigns",
+          "Python bots to automate and query partner bank systems",
+          "Automated dashboards and reports built from raw data",
+          "Administration of the dialer, CRM and VoIP routes",
+        ],
+      },
+      {
+        title: "Data Analyst",
+        period: "Apr/2024 - Jan/2026",
+        items: [
+          "Mailing PostgreSQL: data modeling, orchestrated ETL and extraction queries",
+          "Playwright scrapers and REST integrations with partner banks",
+          "Lead flow through WhatsApp (WABA)",
+          "Power BI on a proposals data mart; Streamlit apps",
+        ],
+      },
+      {
+        title: "IT Supervisor",
+        period: "Jan/2026 - present",
+        items: [
+          "AWS architecture for the company's system, rolled out across all departments",
+          "Batch and real-time pipelines; stack consolidation",
+          "Scrum and CI/CD",
+          "Cost reduction in cloud, telecom and data enrichment",
+        ],
+      },
+    ],
   },
   projects: {
     title: "Projects",

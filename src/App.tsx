@@ -2,6 +2,7 @@ import Nav from "./components/Nav";
 import ScrollRail from "./components/ScrollRail";
 import Hero from "./sections/Hero";
 import About from "./sections/About";
+import Career from "./sections/Career";
 import Projects from "./sections/Projects";
 import Skills from "./sections/Skills";
 import Education from "./sections/Education";
@@ -22,6 +23,7 @@ export default function App() {
       <main className="relative">
         <Hero />
         <About />
+        <Career />
         <Projects />
         <Skills />
         <Education />

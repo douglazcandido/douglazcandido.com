@@ -6,6 +6,7 @@ import { useI18n } from "../i18n/context";
 
 const sectionDefs = [
   { id: "sobre", key: "about" },
+  { id: "carreira", key: "career" },
   { id: "projetos", key: "projects" },
   { id: "skills", key: "skills" },
   { id: "educacao", key: "education" },

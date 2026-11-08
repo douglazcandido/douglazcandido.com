@@ -300,13 +300,66 @@ html.theme-fade *::after {
   filter: brightness(0);
 }
 
+/* ------------------------------------------------------------------ */
+/* Career pipeline: connector line draws, nodes pop in, current node pulses */
+/* ------------------------------------------------------------------ */
+
+.pipe-line {
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 1.1s cubic-bezier(0.19, 1, 0.22, 1) calc(var(--d, 0ms) + 250ms);
+}
+
+.pipe-node {
+  display: block;
+  transform: scale(0);
+  transition: transform 0.7s cubic-bezier(0.19, 1, 0.22, 1) var(--d, 0ms);
+}
+
+.pipe-visible .pipe-line {
+  transform: scale(1);
+}
+
+.pipe-visible .pipe-node {
+  transform: scale(1);
+}
+
+@media (min-width: 768px) {
+  .pipe-line {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+}
+
+.pipe-pulse {
+  animation: pipe-pulse 2s ease-out infinite;
+}
+
+@keyframes pipe-pulse {
+  from {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  to {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
 
-  .animate-blink {
+  .animate-blink,
+  .pipe-pulse {
     animation: none;
+  }
+
+  .pipe-line,
+  .pipe-node {
+    transform: none;
+    transition: none;
   }
 
   .hero-char,

@@ -17,6 +17,7 @@ export const es: Dict = {
   },
   nav: {
     about: "sobre mí",
+    career: "carrera",
     projects: "proyectos",
     skills: "habilidades",
     education: "educación",
@@ -39,6 +40,41 @@ export const es: Dict = {
     statDb: "Base PostgreSQL optimizada",
     statDbWas: "antes 112 GB",
     statTools: "Herramientas en el stack",
+  },
+  career: {
+    title: "Carrera",
+    items: [
+      {
+        title: "Asistente Administrativo",
+        period: "sep/2022 - abr/2024",
+        items: [
+          "Tratamiento de grandes bases de mailing para discador, SMS y URA",
+          "Robots en Python para automatizar y consultar sistemas de bancos socios",
+          "Dashboards e informes automatizados a partir de datos en bruto",
+          "Administración de discador, CRM y rutas VoIP",
+        ],
+      },
+      {
+        title: "Analista de Datos",
+        period: "abr/2024 - ene/2026",
+        items: [
+          "PostgreSQL de mailings: modelado, ETL orquestado y consultas de extracción",
+          "Scrapers con Playwright e integraciones REST con bancos socios",
+          "Flujo de leads por WhatsApp (WABA)",
+          "Power BI sobre un data mart de propuestas; apps en Streamlit",
+        ],
+      },
+      {
+        title: "Supervisor de TI",
+        period: "ene/2026 - hoy",
+        items: [
+          "Arquitectura AWS del sistema de la empresa, implantada en todos los sectores",
+          "Pipelines batch y en tiempo real; consolidación de stacks",
+          "Scrum y CI/CD",
+          "Reducción de costos en cloud, telecom y enriquecimiento de datos",
+        ],
+      },
+    ],
   },
   projects: {
     title: "Proyectos",

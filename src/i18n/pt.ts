@@ -19,6 +19,7 @@ export const pt = {
   },
   nav: {
     about: "sobre",
+    career: "carreira",
     projects: "projetos",
     skills: "skills",
     education: "educação",
@@ -41,6 +42,41 @@ export const pt = {
     statDb: "Base PostgreSQL otimizada",
     statDbWas: "era 112 GB",
     statTools: "Ferramentas na stack",
+  },
+  career: {
+    title: "Carreira",
+    items: [
+      {
+        title: "Assistente Administrativo",
+        period: "set/2022 - abr/2024",
+        items: [
+          "Tratamento de grandes bases de mailing para discador, SMS e URA",
+          "Robôs em Python para automação e consulta em sistemas de bancos parceiros",
+          "Dashboards e relatórios automatizados a partir de dados brutos",
+          "Administração de discador, CRM e rotas VoIP",
+        ],
+      },
+      {
+        title: "Analista de Dados",
+        period: "abr/2024 - jan/2026",
+        items: [
+          "PostgreSQL de mailings: modelagem, ETL orquestrado e queries de extração",
+          "Scrapers com Playwright e integrações REST com bancos parceiros",
+          "Fluxo de leads via WhatsApp (WABA)",
+          "Power BI sobre data mart de propostas; apps em Streamlit",
+        ],
+      },
+      {
+        title: "Supervisor de TI",
+        period: "jan/2026 - hoje",
+        items: [
+          "Arquitetura AWS do sistema da empresa, implantada em todos os setores",
+          "Pipelines batch e real-time; consolidação de stacks",
+          "Scrum e CI/CD",
+          "Redução de custos em cloud, telecom e enriquecimento de dados",
+        ],
+      },
+    ],
   },
   projects: {
     title: "Projetos",

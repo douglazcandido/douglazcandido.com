@@ -4,6 +4,7 @@ import { useI18n } from "../i18n/context";
 const stops = [
   { id: "inicio", key: "home" },
   { id: "sobre", key: "about" },
+  { id: "carreira", key: "career" },
   { id: "projetos", key: "projects" },
   { id: "skills", key: "skills" },
   { id: "educacao", key: "education" },

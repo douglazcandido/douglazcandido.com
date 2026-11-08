@@ -2,6 +2,7 @@ import Section from "../components/Section";
 import Reveal from "../components/Reveal";
 import SpotlightCard from "../components/SpotlightCard";
 import { useInView } from "../hooks/useInView";
+import { profile } from "../data/profile";
 import { useI18n } from "../i18n/context";
 
 /**
@@ -61,7 +62,8 @@ export default function Career() {
                   <h3 className="m-0 mt-3 font-display text-[clamp(20px,1.9vw,30px)] leading-[1.15] font-semibold tracking-[-0.02em] text-pretty">
                     {role.title}
                   </h3>
-                  <ul className="m-0 mt-6 flex list-none flex-col gap-3 p-0">
+                  <p className="m-0 mt-1.5 text-[15px] leading-[1.4] text-neutral-500">{profile.company}</p>
+                  <ul className="m-0 mt-5 flex list-none flex-col gap-3 p-0">
                     {role.items.map((item) => (
                       <li key={item} className="relative pl-4 text-[15px] leading-[1.6] text-neutral-400">
                         <span aria-hidden="true" className="absolute top-[0.62em] left-0 h-1 w-1 rounded-full bg-accent" />

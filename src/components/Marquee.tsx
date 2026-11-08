@@ -12,8 +12,7 @@ interface MarqueeProps {
 }
 
 /**
- * Infinite ticker driven by rAF instead of a CSS animation so it can react to
- * the page: scrolling speeds it up, and scrolling the other way reverses it.
+ * Infinite ticker at a steady speed (it does not react to page scroll).
  * Only runs while on screen. `children` is rendered twice for the seamless loop.
  */
 export default function Marquee({
@@ -33,9 +32,6 @@ export default function Marquee({
 
     let raf = 0;
     let offset = 0;
-    let flip = 1;
-    let velocity = 0;
-    let lastY = window.scrollY;
     let last = performance.now();
     let loop = 0;
     const measure = () => {
@@ -49,15 +45,7 @@ export default function Marquee({
       const dt = Math.min((now - last) / 1000, 0.05);
       last = now;
 
-      const y = window.scrollY;
-      const instant = dt > 0 ? (y - lastY) / dt : 0;
-      lastY = y;
-      velocity += (instant - velocity) * 0.12;
-
-      if (Math.abs(velocity) > 40) flip += ((velocity > 0 ? 1 : -1) - flip) * 0.08;
-      const boost = 1 + Math.min(Math.abs(velocity) / 500, 4);
-
-      offset -= direction * flip * speed * boost * dt;
+      offset -= direction * speed * dt;
       if (loop > 0) offset = ((offset % loop) - loop) % loop;
       track.style.transform = `translate3d(${offset}px, 0, 0)`;
 
@@ -67,7 +55,6 @@ export default function Marquee({
     const io = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting && !raf) {
         last = performance.now();
-        lastY = window.scrollY;
         raf = requestAnimationFrame(frame);
       } else if (!entry.isIntersecting && raf) {
         cancelAnimationFrame(raf);

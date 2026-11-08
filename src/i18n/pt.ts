@@ -123,7 +123,7 @@ export const pt = {
   },
   skills: {
     title: "Skills",
-    text: "Dados & pipelines, backend, automação e cloud: as ferramentas que compõem minha stack. Role a página para acelerar as fileiras.",
+    text: "Dados & pipelines, backend, automação e cloud: as ferramentas que compõem minha stack.",
   },
   education: {
     title: "Educação",

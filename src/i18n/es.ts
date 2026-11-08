@@ -121,7 +121,7 @@ export const es: Dict = {
   },
   skills: {
     title: "Habilidades",
-    text: "Datos y pipelines, backend, automatización y cloud: las herramientas que componen mi stack. Desplázate por la página para acelerar las filas.",
+    text: "Datos y pipelines, backend, automatización y cloud: las herramientas que componen mi stack.",
   },
   education: {
     title: "Educación",

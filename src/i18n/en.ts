@@ -121,7 +121,7 @@ export const en: Dict = {
   },
   skills: {
     title: "Skills",
-    text: "Data & pipelines, backend, automation and cloud: the tools that make up my stack. Scroll the page to speed up the rows.",
+    text: "Data & pipelines, backend, automation and cloud: the tools that make up my stack.",
   },
   education: {
     title: "Education",

@@ -41,7 +41,7 @@ function LogoTile({ skill }: { skill: Skill }) {
   );
 }
 
-/** Two opposing logo tickers; both speed up with scroll and keep a steady base speed. */
+/** Two opposing logo tickers; each at its own steady speed. */
 export default function LogoMarquee({ skills }: LogoMarqueeProps) {
   const { t } = useI18n();
 

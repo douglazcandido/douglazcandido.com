@@ -13,7 +13,7 @@ interface Project {
   tags: readonly string[];
 }
 
-/** Cards fade and shrink a little as they leave the visible window (set from the scroll handler). */
+/** Cards fade as they leave the visible window (set from the scroll handler). */
 function ProjectCard({ project, index, seen, onSelect }: { project: Project; index: number; seen: boolean; onSelect: (e: MouseEvent) => void }) {
   const { t } = useI18n();
   const metric = index === metricProject.index ? { ...metricProject, caption: t.projects.metricCaption } : undefined;
@@ -22,7 +22,7 @@ function ProjectCard({ project, index, seen, onSelect }: { project: Project; ind
     <div
       data-card
       onClick={onSelect}
-      className="w-[min(86vw,520px)] shrink-0 snap-start will-change-transform lg:w-[min(40vw,560px)]"
+      className="w-[min(86vw,520px)] shrink-0 snap-start lg:w-[min(40vw,560px)]"
       style={{ opacity: 0.4 }}
     >
       <SpotlightCard className="flex h-full min-h-[clamp(380px,52vh,540px)] flex-col gap-8 p-[clamp(24px,2.6vw,40px)]">
@@ -102,6 +102,7 @@ export default function Projects() {
   const drag = useRef({ active: false, moved: false, startX: 0, startLeft: 0 });
   const samples = useRef<{ t: number; left: number }[]>([]);
   const anim = useRef(0);
+  const animTarget = useRef(0);
 
   const cards = useCallback(
     () => Array.from(scrollerRef.current?.querySelectorAll<HTMLElement>("[data-card]") ?? []),
@@ -137,6 +138,7 @@ export default function Projects() {
       const s = scrollerRef.current;
       if (!s) return;
       cancelAnimationFrame(anim.current);
+      animTarget.current = target;
       if (prefersReducedMotion()) {
         s.scrollTo({ left: target });
         return;
@@ -183,7 +185,7 @@ export default function Projects() {
   const goNext = useCallback(() => {
     const s = scrollerRef.current;
     if (!s) return;
-    const sl = s.scrollLeft;
+    const sl = anim.current ? animTarget.current : s.scrollLeft;
     const target = cards().map((_, i) => leftFor(i)).find((x) => x > sl + EDGE);
     scrollToX(target ?? maxScroll());
   }, [cards, leftFor, maxScroll, scrollToX]);
@@ -191,12 +193,12 @@ export default function Projects() {
   const goPrev = useCallback(() => {
     const s = scrollerRef.current;
     if (!s) return;
-    const sl = s.scrollLeft;
+    const sl = anim.current ? animTarget.current : s.scrollLeft;
     const before = cards().map((_, i) => leftFor(i)).filter((x) => x < sl - EDGE);
     scrollToX(before.length ? before[before.length - 1] : 0);
   }, [cards, leftFor, scrollToX]);
 
-  // Scroll-linked visuals: each card eases in/out with how much of it is in the window,
+  // Scroll-linked visuals: each card fades with how much of it is in the window,
   // and the thumb mirrors the scroll position. Done imperatively to stay smooth.
   useEffect(() => {
     const scroller = scrollerRef.current;
@@ -214,7 +216,6 @@ export default function Projects() {
         const v = Math.min(1, overlap / Math.max(1, r.width));
         const e = 1 - (1 - v) * (1 - v);
         card.style.opacity = (0.35 + 0.65 * e).toFixed(3);
-        card.style.transform = `scale(${(0.96 + 0.04 * e).toFixed(4)})`;
       }
 
       const max = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
@@ -248,10 +249,16 @@ export default function Projects() {
   useEffect(() => {
     const scroller = scrollerRef.current;
     if (!scroller) return;
-    scroller.addEventListener("wheel", stopAnim, { passive: true });
+    const onWheel = (e: WheelEvent) => {
+      stopAnim();
+      // Smooth page scrolling would swallow sideways swipes (and scroll the page instead):
+      // keep those native and let only vertical wheel movement through.
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) e.stopPropagation();
+    };
+    scroller.addEventListener("wheel", onWheel, { passive: true });
     scroller.addEventListener("touchstart", stopAnim, { passive: true });
     return () => {
-      scroller.removeEventListener("wheel", stopAnim);
+      scroller.removeEventListener("wheel", onWheel);
       scroller.removeEventListener("touchstart", stopAnim);
       stopAnim();
     };
@@ -323,8 +330,8 @@ export default function Projects() {
         const dt = (lastPt.t - first.t) / 1000;
         if (dt > 0.01 && performance.now() - lastPt.t < 80) velocity = (lastPt.left - first.left) / dt;
       }
-      velocity = Math.max(-4000, Math.min(4000, velocity));
-      if (s) animateTo(nearestSnap(s.scrollLeft + velocity * 0.22), velocity);
+      velocity = Math.max(-3000, Math.min(3000, velocity));
+      if (s) animateTo(nearestSnap(s.scrollLeft + velocity * 0.15), velocity);
     }
   };
 
@@ -365,7 +372,7 @@ export default function Projects() {
           onPointerUp={endDrag}
           onPointerLeave={endDrag}
           onPointerCancel={endDrag}
-          className={`no-scrollbar relative flex items-stretch gap-[clamp(14px,1.6vw,24px)] overflow-x-auto overscroll-x-contain pr-[var(--page-pad)] pl-[var(--page-pad)] py-3 [scroll-padding-inline:var(--page-pad)] [clip-path:inset(0_0_0_var(--page-pad))] ${
+          className={`no-scrollbar relative flex items-stretch gap-[clamp(14px,1.6vw,24px)] overflow-x-auto overscroll-x-contain pr-[var(--page-pad)] pl-[var(--page-pad)] py-3 [scroll-padding-inline:var(--page-pad)] [mask-image:linear-gradient(to_right,transparent_calc(var(--page-pad)-56px),black_var(--page-pad))] ${
             dragging ? "cursor-grabbing select-none" : "cursor-grab snap-x snap-mandatory"
           }`}
         >

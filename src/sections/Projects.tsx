@@ -100,6 +100,8 @@ export default function Projects() {
   const [edges, setEdges] = useState({ start: true, end: false });
   const [dragging, setDragging] = useState(false);
   const drag = useRef({ active: false, moved: false, startX: 0, startLeft: 0 });
+  const samples = useRef<{ t: number; left: number }[]>([]);
+  const anim = useRef(0);
 
   const cards = useCallback(
     () => Array.from(scrollerRef.current?.querySelectorAll<HTMLElement>("[data-card]") ?? []),
@@ -120,9 +122,63 @@ export default function Projects() {
     [cards, maxScroll],
   );
 
-  const scrollToX = useCallback((x: number) => {
-    scrollerRef.current?.scrollTo({ left: x, behavior: prefersReducedMotion() ? "auto" : "smooth" });
+  const stopAnim = useCallback(() => {
+    cancelAnimationFrame(anim.current);
+    anim.current = 0;
+    if (scrollerRef.current) scrollerRef.current.style.scrollSnapType = "";
   }, []);
+
+  /**
+   * Critically damped spring towards `target` (ease in and out, no overshoot), optionally
+   * starting with the speed of a mouse fling. Native snapping is paused while it runs.
+   */
+  const animateTo = useCallback(
+    (target: number, initialVelocity = 0) => {
+      const s = scrollerRef.current;
+      if (!s) return;
+      cancelAnimationFrame(anim.current);
+      if (prefersReducedMotion()) {
+        s.scrollTo({ left: target });
+        return;
+      }
+      s.style.scrollSnapType = "none";
+      let cur = s.scrollLeft;
+      let vel = initialVelocity;
+      let last = performance.now();
+      const omega = 2 / 0.3;
+      const step = (now: number) => {
+        const dt = Math.min(0.05, (now - last) / 1000);
+        last = now;
+        const x = omega * dt;
+        const k = 1 / (1 + x + 0.48 * x * x + 0.235 * x * x * x);
+        const change = cur - target;
+        const temp = (vel + omega * change) * dt;
+        vel = (vel - omega * temp) * k;
+        cur = target + (change + temp) * k;
+        s.scrollLeft = cur;
+        if (Math.abs(cur - target) < 0.4 && Math.abs(vel) < 8) {
+          s.scrollLeft = target;
+          s.style.scrollSnapType = "";
+          anim.current = 0;
+          return;
+        }
+        anim.current = requestAnimationFrame(step);
+      };
+      anim.current = requestAnimationFrame(step);
+    },
+    [],
+  );
+
+  const scrollToX = useCallback((x: number) => animateTo(x), [animateTo]);
+
+  /** The scroll position that card-start snapping would settle on, closest to x. */
+  const nearestSnap = useCallback(
+    (x: number) => {
+      const xs = cards().map((_, i) => leftFor(i));
+      return xs.reduce((best, c) => (Math.abs(c - x) < Math.abs(best - x) ? c : best), xs[0] ?? 0);
+    },
+    [cards, leftFor],
+  );
 
   const goNext = useCallback(() => {
     const s = scrollerRef.current;
@@ -138,13 +194,6 @@ export default function Projects() {
     const sl = s.scrollLeft;
     const before = cards().map((_, i) => leftFor(i)).filter((x) => x < sl - EDGE);
     scrollToX(before.length ? before[before.length - 1] : 0);
-  }, [cards, leftFor, scrollToX]);
-
-  const snapNearest = useCallback(() => {
-    const s = scrollerRef.current;
-    if (!s) return;
-    const xs = cards().map((_, i) => leftFor(i));
-    scrollToX(xs.reduce((best, x) => (Math.abs(x - s.scrollLeft) < Math.abs(best - s.scrollLeft) ? x : best), xs[0] ?? 0));
   }, [cards, leftFor, scrollToX]);
 
   // Scroll-linked visuals: each card eases in/out with how much of it is in the window,
@@ -195,6 +244,19 @@ export default function Projects() {
     };
   }, [cards, items.length]);
 
+  // Any direct input (wheel, touch) takes over from a running animation.
+  useEffect(() => {
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+    scroller.addEventListener("wheel", stopAnim, { passive: true });
+    scroller.addEventListener("touchstart", stopAnim, { passive: true });
+    return () => {
+      scroller.removeEventListener("wheel", stopAnim);
+      scroller.removeEventListener("touchstart", stopAnim);
+      stopAnim();
+    };
+  }, [stopAnim]);
+
   // A card counts as "seen" once mostly on screen (starts its before/after bars).
   useEffect(() => {
     const scroller = scrollerRef.current;
@@ -226,7 +288,9 @@ export default function Projects() {
   // Mouse drag (touch and trackpads already scroll natively).
   const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
     if (e.pointerType !== "mouse" || e.button !== 0) return;
+    stopAnim();
     drag.current = { active: true, moved: false, startX: e.clientX, startLeft: e.currentTarget.scrollLeft };
+    samples.current = [{ t: performance.now(), left: e.currentTarget.scrollLeft }];
   };
   const onPointerMove = (e: PointerEvent<HTMLDivElement>) => {
     const d = drag.current;
@@ -236,7 +300,12 @@ export default function Projects() {
       d.moved = true;
       setDragging(true);
     }
-    if (d.moved) e.currentTarget.scrollLeft = d.startLeft - dx;
+    if (d.moved) {
+      e.currentTarget.scrollLeft = d.startLeft - dx;
+      const now = performance.now();
+      samples.current.push({ t: now, left: e.currentTarget.scrollLeft });
+      samples.current = samples.current.filter((p) => now - p.t < 120);
+    }
   };
   const endDrag = () => {
     const d = drag.current;
@@ -244,7 +313,18 @@ export default function Projects() {
     d.active = false;
     if (d.moved) {
       setDragging(false);
-      requestAnimationFrame(snapNearest);
+      // Fling: carry the release speed into the spring and settle on the card it points at.
+      const s = scrollerRef.current;
+      const pts = samples.current;
+      let velocity = 0;
+      if (s && pts.length > 1) {
+        const first = pts[0];
+        const lastPt = pts[pts.length - 1];
+        const dt = (lastPt.t - first.t) / 1000;
+        if (dt > 0.01 && performance.now() - lastPt.t < 80) velocity = (lastPt.left - first.left) / dt;
+      }
+      velocity = Math.max(-4000, Math.min(4000, velocity));
+      if (s) animateTo(nearestSnap(s.scrollLeft + velocity * 0.22), velocity);
     }
   };
 
@@ -260,7 +340,7 @@ export default function Projects() {
   /** Click on the track jumps to that point. */
   const onTrackClick = (e: MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    scrollToX(((e.clientX - rect.left) / rect.width) * maxScroll());
+    scrollToX(nearestSnap(((e.clientX - rect.left) / rect.width) * maxScroll()));
   };
 
   const arrowClass =

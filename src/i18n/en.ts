@@ -14,6 +14,9 @@ export const en: Dict = {
     darkTheme: "Dark theme",
     language: "Language",
     tools: "Tools and technologies",
+    previous: "Previous project",
+    next: "Next project",
+    projectsRegion: "Projects",
   },
   nav: {
     about: "about",

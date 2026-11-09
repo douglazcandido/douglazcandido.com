@@ -14,6 +14,9 @@ export const es: Dict = {
     darkTheme: "Tema oscuro",
     language: "Idioma",
     tools: "Herramientas y tecnologías",
+    previous: "Proyecto anterior",
+    next: "Siguiente proyecto",
+    projectsRegion: "Proyectos",
   },
   nav: {
     about: "sobre mí",

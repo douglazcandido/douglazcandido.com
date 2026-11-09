@@ -16,6 +16,9 @@ export const pt = {
     darkTheme: "Tema escuro",
     language: "Idioma",
     tools: "Ferramentas e tecnologias",
+    previous: "Projeto anterior",
+    next: "Próximo projeto",
+    projectsRegion: "Projetos",
   },
   nav: {
     about: "sobre",

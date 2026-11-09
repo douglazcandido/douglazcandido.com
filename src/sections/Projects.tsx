@@ -1,7 +1,9 @@
-import { useState, type KeyboardEvent } from "react";
-import { FiArrowRight } from "react-icons/fi";
+import { useCallback, useEffect, useRef, useState, type KeyboardEvent, type MouseEvent, type PointerEvent } from "react";
+import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import Section from "../components/Section";
 import Reveal from "../components/Reveal";
+import SpotlightCard from "../components/SpotlightCard";
+import { prefersReducedMotion } from "../hooks/useReducedMotion";
 import { metricProject } from "../data/projects";
 import { useI18n } from "../i18n/context";
 
@@ -11,87 +13,258 @@ interface Project {
   tags: readonly string[];
 }
 
-/** Everything about one project: title, text, optional before/after metric, tags. */
-function ProjectDetail({ project, index, active }: { project: Project; index: number; active: boolean }) {
+/** Cards fade and shrink a little as they leave the visible window (set from the scroll handler). */
+function ProjectCard({ project, index, seen, onSelect }: { project: Project; index: number; seen: boolean; onSelect: (e: MouseEvent) => void }) {
   const { t } = useI18n();
   const metric = index === metricProject.index ? { ...metricProject, caption: t.projects.metricCaption } : undefined;
 
   return (
-    <div className="flex h-full flex-col gap-8">
-      <div>
-        <h3 className="m-0 max-w-[24ch] font-display text-[clamp(24px,2.7vw,42px)] leading-[1.08] font-semibold tracking-[-0.025em] text-pretty">
-          {project.title}
-        </h3>
-        <p className="m-0 mt-5 max-w-[62ch] text-[clamp(15px,1.15vw,18px)] leading-[1.7] text-neutral-400">{project.description}</p>
-      </div>
+    <div
+      data-card
+      onClick={onSelect}
+      className="w-[min(86vw,520px)] shrink-0 snap-start will-change-transform lg:w-[min(40vw,560px)]"
+      style={{ opacity: 0.4 }}
+    >
+      <SpotlightCard className="flex h-full min-h-[clamp(380px,52vh,540px)] flex-col gap-8 p-[clamp(24px,2.6vw,40px)]">
+        <div>
+          <h3 className="m-0 font-display text-[clamp(22px,2vw,32px)] leading-[1.12] font-semibold tracking-[-0.02em] text-pretty">
+            {project.title}
+          </h3>
+          <p className="m-0 mt-4 text-[15px] leading-[1.7] text-neutral-400">{project.description}</p>
+        </div>
 
-      {metric && (
-        <div className={active ? "bar-visible" : ""}>
-          <p className="display m-0 flex items-baseline gap-3 text-[clamp(44px,5.2vw,80px)] leading-[0.9]">
-            <span className="text-neutral-600 line-through decoration-accent decoration-[3px]">{metric.from}</span>
-            <span className="text-[0.22em] font-normal text-accent">→</span>
-            <span className="text-accent">{metric.to}</span>
-            <span className="text-[0.2em] font-normal tracking-normal text-neutral-300 normal-case">{metric.unit}</span>
-          </p>
-          <p className="m-0 mt-3 text-[11px] tracking-[0.16em] text-neutral-500 uppercase">{metric.caption}</p>
+        {metric && (
+          <div className={seen ? "bar-visible" : ""}>
+            <p className="display m-0 flex items-baseline gap-3 text-[clamp(40px,4.4vw,64px)] leading-[0.9]">
+              <span className="text-neutral-600 line-through decoration-accent decoration-[3px]">{metric.from}</span>
+              <span className="text-[0.22em] font-normal text-accent">→</span>
+              <span className="text-accent">{metric.to}</span>
+              <span className="text-[0.2em] font-normal tracking-normal text-neutral-300 normal-case">{metric.unit}</span>
+            </p>
+            <p className="m-0 mt-3 text-[11px] tracking-[0.16em] text-neutral-500 uppercase">{metric.caption}</p>
 
-          <div className="mt-6 flex max-w-[420px] flex-col gap-2.5">
-            <div>
-              <div className="mb-1 flex justify-between text-[10px] tracking-[0.16em] text-neutral-500 uppercase">
-                <span>{t.projects.before}</span>
-                <span>{metric.from} {metric.unit}</span>
+            <div className="mt-5 flex flex-col gap-2.5">
+              <div>
+                <div className="mb-1 flex justify-between text-[10px] tracking-[0.16em] text-neutral-500 uppercase">
+                  <span>{t.projects.before}</span>
+                  <span>{metric.from} {metric.unit}</span>
+                </div>
+                <div className="h-2 bg-neutral-900">
+                  <div className="bar-fill h-full bg-neutral-600" />
+                </div>
               </div>
-              <div className="h-2 bg-neutral-900">
-                <div className="bar-fill h-full bg-neutral-600" />
-              </div>
-            </div>
-            <div>
-              <div className="mb-1 flex justify-between text-[10px] tracking-[0.16em] text-accent uppercase">
-                <span>{t.projects.after}</span>
-                <span>{metric.to} {metric.unit}</span>
-              </div>
-              <div className="h-2 bg-neutral-900">
-                <div
-                  className="bar-fill h-full bg-accent"
-                  style={{ width: `${(Number(metric.to) / Number(metric.from)) * 100}%`, transitionDelay: "0.35s" }}
-                />
+              <div>
+                <div className="mb-1 flex justify-between text-[10px] tracking-[0.16em] text-accent uppercase">
+                  <span>{t.projects.after}</span>
+                  <span>{metric.to} {metric.unit}</span>
+                </div>
+                <div className="h-2 bg-neutral-900">
+                  <div
+                    className="bar-fill h-full bg-accent"
+                    style={{ width: `${(Number(metric.to) / Number(metric.from)) * 100}%`, transitionDelay: "0.35s" }}
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      <ul className="m-0 mt-auto flex list-none flex-wrap gap-2 p-0">
-        {project.tags.map((tag) => (
-          <li
-            key={tag}
-            className="rounded-md border border-divider px-2.5 py-1 text-[10.5px] tracking-[0.12em] text-neutral-400 uppercase"
-          >
-            {tag}
-          </li>
-        ))}
-      </ul>
+        <ul className="m-0 mt-auto flex list-none flex-wrap gap-2 p-0">
+          {project.tags.map((tag) => (
+            <li
+              key={tag}
+              className="rounded-md border border-divider px-2.5 py-1 text-[10.5px] tracking-[0.12em] text-neutral-400 uppercase"
+            >
+              {tag}
+            </li>
+          ))}
+        </ul>
+      </SpotlightCard>
     </div>
   );
 }
 
+const EDGE = 8;
+
 /**
- * Master-detail: the list of projects on the left, the selected one on the right
- * (desktop). On narrow screens each row opens in place, like an accordion.
- * One project is always open; arrow keys move between rows.
+ * Projects as a horizontal strip of cards: native scroll with snapping, mouse drag,
+ * arrow buttons and keys, click-a-card-to-focus, and a scrollbar-like progress track.
+ * Everything is position-based, so the last cards (which cannot all reach the start) still work.
  */
 export default function Projects() {
   const { t } = useI18n();
   const items = t.projects.items;
-  const [current, setCurrent] = useState(0);
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const thumbRef = useRef<HTMLSpanElement>(null);
+  const [seen, setSeen] = useState<ReadonlySet<number>>(new Set());
+  const [edges, setEdges] = useState({ start: true, end: false });
+  const [dragging, setDragging] = useState(false);
+  const drag = useRef({ active: false, moved: false, startX: 0, startLeft: 0 });
 
-  const onKeyDown = (e: KeyboardEvent<HTMLUListElement>) => {
-    if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
+  const cards = useCallback(
+    () => Array.from(scrollerRef.current?.querySelectorAll<HTMLElement>("[data-card]") ?? []),
+    [],
+  );
+  const maxScroll = useCallback(() => {
+    const s = scrollerRef.current;
+    return s ? Math.max(0, s.scrollWidth - s.clientWidth) : 0;
+  }, []);
+  /** scrollLeft that puts card i on the content margin (limited to what can be scrolled). */
+  const leftFor = useCallback(
+    (i: number) => {
+      const s = scrollerRef.current;
+      const card = cards()[i];
+      if (!s || !card) return 0;
+      return Math.min(maxScroll(), Math.max(0, card.offsetLeft - parseFloat(getComputedStyle(s).paddingLeft)));
+    },
+    [cards, maxScroll],
+  );
+
+  const scrollToX = useCallback((x: number) => {
+    scrollerRef.current?.scrollTo({ left: x, behavior: prefersReducedMotion() ? "auto" : "smooth" });
+  }, []);
+
+  const goNext = useCallback(() => {
+    const s = scrollerRef.current;
+    if (!s) return;
+    const sl = s.scrollLeft;
+    const target = cards().map((_, i) => leftFor(i)).find((x) => x > sl + EDGE);
+    scrollToX(target ?? maxScroll());
+  }, [cards, leftFor, maxScroll, scrollToX]);
+
+  const goPrev = useCallback(() => {
+    const s = scrollerRef.current;
+    if (!s) return;
+    const sl = s.scrollLeft;
+    const before = cards().map((_, i) => leftFor(i)).filter((x) => x < sl - EDGE);
+    scrollToX(before.length ? before[before.length - 1] : 0);
+  }, [cards, leftFor, scrollToX]);
+
+  const snapNearest = useCallback(() => {
+    const s = scrollerRef.current;
+    if (!s) return;
+    const xs = cards().map((_, i) => leftFor(i));
+    scrollToX(xs.reduce((best, x) => (Math.abs(x - s.scrollLeft) < Math.abs(best - s.scrollLeft) ? x : best), xs[0] ?? 0));
+  }, [cards, leftFor, scrollToX]);
+
+  // Scroll-linked visuals: each card eases in/out with how much of it is in the window,
+  // and the thumb mirrors the scroll position. Done imperatively to stay smooth.
+  useEffect(() => {
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+    let raf = 0;
+
+    const update = () => {
+      raf = 0;
+      const rect = scroller.getBoundingClientRect();
+      const winLeft = rect.left + parseFloat(getComputedStyle(scroller).paddingLeft);
+      const winRight = rect.right;
+      for (const card of cards()) {
+        const r = card.getBoundingClientRect();
+        const overlap = Math.max(0, Math.min(r.right, winRight) - Math.max(r.left, winLeft));
+        const v = Math.min(1, overlap / Math.max(1, r.width));
+        const e = 1 - (1 - v) * (1 - v);
+        card.style.opacity = (0.35 + 0.65 * e).toFixed(3);
+        card.style.transform = `scale(${(0.96 + 0.04 * e).toFixed(4)})`;
+      }
+
+      const max = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+      const thumb = thumbRef.current;
+      if (thumb) {
+        const pct = Math.min(100, (scroller.clientWidth / Math.max(1, scroller.scrollWidth)) * 100);
+        const ratio = max > 0 ? scroller.scrollLeft / max : 0;
+        thumb.style.width = `${pct.toFixed(2)}%`;
+        thumb.style.left = `${(ratio * (100 - pct)).toFixed(2)}%`;
+      }
+
+      const start = scroller.scrollLeft <= EDGE;
+      const end = scroller.scrollLeft >= max - EDGE;
+      setEdges((prev) => (prev.start === start && prev.end === end ? prev : { start, end }));
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+
+    update();
+    scroller.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      scroller.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [cards, items.length]);
+
+  // A card counts as "seen" once mostly on screen (starts its before/after bars).
+  useEffect(() => {
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+    const els = cards();
+    const io = new IntersectionObserver(
+      (entries) => {
+        setSeen((prev) => {
+          const next = new Set(prev);
+          for (const e of entries) if (e.isIntersecting) next.add(els.indexOf(e.target as HTMLElement));
+          return next.size === prev.size ? prev : next;
+        });
+      },
+      { root: scroller, threshold: 0.6 },
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [cards, items.length]);
+
+  const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "ArrowRight") goNext();
+    else if (e.key === "ArrowLeft") goPrev();
+    else if (e.key === "Home") scrollToX(0);
+    else if (e.key === "End") scrollToX(maxScroll());
+    else return;
     e.preventDefault();
-    const next = (current + (e.key === "ArrowDown" ? 1 : items.length - 1)) % items.length;
-    setCurrent(next);
-    e.currentTarget.querySelectorAll<HTMLButtonElement>("button")[next]?.focus();
   };
+
+  // Mouse drag (touch and trackpads already scroll natively).
+  const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== "mouse" || e.button !== 0) return;
+    drag.current = { active: true, moved: false, startX: e.clientX, startLeft: e.currentTarget.scrollLeft };
+  };
+  const onPointerMove = (e: PointerEvent<HTMLDivElement>) => {
+    const d = drag.current;
+    if (!d.active) return;
+    const dx = e.clientX - d.startX;
+    if (!d.moved && Math.abs(dx) > 4) {
+      d.moved = true;
+      setDragging(true);
+    }
+    if (d.moved) e.currentTarget.scrollLeft = d.startLeft - dx;
+  };
+  const endDrag = () => {
+    const d = drag.current;
+    if (!d.active) return;
+    d.active = false;
+    if (d.moved) {
+      setDragging(false);
+      requestAnimationFrame(snapNearest);
+    }
+  };
+
+  /** Clicking a card (not after a drag) brings it to the start of the strip. */
+  const selectCard = (i: number) => (e: MouseEvent) => {
+    if (drag.current.moved) {
+      e.preventDefault();
+      return;
+    }
+    scrollToX(leftFor(i));
+  };
+
+  /** Click on the track jumps to that point. */
+  const onTrackClick = (e: MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    scrollToX(((e.clientX - rect.left) / rect.width) * maxScroll());
+  };
+
+  const arrowClass =
+    "inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-divider text-neutral-300 transition-colors duration-300 hover:border-accent hover:text-accent disabled:cursor-default disabled:opacity-30 disabled:hover:border-divider disabled:hover:text-neutral-300";
 
   return (
     <Section id="projetos" title={t.projects.title}>
@@ -99,77 +272,48 @@ export default function Projects() {
         {t.projects.intro}
       </Reveal>
 
-      <div className="grid grid-cols-1 gap-x-[clamp(24px,4vw,64px)] lg:grid-cols-12">
-        <ul className="m-0 list-none border-t border-divider p-0 lg:col-span-5 lg:self-start" onKeyDown={onKeyDown}>
-          {items.map((project, i) => {
-            const active = i === current;
-            return (
-              <li key={i} className="border-b border-divider">
-                <button
-                  type="button"
-                  id={`project-tab-${i}`}
-                  aria-expanded={active}
-                  aria-controls={`project-panel-${i}`}
-                  onClick={() => setCurrent(i)}
-                  className="group relative flex w-full cursor-pointer items-center justify-between gap-4 py-[clamp(16px,1.7vw,24px)] pr-1 pl-5 text-left"
-                >
-                  <span
-                    aria-hidden="true"
-                    className={`absolute inset-y-3 left-0 w-[3px] origin-center bg-accent transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${
-                      active ? "scale-y-100" : "scale-y-0"
-                    }`}
-                  />
-                  <span
-                    className={`font-display text-[clamp(18px,1.6vw,25px)] leading-[1.15] font-semibold tracking-[-0.02em] text-pretty transition-colors duration-300 ${
-                      active ? "text-neutral-100" : "text-neutral-500 group-hover:text-neutral-200"
-                    }`}
-                  >
-                    {project.title}
-                  </span>
-                  <FiArrowRight
-                    aria-hidden="true"
-                    className={`hidden h-5 w-5 shrink-0 text-accent transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] lg:block ${
-                      active ? "translate-x-0 opacity-100" : "-translate-x-2 opacity-0"
-                    }`}
-                  />
-                </button>
+      {/* Full-bleed strip: starts on the content margin, runs off the right edge. */}
+      <div className="ml-[calc(50%-50vw)] w-screen">
+        <div
+          ref={scrollerRef}
+          role="region"
+          aria-label={t.a11y.projectsRegion}
+          tabIndex={0}
+          onKeyDown={onKeyDown}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={endDrag}
+          onPointerLeave={endDrag}
+          onPointerCancel={endDrag}
+          className={`no-scrollbar relative flex items-stretch gap-[clamp(14px,1.6vw,24px)] overflow-x-auto overscroll-x-contain pr-[var(--page-pad)] pl-[var(--page-pad)] py-3 [scroll-padding-inline:var(--page-pad)] [clip-path:inset(0_0_0_var(--page-pad))] ${
+            dragging ? "cursor-grabbing select-none" : "cursor-grab snap-x snap-mandatory"
+          }`}
+        >
+          {items.map((project, i) => (
+            <ProjectCard key={i} project={project} index={i} seen={seen.has(i)} onSelect={selectCard(i)} />
+          ))}
+        </div>
+      </div>
 
-                {/* Narrow screens: the detail opens right under its row. */}
-                <div
-                  id={`project-panel-${i}`}
-                  role="region"
-                  aria-labelledby={`project-tab-${i}`}
-                  className={`grid transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] lg:hidden ${
-                    active ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-                  }`}
-                >
-                  <div className="overflow-hidden">
-                    <div className="pt-2 pr-1 pb-8 pl-5">
-                      <ProjectDetail project={project} index={i} active={active} />
-                    </div>
-                  </div>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
+      <div className="mt-[clamp(14px,2vw,26px)] flex items-center justify-between gap-6">
+        {/* Scrollbar-like track: the thumb is the share of the strip currently on screen. */}
+        <div
+          aria-hidden="true"
+          onClick={onTrackClick}
+          className="group relative flex h-6 flex-1 cursor-pointer items-center sm:max-w-[360px]"
+        >
+          <div className="relative h-[3px] w-full bg-neutral-800 transition-colors group-hover:bg-neutral-700">
+            <span ref={thumbRef} className="absolute inset-y-0 bg-accent" style={{ width: "40%", left: "0%" }} />
+          </div>
+        </div>
 
-        {/* Desktop: all details share one cell so the panel never changes height; the active one fades in. */}
-        <div className="hidden lg:col-span-7 lg:grid">
-          {items.map((project, i) => {
-            const active = i === current;
-            return (
-              <div
-                key={i}
-                inert={!active}
-                className={`col-start-1 row-start-1 rounded-[14px] border border-divider bg-surface p-[clamp(28px,3.2vw,52px)] transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${
-                  active ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-2 opacity-0"
-                }`}
-              >
-                <ProjectDetail project={project} index={i} active={active} />
-              </div>
-            );
-          })}
+        <div className="flex gap-2">
+          <button type="button" aria-label={t.a11y.previous} disabled={edges.start} onClick={goPrev} className={arrowClass}>
+            <FiArrowLeft aria-hidden="true" className="h-[18px] w-[18px]" />
+          </button>
+          <button type="button" aria-label={t.a11y.next} disabled={edges.end} onClick={goNext} className={arrowClass}>
+            <FiArrowRight aria-hidden="true" className="h-[18px] w-[18px]" />
+          </button>
         </div>
       </div>
     </Section>

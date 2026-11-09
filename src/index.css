@@ -123,9 +123,14 @@ html.theme-fade *::after {
 /* Layout helpers                                                      */
 /* ------------------------------------------------------------------ */
 
+/* Side margin of the page content; also reused by full-bleed scrollers so they line up. */
+:root {
+  --page-pad: var(--gutter);
+}
+
 .px-page {
-  padding-left: var(--gutter);
-  padding-right: var(--gutter);
+  padding-left: var(--page-pad);
+  padding-right: var(--page-pad);
 }
 
 /* Top bar keeps its own, tighter padding. */
@@ -141,9 +146,8 @@ html.theme-fade *::after {
   }
 
   /* Page content: wider side margins that grow with the viewport. */
-  .px-page {
-    padding-left: max(calc(var(--gutter) + 30px), 7.5vw);
-    padding-right: max(calc(var(--gutter) + 30px), 7.5vw);
+  :root {
+    --page-pad: max(calc(var(--gutter) + 30px), 7.5vw);
   }
 }
 
@@ -272,9 +276,18 @@ html.theme-fade *::after {
 }
 
 /* ------------------------------------------------------------------ */
-/* Before/after bars fill in when their project becomes visible        */
+/* Horizontal card scroller (projects)                                 */
 /* ------------------------------------------------------------------ */
 
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Before/after bars fill in when their project becomes visible */
 .bar-fill {
   transform: scaleX(0);
   transform-origin: left;

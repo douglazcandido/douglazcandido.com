@@ -54,11 +54,17 @@ export default function Nav() {
               aria-label={t.nav.home}
               title={t.nav.home}
               aria-current={active === "inicio" ? "true" : undefined}
-              className={`inline-flex h-8 w-8 items-center justify-center transition-colors duration-300 ${
-                active === "inicio" ? "text-neutral-100" : "text-neutral-500 hover:text-neutral-100"
+              className={`relative inline-flex h-8 w-8 items-center justify-center transition-colors duration-300 ${
+                active === "inicio" ? "text-accent" : "text-neutral-500 hover:text-neutral-100"
               }`}
             >
               <FiHome aria-hidden="true" className="h-[15px] w-[15px]" strokeWidth={1.5} />
+              <span
+                aria-hidden="true"
+                className={`absolute inset-x-1 bottom-0 h-[2px] origin-left bg-accent transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${
+                  active === "inicio" ? "scale-x-100" : "scale-x-0"
+                }`}
+              />
             </a>
             <ul className="m-0 hidden list-none items-center gap-8 p-0 lg:flex">
               {sections.map((s) => {

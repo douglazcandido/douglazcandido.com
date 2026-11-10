@@ -1,4 +1,4 @@
-import { useState, type KeyboardEvent } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { FiArrowRight } from "react-icons/fi";
 import Section from "../components/Section";
 import Reveal from "../components/Reveal";
@@ -11,22 +11,41 @@ interface Project {
   tags: readonly string[];
 }
 
+const EASE = "ease-[cubic-bezier(0.19,1,0.22,1)]";
+
+/** One block of a detail: fades and rises in after the previous one, so the panel "assembles". */
+function Step({ order, active, className = "", children }: { order: number; active: boolean; className?: string; children: React.ReactNode }) {
+  return (
+    <div
+      className={`transition-[opacity,translate] duration-700 ${EASE} ${
+        active ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
+      } ${className}`}
+      style={{ transitionDelay: active ? `${120 + order * 90}ms` : "0ms" }}
+    >
+      {children}
+    </div>
+  );
+}
+
 /** Everything about one project: title, text, optional before/after metric, tags. */
 function ProjectDetail({ project, index, active }: { project: Project; index: number; active: boolean }) {
   const { t } = useI18n();
   const metric = index === metricProject.index ? { ...metricProject, caption: t.projects.metricCaption } : undefined;
 
   return (
-    <div className="flex h-full flex-col gap-8">
-      <div>
-        <h3 className="m-0 max-w-[24ch] font-display text-[clamp(24px,2.7vw,42px)] leading-[1.08] font-semibold tracking-[-0.025em] text-pretty">
+    <div className="flex h-full flex-col gap-9">
+      <Step order={0} active={active}>
+        <h3 className="m-0 max-w-[24ch] font-display text-[clamp(26px,2.9vw,46px)] leading-[1.05] font-semibold tracking-[-0.03em] text-pretty">
           {project.title}
         </h3>
-        <p className="m-0 mt-5 max-w-[62ch] text-[clamp(15px,1.15vw,18px)] leading-[1.7] text-neutral-400">{project.description}</p>
-      </div>
+      </Step>
+
+      <Step order={1} active={active}>
+        <p className="m-0 max-w-[60ch] text-[clamp(15px,1.15vw,18px)] leading-[1.75] text-neutral-400">{project.description}</p>
+      </Step>
 
       {metric && (
-        <div className={active ? "bar-visible" : ""}>
+        <Step order={2} active={active} className={active ? "bar-visible" : ""}>
           <p className="display m-0 flex items-baseline gap-3 text-[clamp(44px,5.2vw,80px)] leading-[0.9]">
             <span className="text-neutral-600 line-through decoration-accent decoration-[3px]">{metric.from}</span>
             <span className="text-[0.22em] font-normal text-accent">→</span>
@@ -53,37 +72,50 @@ function ProjectDetail({ project, index, active }: { project: Project; index: nu
               <div className="h-2 bg-neutral-900">
                 <div
                   className="bar-fill h-full bg-accent"
-                  style={{ width: `${(Number(metric.to) / Number(metric.from)) * 100}%`, transitionDelay: "0.35s" }}
+                  style={{ width: `${(Number(metric.to) / Number(metric.from)) * 100}%`, transitionDelay: "0.45s" }}
                 />
               </div>
             </div>
           </div>
-        </div>
+        </Step>
       )}
 
-      <ul className="m-0 mt-auto flex list-none flex-wrap gap-2 p-0">
-        {project.tags.map((tag) => (
-          <li
-            key={tag}
-            className="rounded-md border border-divider px-2.5 py-1 text-[10.5px] tracking-[0.12em] text-neutral-400 uppercase"
-          >
-            {tag}
-          </li>
-        ))}
-      </ul>
+      <Step order={metric ? 3 : 2} active={active} className="mt-auto">
+        <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
+          {project.tags.map((tag) => (
+            <li
+              key={tag}
+              className="rounded-full border border-divider px-3 py-1 text-[10.5px] tracking-[0.12em] text-neutral-400 uppercase"
+            >
+              {tag}
+            </li>
+          ))}
+        </ul>
+      </Step>
     </div>
   );
 }
 
 /**
- * Master-detail: the list of projects on the left, the selected one on the right
- * (desktop). On narrow screens each row opens in place, like an accordion.
- * One project is always open; arrow keys move between rows.
+ * Master-detail: the list of projects on the left, the selected one on the right.
+ * On desktop, hovering a row (or focusing it) opens it; the panel keeps the last one
+ * until another is hovered. On narrow or touch screens each row opens in place on click.
  */
 export default function ProjectsList() {
   const { t } = useI18n();
   const items = t.projects.items;
   const [current, setCurrent] = useState(0);
+  const hoverTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+  useEffect(() => () => clearTimeout(hoverTimer.current), []);
+
+  /** Hover opens a project only where the panel sits beside the list (desktop with a mouse). */
+  const hoverOpen = (i: number) => {
+    if (!window.matchMedia("(min-width: 1024px) and (hover: hover)").matches) return;
+    clearTimeout(hoverTimer.current);
+    // A short intent delay so sweeping the pointer across rows does not flicker the panel.
+    hoverTimer.current = setTimeout(() => setCurrent(i), 70);
+  };
 
   const onKeyDown = (e: KeyboardEvent<HTMLUListElement>) => {
     if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
@@ -99,8 +131,12 @@ export default function ProjectsList() {
         {t.projects.intro}
       </Reveal>
 
-      <div className="grid grid-cols-1 gap-x-[clamp(24px,4vw,64px)] lg:grid-cols-12">
-        <ul className="m-0 list-none border-t border-divider p-0 lg:col-span-5 lg:self-start" onKeyDown={onKeyDown}>
+      <div className="grid grid-cols-1 gap-x-[clamp(32px,5vw,88px)] lg:grid-cols-12">
+        <ul
+          className="m-0 list-none border-t border-divider p-0 lg:col-span-5 lg:self-start"
+          onKeyDown={onKeyDown}
+          onPointerLeave={() => clearTimeout(hoverTimer.current)}
+        >
           {items.map((project, i) => {
             const active = i === current;
             return (
@@ -111,25 +147,34 @@ export default function ProjectsList() {
                   aria-expanded={active}
                   aria-controls={`project-panel-${i}`}
                   onClick={() => setCurrent(i)}
-                  className="group relative flex w-full cursor-pointer items-center justify-between gap-4 py-[clamp(16px,1.7vw,24px)] pr-1 pl-5 text-left"
+                  onFocus={() => setCurrent(i)}
+                  onPointerEnter={(e) => e.pointerType === "mouse" && hoverOpen(i)}
+                  className="group relative flex w-full cursor-pointer items-center justify-between gap-4 overflow-hidden py-[clamp(16px,1.8vw,26px)] pr-2 pl-6 text-left"
                 >
+                  {/* soft wash that sweeps in behind the active row */}
                   <span
                     aria-hidden="true"
-                    className={`absolute inset-y-3 left-0 w-[3px] origin-center bg-accent transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${
+                    className={`absolute inset-0 bg-gradient-to-r from-accent/10 to-transparent transition-opacity duration-700 ${
+                      active ? "opacity-100" : "opacity-0"
+                    }`}
+                  />
+                  <span
+                    aria-hidden="true"
+                    className={`absolute inset-y-0 left-0 w-[3px] origin-top bg-accent transition-transform duration-500 ${EASE} ${
                       active ? "scale-y-100" : "scale-y-0"
                     }`}
                   />
                   <span
-                    className={`font-display text-[clamp(18px,1.6vw,25px)] leading-[1.15] font-semibold tracking-[-0.02em] text-pretty transition-colors duration-300 ${
-                      active ? "text-neutral-100" : "text-neutral-500 group-hover:text-neutral-200"
+                    className={`relative font-display text-[clamp(18px,1.6vw,25px)] leading-[1.15] font-semibold tracking-[-0.02em] text-pretty transition-[color,translate] duration-500 ${EASE} ${
+                      active ? "translate-x-1 text-neutral-100" : "text-neutral-500 group-hover:text-neutral-300"
                     }`}
                   >
                     {project.title}
                   </span>
                   <FiArrowRight
                     aria-hidden="true"
-                    className={`hidden h-5 w-5 shrink-0 text-accent transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] lg:block ${
-                      active ? "translate-x-0 opacity-100" : "-translate-x-2 opacity-0"
+                    className={`relative hidden h-5 w-5 shrink-0 text-accent transition-all duration-500 ${EASE} lg:block ${
+                      active ? "translate-x-0 opacity-100" : "-translate-x-3 opacity-0"
                     }`}
                   />
                 </button>
@@ -139,12 +184,12 @@ export default function ProjectsList() {
                   id={`project-panel-${i}`}
                   role="region"
                   aria-labelledby={`project-tab-${i}`}
-                  className={`grid transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] lg:hidden ${
+                  className={`grid transition-[grid-template-rows,opacity] duration-500 ${EASE} lg:hidden ${
                     active ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
                   }`}
                 >
                   <div className="overflow-hidden">
-                    <div className="pt-2 pr-1 pb-8 pl-5">
+                    <div className="pt-2 pr-1 pb-8 pl-6">
                       <ProjectDetail project={project} index={i} active={active} />
                     </div>
                   </div>
@@ -154,16 +199,18 @@ export default function ProjectsList() {
           })}
         </ul>
 
-        {/* Desktop: all details share one cell so the panel never changes height; the active one fades in. */}
+        {/* Desktop: every detail shares one cell so the panel never changes height.
+            The ones before the current slide away upward, the ones after wait below. */}
         <div className="hidden lg:col-span-7 lg:grid">
           {items.map((project, i) => {
             const active = i === current;
+            const shift = active ? "translate-y-0" : i < current ? "-translate-y-4" : "translate-y-4";
             return (
               <div
                 key={i}
                 inert={!active}
-                className={`col-start-1 row-start-1 rounded-[14px] border border-divider bg-surface p-[clamp(28px,3.2vw,52px)] transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${
-                  active ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-2 opacity-0"
+                className={`col-start-1 row-start-1 rounded-[20px] border border-divider bg-surface p-[clamp(32px,3.6vw,60px)] transition-[opacity,translate,border-color] duration-700 ${EASE} ${shift} ${
+                  active ? "opacity-100" : "pointer-events-none opacity-0"
                 }`}
               >
                 <ProjectDetail project={project} index={i} active={active} />

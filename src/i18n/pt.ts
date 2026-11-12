@@ -86,9 +86,6 @@ export const pt = {
     title: "Projetos",
     intro:
       "Tipos de problema que já resolvi na prática, sem entrar em detalhes específicos de cliente ou empresa.",
-    before: "antes",
-    after: "depois",
-    metricCaption: "tamanho da base após a reestruturação",
     items: [
       {
         title: "Ingestão, processamento e integração de leads em tempo quase real",
@@ -107,24 +104,6 @@ export const pt = {
         description:
           "Liderei uma equipe na implantação de um sistema completo para uma promotora de crédito consignado, coordenando o trabalho desde o levantamento de requisitos até o deploy em produção, passando por backend, integrações externas e modelagem de banco de dados.",
         tags: ["Liderança", "Backend", "Integrações", "Deploy"],
-      },
-      {
-        title: "Otimização de bancos de produção em grande escala",
-        description:
-          "Diagnóstico e redesenho de modelagem em bases PostgreSQL na AWS com dezenas de milhões de registros. Reestruturação de schema, tipos de dados e índices que reduziu uma base de 112GB para 15GB, além de reescrita de consultas complexas sem downtime.",
-        tags: ["PostgreSQL", "AWS", "Schema", "Índices"],
-      },
-      {
-        title: "Construção de backend e APIs",
-        description:
-          "Serviços e APIs em Python/FastAPI, hospedados na AWS, com autenticação, validação de dados e processamento assíncrono, sustentando sistemas internos usados no dia a dia da operação.",
-        tags: ["Python", "FastAPI", "AWS", "Autenticação"],
-      },
-      {
-        title: "Detecção de anomalias e previsão de falhas (AIOps)",
-        description:
-          "Orquestração de pipeline de dados com múltiplos modelos de machine learning (séries temporais e clustering) servidos por API, com painel de gestão para acompanhar previsões e exportar resultados. Projeto acadêmico em parceria FIAP × Locaweb.",
-        tags: ["Machine Learning", "Séries temporais", "Clustering", "FIAP × Locaweb"],
       },
     ],
   },

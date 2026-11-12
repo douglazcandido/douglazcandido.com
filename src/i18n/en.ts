@@ -84,9 +84,6 @@ export const en: Dict = {
     title: "Projects",
     intro:
       "The kinds of problems I've solved in practice, without going into client- or company-specific details.",
-    before: "before",
-    after: "after",
-    metricCaption: "database size after the restructuring",
     items: [
       {
         title: "Near real-time lead ingestion, processing and integration",
@@ -105,24 +102,6 @@ export const en: Dict = {
         description:
           "I led a team in rolling out a complete system for a payroll-loan originator, coordinating the work from requirements gathering all the way to production deployment, across backend, external integrations and database modeling.",
         tags: ["Leadership", "Backend", "Integrations", "Deploy"],
-      },
-      {
-        title: "Large-scale production database optimization",
-        description:
-          "Diagnosis and redesign of the data model on PostgreSQL databases on AWS holding tens of millions of records. Restructuring schemas, data types and indexes shrank one database from 112GB to 15GB, along with rewriting complex queries with zero downtime.",
-        tags: ["PostgreSQL", "AWS", "Schema", "Indexes"],
-      },
-      {
-        title: "Backend and API development",
-        description:
-          "Python/FastAPI services and APIs hosted on AWS, with authentication, data validation and asynchronous processing, powering the internal systems the operation relies on every day.",
-        tags: ["Python", "FastAPI", "AWS", "Authentication"],
-      },
-      {
-        title: "Anomaly detection and failure prediction (AIOps)",
-        description:
-          "Orchestration of a data pipeline with multiple machine learning models (time series and clustering) served through an API, plus a management dashboard to follow predictions and export results. An academic project in partnership with FIAP × Locaweb.",
-        tags: ["Machine Learning", "Time series", "Clustering", "FIAP × Locaweb"],
       },
     ],
   },

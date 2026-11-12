@@ -4,7 +4,6 @@ import Section from "../components/Section";
 import Reveal from "../components/Reveal";
 import SpotlightCard from "../components/SpotlightCard";
 import { prefersReducedMotion } from "../hooks/useReducedMotion";
-import { metricProject } from "../data/projects";
 import { useI18n } from "../i18n/context";
 
 interface Project {
@@ -14,9 +13,7 @@ interface Project {
 }
 
 /** Cards fade as they leave the visible window (set from the scroll handler). */
-function ProjectCard({ project, index, seen, onSelect }: { project: Project; index: number; seen: boolean; onSelect: (e: MouseEvent) => void }) {
-  const { t } = useI18n();
-  const metric = index === metricProject.index ? { ...metricProject, caption: t.projects.metricCaption } : undefined;
+function ProjectCard({ project, onSelect }: { project: Project; onSelect: (e: MouseEvent) => void }) {
 
   return (
     <div
@@ -32,42 +29,6 @@ function ProjectCard({ project, index, seen, onSelect }: { project: Project; ind
           </h3>
           <p className="m-0 mt-4 text-[15px] leading-[1.7] text-neutral-400">{project.description}</p>
         </div>
-
-        {metric && (
-          <div className={seen ? "bar-visible" : ""}>
-            <p className="display m-0 flex items-baseline gap-3 text-[clamp(40px,4.4vw,64px)] leading-[0.9]">
-              <span className="text-neutral-600 line-through decoration-accent decoration-[3px]">{metric.from}</span>
-              <span className="text-[0.22em] font-normal text-accent">→</span>
-              <span className="text-accent">{metric.to}</span>
-              <span className="text-[0.2em] font-normal tracking-normal text-neutral-300 normal-case">{metric.unit}</span>
-            </p>
-            <p className="m-0 mt-3 text-[11px] tracking-[0.16em] text-neutral-500 uppercase">{metric.caption}</p>
-
-            <div className="mt-5 flex flex-col gap-2.5">
-              <div>
-                <div className="mb-1 flex justify-between text-[10px] tracking-[0.16em] text-neutral-500 uppercase">
-                  <span>{t.projects.before}</span>
-                  <span>{metric.from} {metric.unit}</span>
-                </div>
-                <div className="h-2 bg-neutral-900">
-                  <div className="bar-fill h-full bg-neutral-600" />
-                </div>
-              </div>
-              <div>
-                <div className="mb-1 flex justify-between text-[10px] tracking-[0.16em] text-accent uppercase">
-                  <span>{t.projects.after}</span>
-                  <span>{metric.to} {metric.unit}</span>
-                </div>
-                <div className="h-2 bg-neutral-900">
-                  <div
-                    className="bar-fill h-full bg-accent"
-                    style={{ width: `${(Number(metric.to) / Number(metric.from)) * 100}%`, transitionDelay: "0.35s" }}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
 
         <ul className="m-0 mt-auto flex list-none flex-wrap gap-2 p-0">
           {project.tags.map((tag) => (
@@ -96,7 +57,6 @@ export default function Projects() {
   const items = t.projects.items;
   const scrollerRef = useRef<HTMLDivElement>(null);
   const thumbRef = useRef<HTMLSpanElement>(null);
-  const [seen, setSeen] = useState<ReadonlySet<number>>(new Set());
   const [edges, setEdges] = useState({ start: true, end: false });
   const [dragging, setDragging] = useState(false);
   const drag = useRef({ active: false, moved: false, startX: 0, startLeft: 0 });
@@ -264,25 +224,6 @@ export default function Projects() {
     };
   }, [stopAnim]);
 
-  // A card counts as "seen" once mostly on screen (starts its before/after bars).
-  useEffect(() => {
-    const scroller = scrollerRef.current;
-    if (!scroller) return;
-    const els = cards();
-    const io = new IntersectionObserver(
-      (entries) => {
-        setSeen((prev) => {
-          const next = new Set(prev);
-          for (const e of entries) if (e.isIntersecting) next.add(els.indexOf(e.target as HTMLElement));
-          return next.size === prev.size ? prev : next;
-        });
-      },
-      { root: scroller, threshold: 0.6 },
-    );
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, [cards, items.length]);
-
   const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "ArrowRight") goNext();
     else if (e.key === "ArrowLeft") goPrev();
@@ -377,7 +318,7 @@ export default function Projects() {
           }`}
         >
           {items.map((project, i) => (
-            <ProjectCard key={i} project={project} index={i} seen={seen.has(i)} onSelect={selectCard(i)} />
+            <ProjectCard key={i} project={project} onSelect={selectCard(i)} />
           ))}
         </div>
       </div>

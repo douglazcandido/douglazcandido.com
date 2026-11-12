@@ -84,9 +84,6 @@ export const es: Dict = {
     title: "Proyectos",
     intro:
       "Tipos de problemas que ya resolví en la práctica, sin entrar en detalles específicos de clientes o empresas.",
-    before: "antes",
-    after: "después",
-    metricCaption: "tamaño de la base tras la reestructuración",
     items: [
       {
         title: "Ingesta, procesamiento e integración de leads en tiempo casi real",
@@ -105,24 +102,6 @@ export const es: Dict = {
         description:
           "Lideré un equipo en la implementación de un sistema completo para una promotora de crédito con descuento en nómina, coordinando el trabajo desde el levantamiento de requisitos hasta el despliegue en producción, pasando por backend, integraciones externas y modelado de base de datos.",
         tags: ["Liderazgo", "Backend", "Integraciones", "Despliegue"],
-      },
-      {
-        title: "Optimización de bases de datos de producción a gran escala",
-        description:
-          "Diagnóstico y rediseño del modelado en bases PostgreSQL en AWS con decenas de millones de registros. La reestructuración de esquema, tipos de datos e índices redujo una base de 112GB a 15GB, además de la reescritura de consultas complejas sin downtime.",
-        tags: ["PostgreSQL", "AWS", "Esquema", "Índices"],
-      },
-      {
-        title: "Desarrollo de backend y APIs",
-        description:
-          "Servicios y APIs en Python/FastAPI, alojados en AWS, con autenticación, validación de datos y procesamiento asíncrono, que sostienen los sistemas internos que la operación usa todos los días.",
-        tags: ["Python", "FastAPI", "AWS", "Autenticación"],
-      },
-      {
-        title: "Detección de anomalías y predicción de fallas (AIOps)",
-        description:
-          "Orquestación de un pipeline de datos con múltiples modelos de machine learning (series temporales y clustering) servidos por API, con un panel de gestión para seguir las predicciones y exportar resultados. Proyecto académico en alianza FIAP × Locaweb.",
-        tags: ["Machine Learning", "Series temporales", "Clustering", "FIAP × Locaweb"],
       },
     ],
   },

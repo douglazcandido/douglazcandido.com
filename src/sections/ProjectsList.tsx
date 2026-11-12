@@ -2,7 +2,6 @@ import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { FiArrowRight } from "react-icons/fi";
 import Section from "../components/Section";
 import Reveal from "../components/Reveal";
-import { metricProject } from "../data/projects";
 import { useI18n } from "../i18n/context";
 
 interface Project {
@@ -27,10 +26,8 @@ function Step({ order, active, className = "", children }: { order: number; acti
   );
 }
 
-/** Everything about one project: title, text, optional before/after metric, tags. */
-function ProjectDetail({ project, index, active }: { project: Project; index: number; active: boolean }) {
-  const { t } = useI18n();
-  const metric = index === metricProject.index ? { ...metricProject, caption: t.projects.metricCaption } : undefined;
+/** Everything about one project: title, text and tags. */
+function ProjectDetail({ project, active }: { project: Project; active: boolean }) {
 
   return (
     <div className="flex h-full flex-col gap-9">
@@ -44,43 +41,7 @@ function ProjectDetail({ project, index, active }: { project: Project; index: nu
         <p className="m-0 max-w-[60ch] text-[clamp(15px,1.15vw,18px)] leading-[1.75] text-neutral-400">{project.description}</p>
       </Step>
 
-      {metric && (
-        <Step order={2} active={active} className={active ? "bar-visible" : ""}>
-          <p className="display m-0 flex items-baseline gap-3 text-[clamp(44px,5.2vw,80px)] leading-[0.9]">
-            <span className="text-neutral-600 line-through decoration-accent decoration-[3px]">{metric.from}</span>
-            <span className="text-[0.22em] font-normal text-accent">→</span>
-            <span className="text-accent">{metric.to}</span>
-            <span className="text-[0.2em] font-normal tracking-normal text-neutral-300 normal-case">{metric.unit}</span>
-          </p>
-          <p className="m-0 mt-3 text-[11px] tracking-[0.16em] text-neutral-500 uppercase">{metric.caption}</p>
-
-          <div className="mt-6 flex max-w-[420px] flex-col gap-2.5">
-            <div>
-              <div className="mb-1 flex justify-between text-[10px] tracking-[0.16em] text-neutral-500 uppercase">
-                <span>{t.projects.before}</span>
-                <span>{metric.from} {metric.unit}</span>
-              </div>
-              <div className="h-2 bg-neutral-900">
-                <div className="bar-fill h-full bg-neutral-600" />
-              </div>
-            </div>
-            <div>
-              <div className="mb-1 flex justify-between text-[10px] tracking-[0.16em] text-accent uppercase">
-                <span>{t.projects.after}</span>
-                <span>{metric.to} {metric.unit}</span>
-              </div>
-              <div className="h-2 bg-neutral-900">
-                <div
-                  className="bar-fill h-full bg-accent"
-                  style={{ width: `${(Number(metric.to) / Number(metric.from)) * 100}%`, transitionDelay: "0.45s" }}
-                />
-              </div>
-            </div>
-          </div>
-        </Step>
-      )}
-
-      <Step order={metric ? 3 : 2} active={active} className="mt-auto">
+      <Step order={2} active={active} className="mt-auto">
         <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
           {project.tags.map((tag) => (
             <li
@@ -190,7 +151,7 @@ export default function ProjectsList() {
                 >
                   <div className="overflow-hidden">
                     <div className="pt-2 pr-1 pb-8 pl-6">
-                      <ProjectDetail project={project} index={i} active={active} />
+                      <ProjectDetail project={project} active={active} />
                     </div>
                   </div>
                 </div>
@@ -213,7 +174,7 @@ export default function ProjectsList() {
                   active ? "opacity-100" : "pointer-events-none opacity-0"
                 }`}
               >
-                <ProjectDetail project={project} index={i} active={active} />
+                <ProjectDetail project={project} active={active} />
               </div>
             );
           })}

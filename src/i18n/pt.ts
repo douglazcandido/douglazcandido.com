@@ -91,10 +91,10 @@ export const pt = {
     repoCta: "Ver no GitHub",
     items: [
       {
-        title: "Ingestão, processamento e integração de leads em tempo quase real",
+        title: "Atlas Corban: CRM para crédito consignado",
         description:
-          "Pipeline que recebe leads de múltiplas fontes externas, cada uma com layout de dados e contrato de API diferente. Identificação automática de formato, validação e deduplicação antes da segmentação. Integração com várias APIs externas em paralelo, cada uma com seu próprio limite de requisições e formato de resposta, com tratamento de falha parcial e processamento assíncrono na AWS para aguentar picos de volume sem degradar.",
-        tags: ["AWS", "Assíncrono", "APIs externas", "Deduplicação"],
+          "A maior dor de uma financeira de crédito consignado é o trabalho operacional, e o Atlas foi feito para tirar isso das costas da equipe. A integração com bancos e fintechs deixa a simulação e a digitação de contratos simples para o usuário, e o restante do operacional roda de forma totalmente automatizada. Em volta disso, o sistema unifica as áreas da empresa: leads, financeiro e comissões, RH e dashboards. Tudo sob medida para a operação, em uma arquitetura modular na AWS.",
+        tags: ["PostgreSQL", "MongoDB", "Redis", "FastAPI", "Node", "React", "AWS", "CI/CD", "Docker"],
       },
       {
         title: "Camada de analytics desacoplada da operação",

@@ -89,10 +89,10 @@ export const es: Dict = {
     repoCta: "Ver en GitHub",
     items: [
       {
-        title: "Ingesta, procesamiento e integración de leads en tiempo casi real",
+        title: "Atlas Corban: CRM para crédito con descuento en nómina",
         description:
-          "Un pipeline que recibe leads de múltiples fuentes externas, cada una con su propio formato de datos y contrato de API. Identifica el formato automáticamente, valida y deduplica antes de la segmentación. Se integra con varias APIs externas en paralelo, cada una con su propio límite de solicitudes y formato de respuesta, maneja fallas parciales y procesa de forma asíncrona en AWS para soportar picos de volumen sin degradarse.",
-        tags: ["AWS", "Asíncrono", "APIs externas", "Deduplicación"],
+          "El mayor dolor de una financiera de crédito con descuento en nómina es el trabajo operativo, y Atlas fue hecho para sacarle eso de encima al equipo. La integración con bancos y fintechs vuelve simple para el usuario la simulación y la digitación de contratos, y el resto de la operación corre de forma totalmente automatizada. Alrededor de eso, el sistema unifica las áreas de la empresa: leads, finanzas y comisiones, RR. HH. y dashboards. Todo a medida para la operación, en una arquitectura modular en AWS.",
+        tags: ["PostgreSQL", "MongoDB", "Redis", "FastAPI", "Node", "React", "AWS", "CI/CD", "Docker"],
       },
       {
         title: "Capa de analytics desacoplada de la operación",

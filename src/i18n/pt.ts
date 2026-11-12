@@ -95,20 +95,21 @@ export const pt = {
         title: "Atlas Corban: CRM para crédito consignado",
         description:
           "A maior dor de uma financeira de crédito consignado é o trabalho operacional, e o Atlas foi feito para tirar isso das costas da equipe. A integração com bancos e fintechs deixa a simulação e a digitação de contratos simples para o usuário, e o restante do operacional roda de forma totalmente automatizada. Em volta disso, o sistema unifica as áreas da empresa: leads, financeiro e comissões, RH e dashboards. Tudo sob medida para a operação, em uma arquitetura modular na AWS.",
-        tags: ["PostgreSQL", "MongoDB", "Redis", "FastAPI", "Node", "React", "AWS", "CI/CD", "Docker"],
+        tags: ["AWS", "CI/CD", "Docker", "ETL", "FastAPI", "MongoDB", "Node", "PostgreSQL", "React", "Redis", "SQLAlchemy"],
         private: true,
       },
       {
-        title: "Camada de analytics desacoplada da operação",
+        title: "Mailing Manager: segmentação de bases de leads",
         description:
-          "Arquitetura de dados em padrão medallion (bruto, validado, analítico) na AWS, publicando eventos para um banco de analytics dedicado. Isso permite relatórios e dashboards de negócio sem tocar ou impactar o banco transacional em produção.",
-        tags: ["AWS", "Medallion", "Eventos", "Analytics"],
+          "Todo dia, quem trabalha com crédito precisa separar da base de leads o grupo certo para cada campanha de WhatsApp, SMS, discador ou URA. O Mailing Manager faz isso sem exigir nenhum conhecimento técnico: o usuário monta filtros dinâmicos ou escolhe uma segmentação pronta, os “cortes de base” para cada perfil, e baixa uma planilha já formatada do jeito que a operação precisa. Por trás está um banco relacional com mais de 90 milhões de registros, modelado para o negócio, com queries dinâmicas otimizadas e um ETL mensal que mantém atualizados os dados de contrato e margem dos leads.",
+        tags: ["AWS", "CI/CD", "Docker", "ETL", "FastAPI", "PostgreSQL", "Psycopg2", "React", "SQLAlchemy"],
+        private: true,
       },
       {
         title: "Sentinel: previsão de incidentes de TI e risco de OLA",
         description:
           "Aplicação completa que prevê o volume de incidentes e o risco de violação de OLA a partir de 122 mil registros, desenvolvida no desafio de AIOps da Locaweb com a FIAP. Pipeline medalhão em PostgreSQL com dbt e Airflow, três modelos de ML (previsão, risco com explicabilidade e clusters), API FastAPI com JWT e painel em React. CI/CD no GitHub Actions, com testes do pipeline e deploy automático via SSH em uma VPS Linux.",
-        tags: ["PostgreSQL", "dbt", "Airflow", "Machine Learning", "FastAPI", "React", "CI/CD", "Docker"],
+        tags: ["Airflow", "CI/CD", "dbt", "Docker", "ETL", "FastAPI", "Machine Learning", "PostgreSQL", "React", "SQLAlchemy"],
         repo: "https://github.com/douglazcandido/sentinel-aiops",
         media: "sentinel",
         shotAlts: [

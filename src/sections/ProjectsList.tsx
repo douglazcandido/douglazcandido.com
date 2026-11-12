@@ -60,8 +60,9 @@ function ProjectDetail({ project, active }: { project: Project; active: boolean 
         </Step>
 
         {hasLinks && (
-          <Step order={2} active={active}>
-            <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-5">
+          <Step order={2} active={active} className="mt-auto">
+            {/* The row sits directly above the tags (not under the text), so it lines up across projects. min-h matches the row height the screenshot fan gives the GitHub project, so the pill sits at the same place in both */}
+            <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-5 @min-[29rem]:min-h-[71px]">
               {project.repo ? (
                 <a
                   href={project.repo}
@@ -87,7 +88,7 @@ function ProjectDetail({ project, active }: { project: Project; active: boolean 
           </Step>
         )}
 
-        <Step order={hasLinks ? 3 : 2} active={active} className="mt-auto">
+        <Step order={hasLinks ? 3 : 2} active={active} className={hasLinks ? undefined : "mt-auto"}>
           <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
             {project.tags.map((tag) => (
               <li

@@ -87,12 +87,14 @@ export const es: Dict = {
   projects: {
     title: "Proyectos",
     repoCta: "Ver en GitHub",
+    privateCode: "Código privado",
     items: [
       {
         title: "Atlas Corban: CRM para crédito con descuento en nómina",
         description:
           "El mayor dolor de una financiera de crédito con descuento en nómina es el trabajo operativo, y Atlas fue hecho para sacarle eso de encima al equipo. La integración con bancos y fintechs vuelve simple para el usuario la simulación y la digitación de contratos, y el resto de la operación corre de forma totalmente automatizada. Alrededor de eso, el sistema unifica las áreas de la empresa: leads, finanzas y comisiones, RR. HH. y dashboards. Todo a medida para la operación, en una arquitectura modular en AWS.",
         tags: ["PostgreSQL", "MongoDB", "Redis", "FastAPI", "Node", "React", "AWS", "CI/CD", "Docker"],
+        private: true,
       },
       {
         title: "Capa de analytics desacoplada de la operación",

@@ -87,12 +87,14 @@ export const en: Dict = {
   projects: {
     title: "Projects",
     repoCta: "View on GitHub",
+    privateCode: "Private code",
     items: [
       {
         title: "Atlas Corban: CRM for payroll loans",
         description:
           "The biggest pain for a payroll-loan lender is operational work, and Atlas was built to take that off the team's shoulders. The integration with banks and fintechs makes quoting and contract entry simple for the user, and the rest of the operation runs fully automated. Around that, the system unifies the company's areas: leads, finance and commissions, HR and dashboards. All tailored to the operation, in a modular architecture on AWS.",
         tags: ["PostgreSQL", "MongoDB", "Redis", "FastAPI", "Node", "React", "AWS", "CI/CD", "Docker"],
+        private: true,
       },
       {
         title: "An analytics layer decoupled from operations",

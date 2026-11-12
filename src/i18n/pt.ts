@@ -89,12 +89,14 @@ export const pt = {
   projects: {
     title: "Projetos",
     repoCta: "Ver no GitHub",
+    privateCode: "Código privado",
     items: [
       {
         title: "Atlas Corban: CRM para crédito consignado",
         description:
           "A maior dor de uma financeira de crédito consignado é o trabalho operacional, e o Atlas foi feito para tirar isso das costas da equipe. A integração com bancos e fintechs deixa a simulação e a digitação de contratos simples para o usuário, e o restante do operacional roda de forma totalmente automatizada. Em volta disso, o sistema unifica as áreas da empresa: leads, financeiro e comissões, RH e dashboards. Tudo sob medida para a operação, em uma arquitetura modular na AWS.",
         tags: ["PostgreSQL", "MongoDB", "Redis", "FastAPI", "Node", "React", "AWS", "CI/CD", "Docker"],
+        private: true,
       },
       {
         title: "Camada de analytics desacoplada da operação",

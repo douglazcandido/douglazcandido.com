@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type KeyboardEvent, type MouseEvent, type PointerEvent } from "react";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import Section from "../components/Section";
-import Reveal from "../components/Reveal";
 import SpotlightCard from "../components/SpotlightCard";
 import { prefersReducedMotion } from "../hooks/useReducedMotion";
 import { useI18n } from "../i18n/context";
@@ -296,10 +295,6 @@ export default function Projects() {
 
   return (
     <Section id="projetos" title={t.projects.title}>
-      <Reveal as="p" className="m-0 mb-[clamp(28px,4vw,56px)] max-w-[60ch] text-[clamp(17px,1.5vw,22px)] leading-[1.55] text-neutral-400">
-        {t.projects.intro}
-      </Reveal>
-
       {/* Full-bleed strip: starts on the content margin, runs off the right edge. */}
       <div className="ml-[calc(50%-50vw)] w-screen">
         <div

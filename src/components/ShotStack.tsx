@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { FiArrowLeft, FiArrowRight, FiX } from "react-icons/fi";
+import { prefersReducedMotion } from "../hooks/useReducedMotion";
 import { useI18n } from "../i18n/context";
 
 const EASE = "ease-[cubic-bezier(0.19,1,0.22,1)]";
@@ -98,32 +99,99 @@ function Lightbox({
   );
 }
 
+const SHUFFLE_EVERY_MS = 4200;
+/** One rotation is a single continuous gesture of this length (see `thumb-wrap` in index.css). */
+const ROTATE_MS = 1300;
+
 /**
- * A small fan of overlapping thumbnails that sits in the project's own card. It spreads a
- * little on hover; clicking a thumbnail opens the full-size viewer at that screenshot.
+ * A small fan of overlapping thumbnails that sits in the project's own card. Every few
+ * seconds it rotates one place as a single smooth motion: every thumbnail glides forward
+ * while the front one slides to the back, dissolving on the way and fading in again as it
+ * arrives. It stops while hovered (the fan spreads out a little then), while the viewer is
+ * open, when the project is not the open one, or with reduced motion.
+ * Clicking a thumbnail opens the viewer at that screenshot.
  */
-export default function ShotStack({ images, alts }: { images: readonly string[]; alts: readonly string[] }) {
+export default function ShotStack({
+  images,
+  alts,
+  active,
+}: {
+  images: readonly string[];
+  alts: readonly string[];
+  active: boolean;
+}) {
   const { t } = useI18n();
-  const [open, setOpen] = useState<number | null>(null);
   const n = images.length;
+  const [open, setOpen] = useState<number | null>(null);
+  const [hovering, setHovering] = useState(false);
+  const [offset, setOffset] = useState(0); // how many times the fan has rotated
+  const [wrapping, setWrapping] = useState<number | null>(null); // image index travelling to the back
+  const [arriving, setArriving] = useState<number | null>(null); // image index taking the front
+  const offsetRef = useRef(0);
+  const wrapTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+  const running = active && !hovering && open === null && n > 1 && !prefersReducedMotion();
+
+  useEffect(() => {
+    if (!running) return;
+    const id = setInterval(() => {
+      // The image at the front is the one whose index equals the number of rotations so far.
+      setWrapping(((offsetRef.current % n) + n) % n);
+      setArriving((((offsetRef.current + 1) % n) + n) % n);
+      offsetRef.current += 1;
+      setOffset(offsetRef.current);
+      clearTimeout(wrapTimer.current);
+      wrapTimer.current = setTimeout(() => {
+        setWrapping(null);
+        setArriving(null);
+      }, ROTATE_MS + 60);
+    }, SHUFFLE_EVERY_MS);
+    return () => clearInterval(id);
+  }, [running, n]);
+
+  // A rotation that is already under way is left to finish even if hovering stops the next ones.
+  useEffect(() => () => clearTimeout(wrapTimer.current), []);
+
+  // Position in the fan: 0 is the front. Image k sits at (k - offset) mod n.
+  const place = (k: number) => (((k - offset) % n) + n) % n;
 
   return (
     <>
-      <div className="group/stack flex w-[354px] max-w-full items-center justify-end py-1 max-sm:justify-start">
-        {images.map((src, k) => (
-          <button
-            key={src}
-            type="button"
-            aria-label={`${t.a11y.openImage}: ${alts[k]}`}
-            onClick={() => setOpen(k)}
-            style={{ zIndex: n - k }}
-            className={`relative block h-[55px] w-[88px] shrink-0 cursor-zoom-in overflow-hidden rounded-lg border border-divider bg-bg shadow-[0_6px_16px_-8px_rgba(0,0,0,0.9)] transition-[margin,translate,border-color] duration-500 ${EASE} hover:-translate-y-1 hover:border-accent ${
-              k > 0 ? "-ml-[66px] group-hover/stack:-ml-[50px]" : ""
-            }`}
-          >
-            <img src={src} alt="" loading="lazy" decoding="async" draggable={false} className="h-full w-full object-cover object-top" />
-          </button>
-        ))}
+      <div className="flex w-[354px] max-w-full items-center justify-end py-1 max-sm:justify-start">
+        <div
+          onMouseEnter={() => setHovering(true)}
+          onMouseLeave={() => setHovering(false)}
+          style={{ width: `calc(88px + var(--step) * ${n - 1})`, height: 63 }}
+          className="relative [--step:22px] transition-[width] duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] hover:[--step:38px]"
+        >
+          {images.map((src, k) => {
+            const pos = place(k);
+            return (
+              <button
+                key={src}
+                type="button"
+                aria-label={`${t.a11y.openImage}: ${alts[k]}`}
+                onClick={() => setOpen(k)}
+                style={{
+                  // moved with transform (GPU, sub-pixel) rather than left/margin
+                  translate: `calc(var(--step) * ${pos}) 0`,
+                  zIndex: n - pos,
+                  transition: `translate ${ROTATE_MS}ms cubic-bezier(0.65, 0, 0.35, 1)`,
+                  animation: wrapping === k ? `thumb-wrap ${ROTATE_MS}ms ease-in-out` : undefined,
+                }}
+                className="group/thumb absolute top-1 left-0 block h-[55px] w-[88px] cursor-zoom-in"
+              >
+                {/* The thumbnail taking the front lights up with a yellow outline only while the fan moves. */}
+                <span
+                  style={{ animation: arriving === k ? `thumb-glow ${ROTATE_MS}ms ease-in-out` : undefined }}
+                  className="block h-full w-full overflow-hidden rounded-lg border border-divider bg-bg shadow-[0_6px_16px_-8px_rgba(0,0,0,0.9)] transition-[translate,border-color] duration-300 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover/thumb:-translate-y-1 group-hover/thumb:border-accent"
+                >
+                  <img src={src} alt="" loading="lazy" decoding="async" draggable={false} className="h-full w-full object-cover object-top" />
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {open !== null && <Lightbox images={images} alts={alts} index={open} onChange={setOpen} onClose={() => setOpen(null)} />}

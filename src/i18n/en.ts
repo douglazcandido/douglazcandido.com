@@ -86,15 +86,15 @@ export const en: Dict = {
   },
   projects: {
     title: "Projects",
-    intro:
-      "The kinds of problems I've solved in practice, without going into client- or company-specific details.",
     repoCta: "View on GitHub",
+    privateCode: "Private code",
     items: [
       {
-        title: "Near real-time lead ingestion, processing and integration",
+        title: "Atlas Corban: CRM for payroll loans",
         description:
-          "A pipeline that receives leads from multiple external sources, each with its own data layout and API contract. It detects the format automatically, then validates and deduplicates before segmentation. It integrates with several external APIs in parallel, each with its own rate limits and response format, handling partial failures and processing asynchronously on AWS to absorb volume spikes without degrading.",
-        tags: ["AWS", "Async", "External APIs", "Deduplication"],
+          "The biggest pain for a payroll-loan lender is operational work, and Atlas was built to take that off the team's shoulders. The integration with banks and fintechs makes quoting and contract entry simple for the user, and the rest of the operation runs fully automated. Around that, the system unifies the company's areas: leads, finance and commissions, HR and dashboards. All tailored to the operation, in a modular architecture on AWS.",
+        tags: ["PostgreSQL", "MongoDB", "Redis", "FastAPI", "Node", "React", "AWS", "CI/CD", "Docker"],
+        private: true,
       },
       {
         title: "An analytics layer decoupled from operations",

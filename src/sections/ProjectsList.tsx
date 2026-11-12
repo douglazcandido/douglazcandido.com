@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { FaGithub } from "react-icons/fa";
-import { FiArrowRight, FiArrowUpRight } from "react-icons/fi";
+import { FiArrowRight, FiArrowUpRight, FiLock } from "react-icons/fi";
 import Section from "../components/Section";
-import Reveal from "../components/Reveal";
 import ShotStack from "../components/ShotStack";
 import { projectMedia } from "../data/projectMedia";
 import { useI18n } from "../i18n/context";
@@ -13,6 +12,8 @@ interface Project {
   tags: readonly string[];
   /** Public repository, when there is one. */
   repo?: string;
+  /** Closed-source project: shows a non-interactive "private code" badge instead of a link. */
+  private?: boolean;
   /** Key into `projectMedia` and the matching alt texts, when there are screenshots. */
   media?: string;
   shotAlts?: readonly string[];
@@ -43,7 +44,7 @@ function ProjectDetail({ project, active }: { project: Project; active: boolean 
   const { t } = useI18n();
   const images = project.media ? projectMedia[project.media] : undefined;
   const hasShots = !!(images && project.shotAlts);
-  const hasLinks = !!project.repo || hasShots;
+  const hasLinks = !!project.repo || !!project.private || hasShots;
 
   return (
     <div className="@container h-full">
@@ -61,7 +62,7 @@ function ProjectDetail({ project, active }: { project: Project; active: boolean 
         {hasLinks && (
           <Step order={2} active={active}>
             <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-5">
-              {project.repo && (
+              {project.repo ? (
                 <a
                   href={project.repo}
                   target="_blank"
@@ -75,8 +76,13 @@ function ProjectDetail({ project, active }: { project: Project; active: boolean 
                     className="h-4 w-4 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover/repo:translate-x-0.5 group-hover/repo:-translate-y-0.5"
                   />
                 </a>
-              )}
-              {hasShots && <ShotStack images={images!} alts={project.shotAlts!} />}
+              ) : project.private ? (
+                <span className="inline-flex cursor-default items-center gap-3 rounded-full border border-divider py-2.5 pr-4 pl-4 text-[13px] font-medium tracking-[0.04em] text-neutral-400 select-none">
+                  <FiLock aria-hidden="true" className="h-[17px] w-[17px]" />
+                  {t.projects.privateCode}
+                </span>
+              ) : null}
+              {hasShots && <ShotStack images={images!} alts={project.shotAlts!} active={active} />}
             </div>
           </Step>
         )}
@@ -129,10 +135,6 @@ export default function ProjectsList() {
 
   return (
     <Section id="projetos" title={t.projects.title}>
-      <Reveal as="p" className="m-0 mb-[clamp(28px,4vw,56px)] max-w-[60ch] text-[clamp(17px,1.5vw,22px)] leading-[1.55] text-neutral-400">
-        {t.projects.intro}
-      </Reveal>
-
       <div className="grid grid-cols-1 gap-x-[clamp(32px,5vw,88px)] lg:grid-cols-12">
         <ul
           className="m-0 list-none border-t border-divider p-0 lg:col-span-5 lg:self-start"

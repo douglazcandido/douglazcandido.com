@@ -86,8 +86,6 @@ export const en: Dict = {
   },
   projects: {
     title: "Projects",
-    intro:
-      "The kinds of problems I've solved in practice, without going into client- or company-specific details.",
     repoCta: "View on GitHub",
     items: [
       {

@@ -2,7 +2,6 @@ import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { FaGithub } from "react-icons/fa";
 import { FiArrowRight, FiArrowUpRight } from "react-icons/fi";
 import Section from "../components/Section";
-import Reveal from "../components/Reveal";
 import ShotStack from "../components/ShotStack";
 import { projectMedia } from "../data/projectMedia";
 import { useI18n } from "../i18n/context";
@@ -129,10 +128,6 @@ export default function ProjectsList() {
 
   return (
     <Section id="projetos" title={t.projects.title}>
-      <Reveal as="p" className="m-0 mb-[clamp(28px,4vw,56px)] max-w-[60ch] text-[clamp(17px,1.5vw,22px)] leading-[1.55] text-neutral-400">
-        {t.projects.intro}
-      </Reveal>
-
       <div className="grid grid-cols-1 gap-x-[clamp(32px,5vw,88px)] lg:grid-cols-12">
         <ul
           className="m-0 list-none border-t border-divider p-0 lg:col-span-5 lg:self-start"

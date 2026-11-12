@@ -88,8 +88,6 @@ export const pt = {
   },
   projects: {
     title: "Projetos",
-    intro:
-      "Tipos de problema que já resolvi na prática, sem entrar em detalhes específicos de cliente ou empresa.",
     repoCta: "Ver no GitHub",
     items: [
       {

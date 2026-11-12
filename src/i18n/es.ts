@@ -86,8 +86,6 @@ export const es: Dict = {
   },
   projects: {
     title: "Proyectos",
-    intro:
-      "Tipos de problemas que ya resolví en la práctica, sin entrar en detalles específicos de clientes o empresas.",
     repoCta: "Ver en GitHub",
     items: [
       {

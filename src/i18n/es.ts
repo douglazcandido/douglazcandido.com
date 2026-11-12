@@ -97,10 +97,11 @@ export const es: Dict = {
         private: true,
       },
       {
-        title: "Capa de analytics desacoplada de la operación",
+        title: "Mailing Manager: segmentación de bases de leads",
         description:
-          "Arquitectura de datos con patrón medallion (bruto, validado, analítico) en AWS, que publica eventos en una base de analytics dedicada. Así se pueden generar reportes y dashboards de negocio sin tocar ni afectar la base transaccional en producción.",
-        tags: ["AWS", "Medallion", "Eventos", "Analytics"],
+          "Todos los días, quien trabaja con crédito necesita separar de la base de leads el grupo correcto para cada campaña de WhatsApp, SMS, discador o URA. Mailing Manager lo hace sin exigir ningún conocimiento técnico: el usuario arma filtros dinámicos o elige una segmentación lista, los “cortes de base” para cada perfil, y descarga una planilla ya formateada como la operación la necesita. Por detrás hay una base relacional con más de 90 millones de registros, modelada para el negocio, con consultas dinámicas optimizadas y un ETL mensual que mantiene actualizados los datos de contrato y margen de los leads.",
+        tags: ["FastAPI", "PostgreSQL", "React", "Docker", "SQLAlchemy", "AWS", "CI/CD", "ETL"],
+        private: true,
       },
       {
         title: "Sentinel: predicción de incidentes de TI y riesgo de OLA",

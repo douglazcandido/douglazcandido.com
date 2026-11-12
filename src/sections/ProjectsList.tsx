@@ -61,7 +61,8 @@ function ProjectDetail({ project, active }: { project: Project; active: boolean 
 
         {hasLinks && (
           <Step order={2} active={active}>
-            <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-5">
+            {/* min-h matches the row height the screenshot fan gives the GitHub project, so the pill sits at the same place in both */}
+            <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-5 @min-[35rem]:min-h-[71px]">
               {project.repo ? (
                 <a
                   href={project.repo}

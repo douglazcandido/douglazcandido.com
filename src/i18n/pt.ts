@@ -99,10 +99,11 @@ export const pt = {
         private: true,
       },
       {
-        title: "Camada de analytics desacoplada da operação",
+        title: "Mailing Manager: segmentação de bases de leads",
         description:
-          "Arquitetura de dados em padrão medallion (bruto, validado, analítico) na AWS, publicando eventos para um banco de analytics dedicado. Isso permite relatórios e dashboards de negócio sem tocar ou impactar o banco transacional em produção.",
-        tags: ["AWS", "Medallion", "Eventos", "Analytics"],
+          "Todo dia, quem trabalha com crédito precisa separar da base de leads o grupo certo para cada campanha de WhatsApp, SMS, discador ou URA. O Mailing Manager faz isso sem exigir nenhum conhecimento técnico: o usuário monta filtros dinâmicos ou escolhe uma segmentação pronta, os “cortes de base” para cada perfil, e baixa uma planilha já formatada do jeito que a operação precisa. Por trás está um banco relacional com mais de 90 milhões de registros, modelado para o negócio, com queries dinâmicas otimizadas e um ETL mensal que mantém atualizados os dados de contrato e margem dos leads.",
+        tags: ["FastAPI", "PostgreSQL", "React", "Docker", "SQLAlchemy", "AWS", "CI/CD", "ETL"],
+        private: true,
       },
       {
         title: "Sentinel: previsão de incidentes de TI e risco de OLA",

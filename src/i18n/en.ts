@@ -97,10 +97,11 @@ export const en: Dict = {
         private: true,
       },
       {
-        title: "An analytics layer decoupled from operations",
+        title: "Mailing Manager: lead base segmentation",
         description:
-          "A medallion-style data architecture (raw, validated, analytical) on AWS, publishing events to a dedicated analytics database. This makes business reports and dashboards possible without touching or slowing down the transactional database in production.",
-        tags: ["AWS", "Medallion", "Events", "Analytics"],
+          "Every day, people working in credit need to pull the right group out of the lead base for each WhatsApp, SMS, dialer or IVR campaign. Mailing Manager does this without requiring any technical knowledge: the user builds dynamic filters or picks a ready-made segmentation, the “base cuts” for each profile, and downloads a spreadsheet already formatted the way the operation needs it. Behind it is a relational database with over 90 million records, modeled for the business, with optimized dynamic queries and a monthly ETL that keeps the leads' contract and margin data up to date.",
+        tags: ["FastAPI", "PostgreSQL", "React", "Docker", "SQLAlchemy", "AWS", "CI/CD", "ETL"],
+        private: true,
       },
       {
         title: "Sentinel: IT incident forecasting and OLA risk",

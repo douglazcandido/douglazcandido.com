@@ -3,6 +3,8 @@ import { FaGithub } from "react-icons/fa";
 import { FiArrowRight, FiArrowUpRight } from "react-icons/fi";
 import Section from "../components/Section";
 import Reveal from "../components/Reveal";
+import ShotStack from "../components/ShotStack";
+import { projectMedia } from "../data/projectMedia";
 import { useI18n } from "../i18n/context";
 
 interface Project {
@@ -11,6 +13,9 @@ interface Project {
   tags: readonly string[];
   /** Public repository, when there is one. */
   repo?: string;
+  /** Key into `projectMedia` and the matching alt texts, when there are screenshots. */
+  media?: string;
+  shotAlts?: readonly string[];
 }
 
 const EASE = "ease-[cubic-bezier(0.19,1,0.22,1)]";
@@ -29,9 +34,12 @@ function Step({ order, active, className = "", children }: { order: number; acti
   );
 }
 
-/** Everything about one project: title, text and tags. */
+/** Everything about one project: title, text, links (repository, screenshots) and tags. */
 function ProjectDetail({ project, active }: { project: Project; active: boolean }) {
   const { t } = useI18n();
+  const images = project.media ? projectMedia[project.media] : undefined;
+  const hasShots = !!(images && project.shotAlts);
+  const hasLinks = !!project.repo || hasShots;
 
   return (
     <div className="flex h-full flex-col gap-9">
@@ -45,25 +53,30 @@ function ProjectDetail({ project, active }: { project: Project; active: boolean 
         <p className="m-0 max-w-[60ch] text-[clamp(15px,1.15vw,18px)] leading-[1.75] text-neutral-400">{project.description}</p>
       </Step>
 
-      {project.repo && (
+      {hasLinks && (
         <Step order={2} active={active}>
-          <a
-            href={project.repo}
-            target="_blank"
-            rel="noreferrer"
-            className="group/repo inline-flex items-center gap-3 rounded-full border border-divider py-2.5 pr-4 pl-4 text-[13px] font-medium tracking-[0.04em] text-neutral-200 transition-colors duration-300 hover:border-accent hover:text-accent"
-          >
-            <FaGithub aria-hidden="true" className="h-[18px] w-[18px]" />
-            {t.projects.repoCta}
-            <FiArrowUpRight
-              aria-hidden="true"
-              className="h-4 w-4 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover/repo:translate-x-0.5 group-hover/repo:-translate-y-0.5"
-            />
-          </a>
+          <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-5">
+            {project.repo && (
+              <a
+                href={project.repo}
+                target="_blank"
+                rel="noreferrer"
+                className="group/repo inline-flex items-center gap-3 rounded-full border border-divider py-2.5 pr-4 pl-4 text-[13px] font-medium tracking-[0.04em] text-neutral-200 transition-colors duration-300 hover:border-accent hover:text-accent"
+              >
+                <FaGithub aria-hidden="true" className="h-[18px] w-[18px]" />
+                {t.projects.repoCta}
+                <FiArrowUpRight
+                  aria-hidden="true"
+                  className="h-4 w-4 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover/repo:translate-x-0.5 group-hover/repo:-translate-y-0.5"
+                />
+              </a>
+            )}
+            {hasShots && <ShotStack images={images!} alts={project.shotAlts!} />}
+          </div>
         </Step>
       )}
 
-      <Step order={project.repo ? 3 : 2} active={active} className="mt-auto">
+      <Step order={hasLinks ? 3 : 2} active={active} className="mt-auto">
         <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
           {project.tags.map((tag) => (
             <li

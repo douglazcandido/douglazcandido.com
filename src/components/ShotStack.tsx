@@ -155,12 +155,17 @@ export default function ShotStack({
 
   return (
     <>
-      <div className="flex w-[354px] max-w-full items-center justify-end py-1 max-sm:justify-start">
+      <div className="flex min-w-0 flex-1 items-center justify-end py-1 max-sm:justify-start">
         <div
           onMouseEnter={() => setHovering(true)}
           onMouseLeave={() => setHovering(false)}
-          style={{ width: `calc(88px + var(--step) * ${n - 1})`, height: 63 }}
-          className="relative [--step:22px] transition-[width] duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] hover:[--step:38px]"
+          style={{
+            width: `calc(88px + var(--step) * ${n - 1})`,
+            height: 63,
+            // On hover the fan spreads to at most 38px per step, less when the card is narrow so it never reaches the button beside it.
+            "--hover-step": `clamp(22px, calc((100cqw - 302px) / ${n - 1}), 38px)`,
+          } as React.CSSProperties}
+          className="relative [--step:22px] transition-[width] duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] hover:[--step:var(--hover-step)]"
         >
           {images.map((src, k) => {
             const pos = place(k);

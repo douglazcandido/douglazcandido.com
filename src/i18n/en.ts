@@ -93,7 +93,7 @@ export const en: Dict = {
         title: "Atlas Corban: CRM for payroll loans",
         description:
           "The biggest pain for a payroll-loan lender is operational work, and Atlas was built to take that off the team's shoulders. The integration with banks and fintechs makes quoting and contract entry simple for the user, and the rest of the operation runs fully automated. Around that, the system unifies the company's areas: leads, finance and commissions, HR and dashboards. All tailored to the operation, in a modular architecture on AWS.",
-        tags: ["PostgreSQL", "MongoDB", "Redis", "FastAPI", "Node", "React", "AWS", "CI/CD", "Docker"],
+        tags: ["PostgreSQL", "MongoDB", "Redis", "FastAPI", "SQLAlchemy", "ETL", "Node", "React", "AWS", "CI/CD", "Docker"],
         private: true,
       },
       {
@@ -106,7 +106,7 @@ export const en: Dict = {
         title: "Sentinel: IT incident forecasting and OLA risk",
         description:
           "A complete application that forecasts incident volume and the risk of breaching an OLA from 122,000 records, built for the Locaweb AIOps challenge with FIAP. Medallion pipeline on PostgreSQL with dbt and Airflow, three ML models (forecasting, risk with explainability, and clustering), a FastAPI API with JWT and a React dashboard. CI/CD on GitHub Actions, with pipeline tests and automatic deployment over SSH to a Linux VPS.",
-        tags: ["PostgreSQL", "dbt", "Airflow", "Machine Learning", "FastAPI", "React", "CI/CD", "Docker"],
+        tags: ["PostgreSQL", "dbt", "Airflow", "Machine Learning", "FastAPI", "SQLAlchemy", "ETL", "React", "CI/CD", "Docker"],
         repo: "https://github.com/douglazcandido/sentinel-aiops",
         media: "sentinel",
         shotAlts: [

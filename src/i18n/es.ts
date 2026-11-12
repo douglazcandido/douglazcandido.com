@@ -93,7 +93,7 @@ export const es: Dict = {
         title: "Atlas Corban: CRM para crédito con descuento en nómina",
         description:
           "El mayor dolor de una financiera de crédito con descuento en nómina es el trabajo operativo, y Atlas fue hecho para sacarle eso de encima al equipo. La integración con bancos y fintechs vuelve simple para el usuario la simulación y la digitación de contratos, y el resto de la operación corre de forma totalmente automatizada. Alrededor de eso, el sistema unifica las áreas de la empresa: leads, finanzas y comisiones, RR. HH. y dashboards. Todo a medida para la operación, en una arquitectura modular en AWS.",
-        tags: ["PostgreSQL", "MongoDB", "Redis", "FastAPI", "Node", "React", "AWS", "CI/CD", "Docker"],
+        tags: ["PostgreSQL", "MongoDB", "Redis", "FastAPI", "SQLAlchemy", "ETL", "Node", "React", "AWS", "CI/CD", "Docker"],
         private: true,
       },
       {
@@ -106,7 +106,7 @@ export const es: Dict = {
         title: "Sentinel: predicción de incidentes de TI y riesgo de OLA",
         description:
           "Aplicación completa que predice el volumen de incidentes y el riesgo de incumplir un OLA a partir de 122 mil registros, desarrollada en el desafío de AIOps de Locaweb con FIAP. Pipeline medallón en PostgreSQL con dbt y Airflow, tres modelos de ML (predicción, riesgo con explicabilidad y clusters), API FastAPI con JWT y panel en React. CI/CD en GitHub Actions, con pruebas del pipeline y despliegue automático por SSH en una VPS Linux.",
-        tags: ["PostgreSQL", "dbt", "Airflow", "Machine Learning", "FastAPI", "React", "CI/CD", "Docker"],
+        tags: ["PostgreSQL", "dbt", "Airflow", "Machine Learning", "FastAPI", "SQLAlchemy", "ETL", "React", "CI/CD", "Docker"],
         repo: "https://github.com/douglazcandido/sentinel-aiops",
         media: "sentinel",
         shotAlts: [

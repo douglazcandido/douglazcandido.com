@@ -4,8 +4,6 @@ import { FiArrowLeft, FiArrowRight, FiX } from "react-icons/fi";
 import { prefersReducedMotion } from "../hooks/useReducedMotion";
 import { useI18n } from "../i18n/context";
 
-const EASE = "ease-[cubic-bezier(0.19,1,0.22,1)]";
-
 /** Full-screen viewer: arrows / keys to move, Esc or a click outside to close. */
 function Lightbox({
   images,

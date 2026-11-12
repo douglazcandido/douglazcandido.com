@@ -95,7 +95,7 @@ export const pt = {
         title: "Atlas Corban: CRM para crédito consignado",
         description:
           "A maior dor de uma financeira de crédito consignado é o trabalho operacional, e o Atlas foi feito para tirar isso das costas da equipe. A integração com bancos e fintechs deixa a simulação e a digitação de contratos simples para o usuário, e o restante do operacional roda de forma totalmente automatizada. Em volta disso, o sistema unifica as áreas da empresa: leads, financeiro e comissões, RH e dashboards. Tudo sob medida para a operação, em uma arquitetura modular na AWS.",
-        tags: ["PostgreSQL", "MongoDB", "Redis", "FastAPI", "Node", "React", "AWS", "CI/CD", "Docker"],
+        tags: ["PostgreSQL", "MongoDB", "Redis", "FastAPI", "SQLAlchemy", "ETL", "Node", "React", "AWS", "CI/CD", "Docker"],
         private: true,
       },
       {
@@ -108,7 +108,7 @@ export const pt = {
         title: "Sentinel: previsão de incidentes de TI e risco de OLA",
         description:
           "Aplicação completa que prevê o volume de incidentes e o risco de violação de OLA a partir de 122 mil registros, desenvolvida no desafio de AIOps da Locaweb com a FIAP. Pipeline medalhão em PostgreSQL com dbt e Airflow, três modelos de ML (previsão, risco com explicabilidade e clusters), API FastAPI com JWT e painel em React. CI/CD no GitHub Actions, com testes do pipeline e deploy automático via SSH em uma VPS Linux.",
-        tags: ["PostgreSQL", "dbt", "Airflow", "Machine Learning", "FastAPI", "React", "CI/CD", "Docker"],
+        tags: ["PostgreSQL", "dbt", "Airflow", "Machine Learning", "FastAPI", "SQLAlchemy", "ETL", "React", "CI/CD", "Docker"],
         repo: "https://github.com/douglazcandido/sentinel-aiops",
         media: "sentinel",
         shotAlts: [

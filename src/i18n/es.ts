@@ -84,7 +84,7 @@ export const es: Dict = {
     title: "Proyectos",
     intro:
       "Tipos de problemas que ya resolví en la práctica, sin entrar en detalles específicos de clientes o empresas.",
-    repoCta: "Ver el código en GitHub",
+    repoCta: "Ver en GitHub",
     items: [
       {
         title: "Ingesta, procesamiento e integración de leads en tiempo casi real",

@@ -86,7 +86,7 @@ export const pt = {
     title: "Projetos",
     intro:
       "Tipos de problema que já resolvi na prática, sem entrar em detalhes específicos de cliente ou empresa.",
-    repoCta: "Ver código no GitHub",
+    repoCta: "Ver no GitHub",
     items: [
       {
         title: "Ingestão, processamento e integração de leads em tempo quase real",

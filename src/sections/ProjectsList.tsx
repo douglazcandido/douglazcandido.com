@@ -68,7 +68,7 @@ function ProjectDetail({ project, active }: { project: Project; active: boolean 
           {project.tags.map((tag) => (
             <li
               key={tag}
-              className="rounded-full border border-divider px-3 py-1 text-[10.5px] tracking-[0.12em] text-neutral-400 uppercase"
+              className="rounded-full bg-accent/10 px-3 py-1 text-[10.5px] tracking-[0.12em] text-accent uppercase"
             >
               {tag}
             </li>

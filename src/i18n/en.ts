@@ -84,6 +84,7 @@ export const en: Dict = {
     title: "Projects",
     intro:
       "The kinds of problems I've solved in practice, without going into client- or company-specific details.",
+    repoCta: "View the code on GitHub",
     items: [
       {
         title: "Near real-time lead ingestion, processing and integration",
@@ -98,10 +99,11 @@ export const en: Dict = {
         tags: ["AWS", "Medallion", "Events", "Analytics"],
       },
       {
-        title: "Leading the rollout of a system for a payroll-loan originator",
+        title: "Sentinel: IT incident forecasting and OLA risk",
         description:
-          "I led a team in rolling out a complete system for a payroll-loan originator, coordinating the work from requirements gathering all the way to production deployment, across backend, external integrations and database modeling.",
-        tags: ["Leadership", "Backend", "Integrations", "Deploy"],
+          "A complete application that forecasts incident volume and the risk of breaching an OLA from 122,000 records, built for the Locaweb AIOps challenge with FIAP. Medallion pipeline on PostgreSQL with dbt and Airflow, three ML models (forecasting, risk with explainability, and clustering), a FastAPI API with JWT and a React dashboard. CI/CD on GitHub Actions, with pipeline tests and automatic deployment over SSH to a Linux VPS.",
+        tags: ["PostgreSQL", "dbt", "Airflow", "Machine Learning", "FastAPI", "React", "CI/CD", "Docker"],
+        repo: "https://github.com/douglazcandido/sentinel-aiops",
       },
     ],
   },

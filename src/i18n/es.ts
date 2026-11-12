@@ -84,6 +84,7 @@ export const es: Dict = {
     title: "Proyectos",
     intro:
       "Tipos de problemas que ya resolví en la práctica, sin entrar en detalles específicos de clientes o empresas.",
+    repoCta: "Ver el código en GitHub",
     items: [
       {
         title: "Ingesta, procesamiento e integración de leads en tiempo casi real",
@@ -98,10 +99,11 @@ export const es: Dict = {
         tags: ["AWS", "Medallion", "Eventos", "Analytics"],
       },
       {
-        title: "Liderazgo en la implementación de un sistema para una promotora de crédito con descuento en nómina",
+        title: "Sentinel: predicción de incidentes de TI y riesgo de OLA",
         description:
-          "Lideré un equipo en la implementación de un sistema completo para una promotora de crédito con descuento en nómina, coordinando el trabajo desde el levantamiento de requisitos hasta el despliegue en producción, pasando por backend, integraciones externas y modelado de base de datos.",
-        tags: ["Liderazgo", "Backend", "Integraciones", "Despliegue"],
+          "Aplicación completa que predice el volumen de incidentes y el riesgo de incumplir un OLA a partir de 122 mil registros, desarrollada en el desafío de AIOps de Locaweb con FIAP. Pipeline medallón en PostgreSQL con dbt y Airflow, tres modelos de ML (predicción, riesgo con explicabilidad y clusters), API FastAPI con JWT y panel en React. CI/CD en GitHub Actions, con pruebas del pipeline y despliegue automático por SSH en una VPS Linux.",
+        tags: ["PostgreSQL", "dbt", "Airflow", "Machine Learning", "FastAPI", "React", "CI/CD", "Docker"],
+        repo: "https://github.com/douglazcandido/sentinel-aiops",
       },
     ],
   },

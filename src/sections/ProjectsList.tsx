@@ -76,7 +76,7 @@ function ProjectDetail({ project, active }: { project: Project; active: boolean 
                   />
                 </a>
               )}
-              {hasShots && <ShotStack images={images!} alts={project.shotAlts!} />}
+              {hasShots && <ShotStack images={images!} alts={project.shotAlts!} active={active} />}
             </div>
           </Step>
         )}

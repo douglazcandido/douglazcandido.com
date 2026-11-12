@@ -287,6 +287,38 @@ html.theme-fade *::after {
   display: none;
 }
 
+/* The thumbnail travelling to the back of the fan: dissolves while it crosses, fades in on arrival. */
+@keyframes thumb-wrap {
+  0% {
+    opacity: 1;
+  }
+  30%,
+  62% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Outline that wraps the thumbnail arriving at the front during a rotation, then fades away. */
+@keyframes thumb-glow {
+  0%,
+  100% {
+    border-color: var(--color-divider);
+    box-shadow:
+      0 6px 16px -8px rgba(0, 0, 0, 0.9),
+      0 0 0 0 transparent;
+  }
+  28%,
+  68% {
+    border-color: var(--color-accent);
+    box-shadow:
+      0 6px 16px -8px rgba(0, 0, 0, 0.9),
+      0 0 0 3px color-mix(in srgb, var(--color-accent) 22%, transparent);
+  }
+}
+
 @keyframes lightbox-in {
   from {
     opacity: 0;

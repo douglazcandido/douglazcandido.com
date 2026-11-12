@@ -109,7 +109,7 @@ export default function ShotStack({ images, alts }: { images: readonly string[];
 
   return (
     <>
-      <div className="group/stack flex items-center py-1">
+      <div className="group/stack flex w-[354px] max-w-full items-center justify-end py-1 max-sm:justify-start">
         {images.map((src, k) => (
           <button
             key={src}
@@ -117,8 +117,8 @@ export default function ShotStack({ images, alts }: { images: readonly string[];
             aria-label={`${t.a11y.openImage}: ${alts[k]}`}
             onClick={() => setOpen(k)}
             style={{ zIndex: n - k }}
-            className={`relative block h-[62px] w-[100px] shrink-0 cursor-zoom-in overflow-hidden rounded-lg border border-divider bg-bg shadow-[0_6px_16px_-8px_rgba(0,0,0,0.9)] transition-[margin,translate,border-color] duration-500 ${EASE} hover:-translate-y-1 hover:border-accent ${
-              k > 0 ? "-ml-[62px] group-hover/stack:-ml-[38px]" : ""
+            className={`relative block h-[55px] w-[88px] shrink-0 cursor-zoom-in overflow-hidden rounded-lg border border-divider bg-bg shadow-[0_6px_16px_-8px_rgba(0,0,0,0.9)] transition-[margin,translate,border-color] duration-500 ${EASE} hover:-translate-y-1 hover:border-accent ${
+              k > 0 ? "-ml-[66px] group-hover/stack:-ml-[50px]" : ""
             }`}
           >
             <img src={src} alt="" loading="lazy" decoding="async" draggable={false} className="h-full w-full object-cover object-top" />

@@ -83,6 +83,19 @@ export const es: Dict = {
         ],
       },
     ],
+    professionalLabel: "Profesional",
+    academicLabel: "Académico",
+    academic: [
+      { period: "2020 - 2021", title: "Técnico en Desarrollo de Sistemas", school: "ETEC", note: "", description: "" },
+      { period: "2022 - 2023", title: "Técnico en Redes de Computadores", school: "ETEC", note: "", description: "" },
+      { period: "2025 - 2026", title: "Tecnólogo en Ciencia de Datos", school: "FIAP", note: "educación superior, Brasil", description: "" },
+    ],
+    certs: {
+      title: "Cursos y certificaciones",
+      exampleTag: "[ejemplo]",
+      exampleName: "Nombre del curso",
+      exampleIssuer: "Institución",
+    },
   },
   projects: {
     title: "Proyectos",

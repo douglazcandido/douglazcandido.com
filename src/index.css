@@ -416,6 +416,153 @@ html.theme-fade *::after {
   }
 }
 
+/* ------------------------------------------------------------------ */
+/* Career timeline: a central axis with year markers; professional cards */
+/* on the left, academic on the right. One row per year, cards aligned   */
+/* to the year they start in and only as tall as their content.          */
+/* ------------------------------------------------------------------ */
+
+:root {
+  /* Width of the middle column that holds the axis and the year markers. */
+  --tl-axis: 96px;
+}
+
+.tl {
+  --yr: clamp(200px, 17vw, 250px); /* minimum height of one year row */
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: 28px;
+}
+
+/* Mobile: single column, axis on the left. */
+.tl::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 4px;
+  width: 1px;
+  background: color-mix(in srgb, var(--color-accent) 60%, transparent);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 1.6s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.tl.pipe-visible::before {
+  transform: scaleY(1);
+}
+
+.tl-year,
+.tl-tick {
+  display: none;
+}
+
+.tl-card {
+  position: relative;
+  padding-left: 32px;
+}
+
+.tl-dot {
+  position: absolute;
+  top: 6px;
+  left: 0;
+}
+
+@media (min-width: 768px) {
+  .tl {
+    grid-template-columns: minmax(0, 1fr) var(--tl-axis) minmax(0, 1fr);
+    grid-template-rows: repeat(6, minmax(var(--yr), auto)) auto;
+    row-gap: 0;
+  }
+
+  /* The axis runs from the first year marker to the last one (the top of the last row). */
+  .tl::before {
+    position: static;
+    grid-column: 2;
+    grid-row: 1 / 7;
+    justify-self: center;
+    align-self: stretch;
+    margin: 11px 0 -11px;
+  }
+
+  .tl-year {
+    display: flex;
+    grid-column: 2;
+    grid-row: var(--r);
+    align-self: start;
+    justify-self: center;
+    z-index: 2;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 22px;
+    border: 1px solid var(--color-divider);
+    border-radius: 9999px;
+    background: var(--color-bg);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tl-card {
+    grid-row: var(--r) / span var(--s);
+    align-self: start;
+    padding-left: 0;
+    /* Counts towards the row height, so two cards of one column never touch. */
+    padding-bottom: clamp(24px, 3vw, 40px);
+  }
+
+  .tl-left {
+    grid-column: 1;
+  }
+
+  .tl-right {
+    grid-column: 3;
+  }
+
+  /* A short branch from the axis to the card, ending in a node on the card's edge. */
+  .tl-tick {
+    display: block;
+    position: absolute;
+    top: 11px;
+    width: calc(var(--tl-axis) / 2);
+    height: 1px;
+    background: color-mix(in srgb, var(--color-accent) 60%, transparent);
+    transform: scaleX(0);
+    transition: transform 0.9s cubic-bezier(0.19, 1, 0.22, 1) calc(var(--d, 0ms) + 250ms);
+  }
+
+  .tl.pipe-visible .tl-tick {
+    transform: scaleX(1);
+  }
+
+  .tl-left .tl-tick {
+    left: 100%;
+    transform-origin: left;
+  }
+
+  .tl-right .tl-tick {
+    right: 100%;
+    transform-origin: right;
+  }
+
+  .tl-dot {
+    top: 6.5px;
+  }
+
+  .tl-left .tl-dot {
+    left: 100%;
+    margin-left: -4.5px;
+  }
+
+  .tl-right .tl-dot {
+    right: 100%;
+    left: auto;
+    margin-right: -4.5px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -427,7 +574,9 @@ html.theme-fade *::after {
   }
 
   .pipe-line,
-  .pipe-node {
+  .pipe-node,
+  .tl::before,
+  .tl-tick {
     transform: none;
     transition: none;
   }

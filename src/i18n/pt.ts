@@ -85,6 +85,19 @@ export const pt = {
         ],
       },
     ],
+    professionalLabel: "Profissional",
+    academicLabel: "Acadêmico",
+    academic: [
+      { period: "2020 - 2021", title: "Técnico em Desenvolvimento de Sistemas", school: "ETEC", note: "", description: "" },
+      { period: "2022 - 2023", title: "Técnico em Redes de Computadores", school: "ETEC", note: "", description: "" },
+      { period: "2025 - 2026", title: "Tecnólogo em Ciência de Dados", school: "FIAP", note: "", description: "" },
+    ],
+    certs: {
+      title: "Cursos e certificações",
+      exampleTag: "[exemplo]",
+      exampleName: "Nome do curso",
+      exampleIssuer: "Instituição",
+    },
   },
   projects: {
     title: "Projetos",

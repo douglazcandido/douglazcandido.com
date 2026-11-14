@@ -27,7 +27,6 @@ export const es: Dict = {
     career: "carrera",
     projects: "proyectos",
     skills: "habilidades",
-    education: "educación",
     contact: "contacto",
     home: "inicio",
     menu: "menú",
@@ -83,6 +82,28 @@ export const es: Dict = {
         ],
       },
     ],
+    professionalLabel: "Profesional",
+    academicLabel: "Académico",
+    academic: [
+      { period: "2020 - 2021", title: "Técnico en Desarrollo de Sistemas", school: "ETEC", note: "", description: "" },
+      { period: "2022 - 2023", title: "Técnico en Redes de Computadores", school: "ETEC", note: "", description: "" },
+      { period: "2025 - 2026", title: "Tecnólogo en Ciencia de Datos", school: "FIAP", note: "grado de educación superior en Brasil", description: "" },
+    ],
+    certs: {
+      title: "Cursos y certificaciones",
+      names: {
+        "analytics-bigdata": "Calificación Profesional en Arquitectura de Analytics y Big Data",
+        "data-quality": "Calificación Profesional en Modelado, Programación y Calidad de Datos",
+        bi: "Business Intelligence (BI)",
+        cybersecurity: "Ciberseguridad",
+      },
+      months: ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"],
+      verify: "Verificar",
+      lookup: "Consultar",
+      codeLabel: "Código",
+      copyCode: "Copiar código",
+      copied: "Copiado",
+    },
   },
   projects: {
     title: "Proyectos",
@@ -126,14 +147,6 @@ export const es: Dict = {
   skills: {
     title: "Habilidades",
     text: "Datos y pipelines, backend, automatización y cloud: las herramientas que componen mi stack.",
-  },
-  education: {
-    title: "Educación",
-    items: [
-      { title: "Tecnólogo en Ciencia de Datos", school: "FIAP" },
-      { title: "Técnico en Redes de Computadoras", school: "ETEC" },
-      { title: "Técnico en Desarrollo de Sistemas", school: "ETEC" },
-    ],
   },
   contact: {
     title: "Hablemos",

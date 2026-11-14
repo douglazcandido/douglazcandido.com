@@ -29,7 +29,6 @@ export const pt = {
     career: "carreira",
     projects: "projetos",
     skills: "skills",
-    education: "educação",
     contact: "contato",
     home: "início",
     menu: "menu",
@@ -85,6 +84,28 @@ export const pt = {
         ],
       },
     ],
+    professionalLabel: "Profissional",
+    academicLabel: "Acadêmico",
+    academic: [
+      { period: "2020 - 2021", title: "Técnico em Desenvolvimento de Sistemas", school: "ETEC", note: "", description: "" },
+      { period: "2022 - 2023", title: "Técnico em Redes de Computadores", school: "ETEC", note: "", description: "" },
+      { period: "2025 - 2026", title: "Tecnólogo em Ciência de Dados", school: "FIAP", note: "", description: "" },
+    ],
+    certs: {
+      title: "Cursos e certificações",
+      names: {
+        "analytics-bigdata": "Qualificação Profissional em Arquitetura de Analytics e Big Data",
+        "data-quality": "Qualificação Profissional em Modelagem, Programação e Qualidade de Dados",
+        bi: "Business Intelligence (BI)",
+        cybersecurity: "Cybersecurity",
+      },
+      months: ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"],
+      verify: "Verificar",
+      lookup: "Consultar",
+      codeLabel: "Código",
+      copyCode: "Copiar código",
+      copied: "Copiado",
+    },
   },
   projects: {
     title: "Projetos",
@@ -128,14 +149,6 @@ export const pt = {
   skills: {
     title: "Skills",
     text: "Dados & pipelines, backend, automação e cloud: as ferramentas que compõem minha stack.",
-  },
-  education: {
-    title: "Educação",
-    items: [
-      { title: "Tecnólogo em Ciência de Dados", school: "FIAP" },
-      { title: "Técnico em Redes de Computadores", school: "ETEC" },
-      { title: "Técnico em Desenvolvimento de Sistemas", school: "ETEC" },
-    ],
   },
   contact: {
     title: "Vamos conversar",

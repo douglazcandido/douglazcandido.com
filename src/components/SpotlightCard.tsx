@@ -5,7 +5,7 @@ interface SpotlightCardProps {
   className?: string;
 }
 
-/** Bordered card; hover styles live in index.css (`.spot`). */
+/** Card without an outline; styles live in index.css (`.spot`), static on hover. */
 export default function SpotlightCard({ children, className = "" }: SpotlightCardProps) {
   return <div className={`spot ${className}`}>{children}</div>;
 }

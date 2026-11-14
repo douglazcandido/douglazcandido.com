@@ -27,7 +27,6 @@ export const en: Dict = {
     career: "career",
     projects: "projects",
     skills: "skills",
-    education: "education",
     contact: "contact",
     home: "home",
     menu: "menu",
@@ -83,6 +82,28 @@ export const en: Dict = {
         ],
       },
     ],
+    professionalLabel: "Professional",
+    academicLabel: "Academic",
+    academic: [
+      { period: "2020 - 2021", title: "Technical Diploma in Systems Development", school: "ETEC", note: "", description: "" },
+      { period: "2022 - 2023", title: "Technical Diploma in Computer Networks", school: "ETEC", note: "", description: "" },
+      { period: "2025 - 2026", title: "Technologist Degree in Data Science", school: "FIAP", note: "Brazilian higher-education degree", description: "" },
+    ],
+    certs: {
+      title: "Courses and certifications",
+      names: {
+        "analytics-bigdata": "Professional Qualification in Analytics and Big Data Architecture",
+        "data-quality": "Professional Qualification in Data Modeling, Programming and Quality",
+        bi: "Business Intelligence (BI)",
+        cybersecurity: "Cybersecurity",
+      },
+      months: ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"],
+      verify: "Verify",
+      lookup: "Look up",
+      codeLabel: "Code",
+      copyCode: "Copy code",
+      copied: "Copied",
+    },
   },
   projects: {
     title: "Projects",
@@ -126,14 +147,6 @@ export const en: Dict = {
   skills: {
     title: "Skills",
     text: "Data & pipelines, backend, automation and cloud: the tools that make up my stack.",
-  },
-  education: {
-    title: "Education",
-    items: [
-      { title: "Technologist Degree in Data Science", school: "FIAP" },
-      { title: "Technical Diploma in Computer Networking", school: "ETEC" },
-      { title: "Technical Diploma in Systems Development", school: "ETEC" },
-    ],
   },
   contact: {
     title: "Let's talk",

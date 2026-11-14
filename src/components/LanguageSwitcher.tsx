@@ -17,7 +17,7 @@ export default function LanguageSwitcher() {
             aria-label={LANG_META[code].name}
             aria-pressed={isActive}
             onClick={() => setLang(code)}
-            className={`relative py-1 transition-colors duration-300 ${
+            className={`relative py-1 transition-colors duration-300 before:absolute before:-inset-x-1.5 before:-inset-y-5 ${
               isActive ? "text-neutral-100" : "text-neutral-500 hover:text-neutral-200"
             }`}
           >

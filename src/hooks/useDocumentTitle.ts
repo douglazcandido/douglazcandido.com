@@ -9,7 +9,6 @@ const stops = [
   { id: "carreira", key: "career" },
   { id: "projetos", key: "projects" },
   { id: "skills", key: "skills" },
-  { id: "educacao", key: "education" },
   { id: "contato", key: "contact" },
 ] as const;
 

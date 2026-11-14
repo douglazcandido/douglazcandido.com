@@ -3,7 +3,7 @@
  * The strip is hidden while this array is empty. The course names live in the dictionaries
  * (`career.certs.names`, keyed by `id`) because they are translated; the issuer is a proper name.
  */
-export type CertId = "analytics-bigdata" | "data-quality" | "bi" | "cybersecurity";
+export type CertId = "data-viz" | "analytics-bigdata" | "data-quality" | "bi" | "cybersecurity";
 
 /** How a certificate can be checked: a direct link, or a code typed into the issuer's lookup page. */
 export type CertVerification =
@@ -22,6 +22,13 @@ export interface Certification {
 const FIAP_LOOKUP = "https://www.fiap.com.br/consultadocumento";
 
 export const certifications: readonly Certification[] = [
+  {
+    id: "data-viz",
+    issuer: "FIAP",
+    month: 6,
+    year: 2026,
+    verification: { kind: "code", code: "92EAE2AA", url: FIAP_LOOKUP },
+  },
   {
     id: "analytics-bigdata",
     issuer: "FIAP",

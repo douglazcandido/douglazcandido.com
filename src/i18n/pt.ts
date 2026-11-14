@@ -86,13 +86,48 @@ export const pt = {
     professionalLabel: "Profissional",
     academicLabel: "Acadêmico",
     academic: [
-      { period: "2020 - 2021", title: "Técnico em Desenvolvimento de Sistemas", school: "ETEC", note: "", description: "" },
-      { period: "2022 - 2023", title: "Técnico em Redes de Computadores", school: "ETEC", note: "", description: "" },
-      { period: "2025 - 2026", title: "Tecnólogo em Ciência de Dados", school: "FIAP", note: "", description: "" },
+      {
+        period: "2020 - 2021",
+        title: "Técnico em Desenvolvimento de Sistemas",
+        school: "ETEC",
+        note: "",
+        items: [
+          "Bancos de dados relacionais, da modelagem às consultas",
+          "Aplicações web, do banco de dados à interface",
+          "Aplicações desktop no Visual Studio e aplicativos mobile",
+        ],
+      },
+      {
+        period: "2022 - 2023",
+        title: "Técnico em Redes de Computadores",
+        school: "ETEC",
+        note: "",
+        items: [
+          "Protocolos, camadas e arquitetura de redes, além dos tipos de cabeamento",
+          "Endereçamento IP, sub-redes e switching",
+          "Redes sem fio e Internet das Coisas (IoT)",
+          "Servidores DNS, DHCP e de arquivos, e administração de Linux (Ubuntu e Debian)",
+        ],
+      },
+      {
+        period: "2025 - 2026",
+        title: "Tecnólogo em Ciência de Dados",
+        school: "FIAP",
+        note: "",
+        items: [
+          "Modelagem de dados, SQL e NoSQL, incluindo modelos de dados distribuídos",
+          "Engenharia e arquitetura de dados, com Big Data",
+          "Machine learning e deep learning: séries temporais, classificação e clusterização",
+          "Visão computacional: reconhecimento de imagens e OCR",
+          "Programação em Python, com POO, Git e Docker",
+          "Entrega de 6 projetos MVP durante a formação",
+        ],
+      },
     ],
     certs: {
       title: "Cursos e certificações",
       names: {
+        "data-viz": "Qualificação Profissional em Análise e Visualização de Dados",
         "analytics-bigdata": "Qualificação Profissional em Arquitetura de Analytics e Big Data",
         "data-quality": "Qualificação Profissional em Modelagem, Programação e Qualidade de Dados",
         bi: "Business Intelligence (BI)",

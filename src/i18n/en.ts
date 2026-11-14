@@ -84,13 +84,48 @@ export const en: Dict = {
     professionalLabel: "Professional",
     academicLabel: "Academic",
     academic: [
-      { period: "2020 - 2021", title: "Technical Diploma in Systems Development", school: "ETEC", note: "", description: "" },
-      { period: "2022 - 2023", title: "Technical Diploma in Computer Networks", school: "ETEC", note: "", description: "" },
-      { period: "2025 - 2026", title: "Technologist Degree in Data Science", school: "FIAP", note: "Brazilian higher-education degree", description: "" },
+      {
+        period: "2020 - 2021",
+        title: "Technical Diploma in Systems Development",
+        school: "ETEC",
+        note: "",
+        items: [
+          "Relational databases, from modeling to queries",
+          "Web applications, from the database to the interface",
+          "Desktop applications in Visual Studio and mobile apps",
+        ],
+      },
+      {
+        period: "2022 - 2023",
+        title: "Technical Diploma in Computer Networks",
+        school: "ETEC",
+        note: "",
+        items: [
+          "Network protocols, layers and architecture, plus cabling types",
+          "IP addressing, subnetting and switching",
+          "Wireless networks and the Internet of Things (IoT)",
+          "DNS, DHCP and file servers, and Linux administration (Ubuntu and Debian)",
+        ],
+      },
+      {
+        period: "2025 - 2026",
+        title: "Technologist Degree in Data Science",
+        school: "FIAP",
+        note: "Brazilian higher-education degree",
+        items: [
+          "Data modeling, SQL and NoSQL, including distributed data models",
+          "Data engineering and architecture, with Big Data",
+          "Machine learning and deep learning: time series, classification and clustering",
+          "Computer vision: image recognition and OCR",
+          "Python programming, with OOP, Git and Docker",
+          "Delivery of 6 MVP projects during the degree",
+        ],
+      },
     ],
     certs: {
       title: "Courses and certifications",
       names: {
+        "data-viz": "Professional Qualification in Data Analysis and Visualization",
         "analytics-bigdata": "Professional Qualification in Analytics and Big Data Architecture",
         "data-quality": "Professional Qualification in Data Modeling, Programming and Data Quality",
         bi: "Business Intelligence (BI)",

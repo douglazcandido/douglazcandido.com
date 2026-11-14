@@ -84,13 +84,48 @@ export const es: Dict = {
     professionalLabel: "Profesional",
     academicLabel: "Académico",
     academic: [
-      { period: "2020 - 2021", title: "Técnico en Desarrollo de Sistemas", school: "ETEC", note: "", description: "" },
-      { period: "2022 - 2023", title: "Técnico en Redes de Computadores", school: "ETEC", note: "", description: "" },
-      { period: "2025 - 2026", title: "Tecnólogo en Ciencia de Datos", school: "FIAP", note: "Grado de educación superior en Brasil", description: "" },
+      {
+        period: "2020 - 2021",
+        title: "Técnico en Desarrollo de Sistemas",
+        school: "ETEC",
+        note: "",
+        items: [
+          "Bases de datos relacionales, del modelado a las consultas",
+          "Aplicaciones web, de la base de datos a la interfaz",
+          "Aplicaciones de escritorio en Visual Studio y aplicaciones móviles",
+        ],
+      },
+      {
+        period: "2022 - 2023",
+        title: "Técnico en Redes de Computadores",
+        school: "ETEC",
+        note: "",
+        items: [
+          "Protocolos, capas y arquitectura de redes, además de los tipos de cableado",
+          "Direccionamiento IP, subredes y switching",
+          "Redes inalámbricas e Internet de las Cosas (IoT)",
+          "Servidores DNS, DHCP y de archivos, y administración de Linux (Ubuntu y Debian)",
+        ],
+      },
+      {
+        period: "2025 - 2026",
+        title: "Tecnólogo en Ciencia de Datos",
+        school: "FIAP",
+        note: "Grado de educación superior en Brasil",
+        items: [
+          "Modelado de datos, SQL y NoSQL, incluidos modelos de datos distribuidos",
+          "Ingeniería y arquitectura de datos, con Big Data",
+          "Machine learning y deep learning: series temporales, clasificación y clustering",
+          "Visión por computadora: reconocimiento de imágenes y OCR",
+          "Programación en Python, con POO, Git y Docker",
+          "Entrega de 6 proyectos MVP durante la formación",
+        ],
+      },
     ],
     certs: {
       title: "Cursos y certificaciones",
       names: {
+        "data-viz": "Calificación Profesional en Análisis y Visualización de Datos",
         "analytics-bigdata": "Calificación Profesional en Arquitectura de Analytics y Big Data",
         "data-quality": "Calificación Profesional en Modelado, Programación y Calidad de Datos",
         bi: "Business Intelligence (BI)",

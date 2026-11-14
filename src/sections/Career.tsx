@@ -101,24 +101,17 @@ function ProfessionalCard({
         {role.title}
       </h3>
       <p className="m-0 mt-1 text-[14px] leading-[1.4] text-neutral-500">{profile.company}</p>
-      <ul className="m-0 mt-3.5 flex list-none flex-col gap-2 p-0">
-        {role.items.map((item) => (
-          <li key={item} className="relative pl-4 text-[14px] leading-[1.5] text-neutral-400">
-            <span aria-hidden="true" className="absolute top-[0.62em] left-0 h-1 w-1 rounded-full bg-accent" />
-            {item}
-          </li>
-        ))}
-      </ul>
+      <TopicList items={role.items} />
     </SpotlightCard>
   );
 }
 
-/** Smaller card: period, course and school. The note and the description only render once filled in. */
+/** Smaller card: period, course and school, then the topics (same list as the professional cards). The note and the topics only render once filled in. */
 function AcademicCard({
   course,
   label,
 }: {
-  course: { period: string; title: string; school: string; note: string; description: string };
+  course: { period: string; title: string; school: string; note: string; items: readonly string[] };
   label: string;
 }) {
   return (
@@ -130,8 +123,22 @@ function AcademicCard({
       </h3>
       {course.note && <p className="m-0 mt-1 text-[12px] leading-[1.4] text-neutral-500">{course.note}</p>}
       <p className="m-0 mt-1 text-[13px] leading-[1.4] text-neutral-500">{course.school}</p>
-      {course.description && <p className="m-0 mt-3 text-[13px] leading-[1.6] text-neutral-400 text-pretty">{course.description}</p>}
+      {course.items.length > 0 && <TopicList items={course.items} />}
     </SpotlightCard>
+  );
+}
+
+/** Bulleted topics of a card; shared by the professional and the academic cards. */
+function TopicList({ items }: { items: readonly string[] }) {
+  return (
+    <ul className="m-0 mt-3.5 flex list-none flex-col gap-2 p-0">
+      {items.map((item) => (
+        <li key={item} className="relative pl-4 text-[14px] leading-[1.5] text-neutral-400">
+          <span aria-hidden="true" className="absolute top-[0.62em] left-0 h-1 w-1 rounded-full bg-accent" />
+          {item}
+        </li>
+      ))}
+    </ul>
   );
 }
 

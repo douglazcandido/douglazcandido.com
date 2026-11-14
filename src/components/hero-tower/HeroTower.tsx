@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
 import { useI18n } from "../../i18n/context";
 import TowerIllustration from "./TowerIllustration";
@@ -6,6 +6,9 @@ import { GROUP_BY_GAP, STAGE_ASPECT, STAGE_BLEED } from "./towerSpec";
 
 /** Below this width the tower is not rendered at all (and Three.js is never downloaded). */
 const MIN_WIDTH_QUERY = "(min-width: 900px)";
+
+/** Slightly longer than the label's opacity transition in index.css (0.3s), so the fade-out is never cut short. */
+const LABEL_FADE_MS = 400;
 
 /** Runs `run` once the page has loaded and the browser is idle, so the 3D never competes with the text. */
 function whenIdle(run: () => void): () => void {
@@ -58,6 +61,30 @@ function Tower() {
   const [live, setLive] = useState(false);
   // `gap` keeps the last hovered opening so the label text stays while it fades out.
   const [hover, setHover] = useState<{ gap: number; on: boolean }>({ gap: 0, on: false });
+  // The label only holds text (and is only in the layout) while an opening is hovered, plus the
+  // fade-out afterwards: `present` mounts the text, `shown` drives the opacity transition.
+  const [present, setPresent] = useState(false);
+  const [shown, setShown] = useState(false);
+
+  const fadeTimer = useRef(0);
+  const frame = useRef(0);
+
+  /** Called by the tower on every hover change (`null` = no opening under the pointer). */
+  const handleHover = useCallback((gap: number | null) => {
+    setHover((prev) => (gap === null ? { gap: prev.gap, on: false } : { gap, on: true }));
+    window.clearTimeout(fadeTimer.current);
+    cancelAnimationFrame(frame.current);
+    if (gap !== null) {
+      setPresent(true);
+      // Two frames: the label has to be laid out at opacity 0 first, or there is no fade-in.
+      frame.current = requestAnimationFrame(() => {
+        frame.current = requestAnimationFrame(() => setShown(true));
+      });
+    } else {
+      setShown(false);
+      fadeTimer.current = window.setTimeout(() => setPresent(false), LABEL_FADE_MS);
+    }
+  }, []);
 
   useEffect(() => {
     const stage = stageRef.current;
@@ -80,7 +107,7 @@ function Tower() {
             host: stage,
             interactionRoot: hero,
             label: labelRef.current,
-            onHover: (gap) => setHover((prev) => (gap === null ? { gap: prev.gap, on: false } : { gap, on: true })),
+            onHover: handleHover,
             onReady: () => setLive(true),
             onLost: () => setLive(false),
             signal: abort.signal,
@@ -98,17 +125,17 @@ function Tower() {
       cancelIdle();
       dispose?.();
       setLive(false);
-      setHover((prev) => ({ gap: prev.gap, on: false }));
+      handleHover(null);
     };
-  }, [reducedMotion]);
+  }, [reducedMotion, handleHover]);
 
   return (
     <div ref={rootRef} className="hero-tower" data-live={live} aria-hidden="true">
       <div ref={stageRef} className="hero-tower__stage" style={{ aspectRatio: STAGE_ASPECT, "--tower-bleed": `${STAGE_BLEED * 100}%` } as React.CSSProperties}>
         <TowerIllustration className="hero-tower__svg" />
-        <div ref={labelRef} className="hero-tower__label" data-on={hover.on}>
+        <div ref={labelRef} className="hero-tower__label" data-on={shown} hidden={!present} aria-hidden="true">
           <span className="rounded-full bg-accent/10 px-3 py-1 text-[12px] leading-none tracking-[0.12em] text-accent uppercase">
-            {t.skills.groups[GROUP_BY_GAP[hover.gap]]}
+            {present ? t.skills.groups[GROUP_BY_GAP[hover.gap]] : ""}
           </span>
           <span className="hero-tower__tick" />
         </div>

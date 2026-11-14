@@ -106,7 +106,7 @@ function ProfessionalCard({
   );
 }
 
-/** Smaller card: period, course and school, then the topics (same list as the professional cards). The note and the topics only render once filled in. */
+/** Smaller card: period, course, school and an optional explanatory note, then the topics (same list as the professional cards). The note and the topics only render once filled in. */
 function AcademicCard({
   course,
   label,
@@ -121,8 +121,8 @@ function AcademicCard({
       <h3 className="m-0 mt-2 font-display text-[clamp(16px,1.3vw,20px)] leading-[1.2] font-semibold tracking-[-0.02em] text-pretty">
         {course.title}
       </h3>
-      {course.note && <p className="m-0 mt-1 text-[12px] leading-[1.4] text-neutral-500">{course.note}</p>}
       <p className="m-0 mt-1 text-[13px] leading-[1.4] text-neutral-500">{course.school}</p>
+      {course.note && <p className="m-0 mt-1 text-[11.5px] leading-[1.4] text-neutral-500">{course.note}</p>}
       {course.items.length > 0 && <TopicList items={course.items} />}
     </SpotlightCard>
   );

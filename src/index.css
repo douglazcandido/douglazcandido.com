@@ -386,6 +386,10 @@ html.theme-fade *::after {
   transition: opacity 0.3s ease;
 }
 
+.hero-tower__label[hidden] {
+  display: none;
+}
+
 .hero-tower__label[data-on="true"] {
   opacity: 1;
   transition-delay: 0.1s;

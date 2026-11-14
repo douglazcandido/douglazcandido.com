@@ -156,6 +156,6 @@ export const en: Dict = {
   },
   contact: {
     title: "Let's talk",
-    rights: "All rights reserved.",
+    rights: "All Rights Reserved.",
   },
 };

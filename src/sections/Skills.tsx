@@ -6,7 +6,7 @@ import { useI18n } from "../i18n/context";
 /**
  * Tech stack as typographic columns: a small heading per group and, under it, the items as
  * running text separated by commas. Semantically each group is a titled <ul>; the commas are
- * drawn by CSS (.stack-list), so assistive tech reads a plain list of items.
+ * real text inside each <li>, so they survive text extraction (crawlers, copy/paste, screen readers).
  */
 export default function Skills() {
   const { t } = useI18n();
@@ -27,8 +27,11 @@ export default function Skills() {
                   {t.skills.groups[group.id]}
                 </h3>
                 <ul className="stack-list m-0 mt-3.5 list-none p-0 text-[clamp(16px,1.5vw,22px)] leading-[1.7] text-neutral-400">
-                  {group.items.map((item) => (
-                    <li key={item}>{item}</li>
+                  {group.items.map((item, j) => (
+                    <li key={item}>
+                      {item}
+                      {j < group.items.length - 1 ? ", " : ""}
+                    </li>
                   ))}
                 </ul>
               </section>

@@ -29,7 +29,6 @@ export const pt = {
     career: "carreira",
     projects: "projetos",
     skills: "skills",
-    education: "educação",
     contact: "contato",
     home: "início",
     menu: "menu",
@@ -94,9 +93,18 @@ export const pt = {
     ],
     certs: {
       title: "Cursos e certificações",
-      exampleTag: "[exemplo]",
-      exampleName: "Nome do curso",
-      exampleIssuer: "Instituição",
+      names: {
+        "analytics-bigdata": "Qualificação Profissional em Arquitetura de Analytics e Big Data",
+        "data-quality": "Qualificação Profissional em Modelagem, Programação e Qualidade de Dados",
+        bi: "Business Intelligence (BI)",
+        cybersecurity: "Cybersecurity",
+      },
+      months: ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"],
+      verify: "Verificar",
+      lookup: "Consultar",
+      codeLabel: "Código",
+      copyCode: "Copiar código",
+      copied: "Copiado",
     },
   },
   projects: {
@@ -141,14 +149,6 @@ export const pt = {
   skills: {
     title: "Skills",
     text: "Dados & pipelines, backend, automação e cloud: as ferramentas que compõem minha stack.",
-  },
-  education: {
-    title: "Educação",
-    items: [
-      { title: "Tecnólogo em Ciência de Dados", school: "FIAP" },
-      { title: "Técnico em Redes de Computadores", school: "ETEC" },
-      { title: "Técnico em Desenvolvimento de Sistemas", school: "ETEC" },
-    ],
   },
   contact: {
     title: "Vamos conversar",

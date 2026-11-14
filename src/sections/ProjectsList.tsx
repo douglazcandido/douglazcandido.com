@@ -215,7 +215,7 @@ export default function ProjectsList() {
               <div
                 key={i}
                 inert={!active}
-                className={`col-start-1 row-start-1 rounded-[20px] border border-divider bg-surface p-[clamp(32px,3.6vw,60px)] transition-[opacity,translate,border-color] duration-700 ${EASE} ${shift} ${
+                className={`col-start-1 row-start-1 rounded-[20px] bg-surface p-[clamp(32px,3.6vw,60px)] transition-[opacity,translate] duration-700 ${EASE} ${shift} ${
                   active ? "opacity-100" : "pointer-events-none opacity-0"
                 }`}
               >

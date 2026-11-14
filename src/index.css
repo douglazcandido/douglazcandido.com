@@ -32,8 +32,8 @@
   --color-bg: #d6d9de;
   --color-surface: #e0e2e7;
   --color-text: #14151a;
-  --color-accent: #a67c00;
-  --color-on-accent: #fffaf0;
+  --color-accent: #0b4f26;
+  --color-on-accent: #f3faf5;
 
   --color-neutral-100: #14151a;
   --color-neutral-200: #24252c;
@@ -259,20 +259,13 @@ html.theme-fade *::after {
 }
 
 /* ------------------------------------------------------------------ */
-/* Card: border and wash shift on hover                                */
+/* Card: static, no outline and no hover effect (cards are not buttons) */
 /* ------------------------------------------------------------------ */
 
 .spot {
   position: relative;
   background: color-mix(in srgb, var(--color-surface) 82%, transparent);
-  border: 1px solid var(--color-divider);
   border-radius: 14px;
-  transition: border-color 0.4s ease, background-color 0.4s ease;
-}
-
-.spot:hover {
-  border-color: color-mix(in srgb, var(--color-accent) 55%, transparent);
-  background: color-mix(in srgb, var(--color-accent) 4%, var(--color-surface));
 }
 
 /* ------------------------------------------------------------------ */
@@ -331,7 +324,7 @@ html.theme-fade *::after {
 }
 
 /* ------------------------------------------------------------------ */
-/* Row links (education / contact): background sweeps up on hover     */
+/* Row links (contact): background sweeps up on hover     */
 /* ------------------------------------------------------------------ */
 
 .row-sweep {
@@ -428,11 +421,11 @@ html.theme-fade *::after {
 }
 
 .tl {
-  --yr: clamp(200px, 17vw, 250px); /* minimum height of one year row */
+  --yr: clamp(104px, 9vw, 132px); /* minimum height of one year row */
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  row-gap: 28px;
+  row-gap: 18px;
 }
 
 /* Mobile: single column, axis on the left. */
@@ -497,11 +490,11 @@ html.theme-fade *::after {
     justify-content: center;
     width: 52px;
     height: 22px;
-    border: 1px solid var(--color-divider);
+    /* Same look as the stack tags on the projects. */
     border-radius: 9999px;
-    background: var(--color-bg);
-    font-size: 11px;
-    letter-spacing: 0.14em;
+    background: color-mix(in srgb, var(--color-accent) 10%, var(--color-bg));
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
     font-variant-numeric: tabular-nums;
   }
 
@@ -510,7 +503,7 @@ html.theme-fade *::after {
     align-self: start;
     padding-left: 0;
     /* Counts towards the row height, so two cards of one column never touch. */
-    padding-bottom: clamp(24px, 3vw, 40px);
+    padding-bottom: clamp(14px, 1.6vw, 22px);
   }
 
   .tl-left {
@@ -526,7 +519,7 @@ html.theme-fade *::after {
     display: block;
     position: absolute;
     top: 11px;
-    width: calc(var(--tl-axis) / 2);
+    width: calc(var(--tl-axis) / 2 - 13px);
     height: 1px;
     background: color-mix(in srgb, var(--color-accent) 60%, transparent);
     transform: scaleX(0);
@@ -538,12 +531,12 @@ html.theme-fade *::after {
   }
 
   .tl-left .tl-tick {
-    left: 100%;
+    left: calc(100% + 13px);
     transform-origin: left;
   }
 
   .tl-right .tl-tick {
-    right: 100%;
+    right: calc(100% + 13px);
     transform-origin: right;
   }
 
@@ -551,15 +544,16 @@ html.theme-fade *::after {
     top: 6.5px;
   }
 
+  /* The node sits beside the card, outside its edge, so the card never covers it. */
   .tl-left .tl-dot {
     left: 100%;
-    margin-left: -4.5px;
+    margin-left: 4px;
   }
 
   .tl-right .tl-dot {
     right: 100%;
     left: auto;
-    margin-right: -4.5px;
+    margin-right: 4px;
   }
 }
 

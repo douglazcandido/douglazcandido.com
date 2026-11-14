@@ -8,7 +8,7 @@ interface LogoMarqueeProps {
 
 function LogoTile({ skill }: { skill: Skill }) {
   return (
-    <div className="group relative mr-[clamp(12px,1.4vw,20px)] flex h-[clamp(96px,11vw,150px)] w-[clamp(150px,17vw,240px)] shrink-0 items-center justify-center rounded-[14px] border border-divider bg-surface p-[clamp(6px,0.8vw,12px)] transition-colors duration-500 hover:border-accent">
+    <div className="group relative mr-[clamp(12px,1.4vw,20px)] flex h-[clamp(96px,11vw,150px)] w-[clamp(150px,17vw,240px)] shrink-0 items-center justify-center rounded-[14px] bg-surface p-[clamp(6px,0.8vw,12px)]">
       {skill.mono ? (
         /* dark artwork: flat light mark on the dark theme, flat dark mark on the light one */
         <img

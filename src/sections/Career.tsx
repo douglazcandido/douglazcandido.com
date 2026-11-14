@@ -1,9 +1,8 @@
 import Section from "../components/Section";
 import Reveal from "../components/Reveal";
 import SpotlightCard from "../components/SpotlightCard";
-import { FiArrowUpRight } from "react-icons/fi";
+import CertificationStrip from "../components/CertificationStrip";
 import { useInView } from "../hooks/useInView";
-import { certifications } from "../data/certifications";
 import { FIRST_YEAR, timeline, years, type TimelineEntry } from "../data/timeline";
 import { profile } from "../data/profile";
 import { useI18n } from "../i18n/context";
@@ -26,13 +25,12 @@ function rowsFor(entry: TimelineEntry, i: number) {
 export default function Career() {
   const { t } = useI18n();
   const { ref, isInView } = useInView<HTMLOListElement>({ threshold: 0.05 });
-  const hasCerts = certifications.length > 0;
 
   return (
     <Section id="carreira" title={t.career.title}>
-      {/* Column captions (desktop only; on mobile each card carries its own label). */}
+      {/* Column captions, next to the axis (desktop only; on mobile each card carries its own label). */}
       <div aria-hidden="true" className="mb-7 hidden grid-cols-[minmax(0,1fr)_var(--tl-axis)_minmax(0,1fr)] text-[11px] tracking-[0.18em] text-neutral-500 uppercase md:grid">
-        <span>{t.career.professionalLabel}</span>
+        <span className="text-right">{t.career.professionalLabel}</span>
         <span />
         <span>{t.career.academicLabel}</span>
       </div>
@@ -42,7 +40,7 @@ export default function Career() {
           <li
             key={year}
             aria-hidden="true"
-            className={`tl-year ${year === years[years.length - 1] ? "text-accent" : "text-neutral-500"}`}
+            className="tl-year text-accent"
             style={{ "--r": year - FIRST_YEAR + 1 } as React.CSSProperties}
           >
             {year}
@@ -68,7 +66,7 @@ export default function Career() {
                 {current && <span className="pipe-pulse absolute inset-0 rounded-full border border-accent" />}
               </span>
 
-              <Reveal delay={i * 110}>
+              <Reveal delay={0} eager>
                 {isPro ? (
                   <ProfessionalCard role={t.career.items[entry.index]} label={label} current={current} />
                 ) : (
@@ -80,48 +78,7 @@ export default function Career() {
         })}
       </ol>
 
-      {hasCerts && (
-        <div className="mt-[clamp(40px,5vw,72px)] border-t border-divider pt-[clamp(20px,2.4vw,32px)]">
-          <h3 className="m-0 text-[11px] font-normal tracking-[0.18em] text-neutral-500 uppercase">{t.career.certs.title}</h3>
-          <ul className="m-0 mt-5 flex list-none flex-wrap gap-3 p-0">
-            {certifications.map((c) => {
-              const name = c.example ? t.career.certs.exampleName : c.name;
-              const issuer = c.example ? t.career.certs.exampleIssuer : c.issuer;
-              const body = (
-                <>
-                  <span className="text-[14px] leading-[1.3] text-neutral-200">{name}</span>
-                  <span className="text-[12px] leading-[1.3] text-neutral-500">
-                    {issuer} · {c.year}
-                  </span>
-                  {c.example && <span className="text-[11px] tracking-[0.08em] text-accent">{t.career.certs.exampleTag}</span>}
-                </>
-              );
-              const chip =
-                "flex flex-col gap-1 rounded-xl border border-divider px-4 py-3 transition-colors duration-300";
-              return (
-                <li key={`${name}-${c.year}`}>
-                  {c.url ? (
-                    <a
-                      href={c.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className={`${chip} group/cert relative pr-9 hover:border-accent`}
-                    >
-                      {body}
-                      <FiArrowUpRight
-                        aria-hidden="true"
-                        className="absolute top-3 right-3 h-4 w-4 text-neutral-500 transition-colors duration-300 group-hover/cert:text-accent"
-                      />
-                    </a>
-                  ) : (
-                    <div className={chip}>{body}</div>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      )}
+      <CertificationStrip />
     </Section>
   );
 }
@@ -137,16 +94,16 @@ function ProfessionalCard({
   current: boolean;
 }) {
   return (
-    <SpotlightCard className="flex flex-col p-[clamp(20px,2.2vw,32px)]">
+    <SpotlightCard className="flex flex-col p-[clamp(16px,1.7vw,24px)]">
       <TrackTag>{label}</TrackTag>
       <p className={`m-0 text-[11px] tracking-[0.16em] uppercase ${current ? "text-accent" : "text-neutral-500"}`}>{role.period}</p>
-      <h3 className="m-0 mt-3 font-display text-[clamp(20px,1.9vw,30px)] leading-[1.15] font-semibold tracking-[-0.02em] text-pretty">
+      <h3 className="m-0 mt-2 font-display text-[clamp(18px,1.6vw,24px)] leading-[1.15] font-semibold tracking-[-0.02em] text-pretty">
         {role.title}
       </h3>
-      <p className="m-0 mt-1.5 text-[15px] leading-[1.4] text-neutral-500">{profile.company}</p>
-      <ul className="m-0 mt-5 flex list-none flex-col gap-3 p-0">
+      <p className="m-0 mt-1 text-[14px] leading-[1.4] text-neutral-500">{profile.company}</p>
+      <ul className="m-0 mt-3.5 flex list-none flex-col gap-2 p-0">
         {role.items.map((item) => (
-          <li key={item} className="relative pl-4 text-[15px] leading-[1.6] text-neutral-400">
+          <li key={item} className="relative pl-4 text-[14px] leading-[1.5] text-neutral-400">
             <span aria-hidden="true" className="absolute top-[0.62em] left-0 h-1 w-1 rounded-full bg-accent" />
             {item}
           </li>
@@ -165,15 +122,15 @@ function AcademicCard({
   label: string;
 }) {
   return (
-    <SpotlightCard className="flex flex-col p-[clamp(16px,1.7vw,24px)]">
+    <SpotlightCard className="flex flex-col p-[clamp(14px,1.4vw,20px)]">
       <TrackTag>{label}</TrackTag>
       <p className="m-0 text-[11px] tracking-[0.16em] text-neutral-500 uppercase">{course.period}</p>
-      <h3 className="m-0 mt-2.5 font-display text-[clamp(17px,1.45vw,22px)] leading-[1.2] font-semibold tracking-[-0.02em] text-pretty">
+      <h3 className="m-0 mt-2 font-display text-[clamp(16px,1.3vw,20px)] leading-[1.2] font-semibold tracking-[-0.02em] text-pretty">
         {course.title}
       </h3>
       {course.note && <p className="m-0 mt-1 text-[12px] leading-[1.4] text-neutral-500">{course.note}</p>}
-      <p className="m-0 mt-1.5 text-[14px] leading-[1.4] text-neutral-500">{course.school}</p>
-      {course.description && <p className="m-0 mt-4 text-[14px] leading-[1.6] text-neutral-400 text-pretty">{course.description}</p>}
+      <p className="m-0 mt-1 text-[13px] leading-[1.4] text-neutral-500">{course.school}</p>
+      {course.description && <p className="m-0 mt-3 text-[13px] leading-[1.6] text-neutral-400 text-pretty">{course.description}</p>}
     </SpotlightCard>
   );
 }

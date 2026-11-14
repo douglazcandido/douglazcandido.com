@@ -5,7 +5,6 @@ import About from "./sections/About";
 import Career from "./sections/Career";
 import Projects from "./sections/ProjectsList";
 import Skills from "./sections/Skills";
-import Education from "./sections/Education";
 import Contact from "./sections/Contact";
 import { useScrollProgress } from "./hooks/useScrollProgress";
 import { useSmoothScroll } from "./hooks/useSmoothScroll";
@@ -26,7 +25,6 @@ export default function App() {
         <Career />
         <Projects />
         <Skills />
-        <Education />
         <Contact />
       </main>
     </div>

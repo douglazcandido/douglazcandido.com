@@ -27,6 +27,16 @@ The site opens at `http://localhost:5173`.
 | `npm run preview` | Serves the production build locally  |
 | `npm run lint`    | Runs the linter                      |
 
+## Share image
+
+The social preview (`public/og-image-en-light.png`, 1200x630) is generated from the light theme tokens in `src/index.css` and the hero tower spec:
+
+```bash
+node scripts/generate-og-image.mjs
+```
+
+It needs Playwright's Chromium (`npx playwright install chromium`) and network access for the web font. When you redo the image, save it under a new file name and update `og:image` / `twitter:image` in `index.html`, so crawlers don't serve a cached copy.
+
 ## Project structure
 
 ```

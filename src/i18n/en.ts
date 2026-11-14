@@ -2,9 +2,9 @@ import type { Dict } from "./pt";
 
 export const en: Dict = {
   meta: {
-    title: "Douglas Candido | Data & Backend Engineer",
+    title: "Douglas Candido | Data and Software Engineer",
     description:
-      "Douglas Candido, Data & Backend Engineer. Pipelines, APIs and data infrastructure running in production.",
+      "Data and software engineer. From data model to deploy: modeling, pipeline, API and infrastructure.",
   },
   a11y: {
     progress: "Page progress",

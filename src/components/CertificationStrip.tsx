@@ -114,7 +114,7 @@ export default function CertificationStrip() {
   return (
     <div className="mt-[clamp(24px,3vw,40px)] border-t border-divider pt-[clamp(16px,1.8vw,24px)]">
       <h3 className="m-0 text-[11px] font-normal tracking-[0.18em] text-neutral-500 uppercase">{t.career.certs.title}</h3>
-      <ul className="m-0 mt-5 grid list-none grid-cols-[repeat(auto-fit,minmax(min(100%,236px),1fr))] gap-3 p-0">
+      <ul className="m-0 mt-5 grid list-none grid-cols-[repeat(auto-fit,minmax(min(100%,196px),1fr))] gap-3 p-0">
         {certifications.map((cert) => (
           <CertCard key={cert.id} cert={cert} />
         ))}

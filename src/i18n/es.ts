@@ -99,7 +99,7 @@ export const es: Dict = {
       },
       months: ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"],
       verify: "Verificar",
-      lookup: "Consultar",
+      lookup: "Verificar",
       codeLabel: "Código",
       copyCode: "Copiar código",
       copied: "Copiado",

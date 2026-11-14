@@ -29,7 +29,7 @@ The site opens at `http://localhost:5173`.
 
 ## Share image
 
-The social preview (`public/og-image-en-light.png`, 1200x630) is generated from the light theme tokens in `src/index.css` and the hero tower spec:
+The social preview (`public/og-image-en-light-v2.png`, 1200x630) is generated from the light theme tokens in `src/index.css` and a capture of the real hero tower (the script starts the site, freezes the 3D scene and screenshots it):
 
 ```bash
 node scripts/generate-og-image.mjs

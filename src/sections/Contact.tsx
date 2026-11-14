@@ -1,4 +1,4 @@
-import { FaGithub, FaInstagram, FaLinkedin } from "react-icons/fa";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { FiArrowUpRight } from "react-icons/fi";
 import Reveal from "../components/Reveal";
 import SectionRule from "../components/SectionRule";
@@ -9,7 +9,6 @@ import { useI18n } from "../i18n/context";
 const socials = [
   { href: profile.github, label: "GitHub", handle: "@douglazcandido", Icon: FaGithub },
   { href: profile.linkedin, label: "LinkedIn", handle: "in/douglazcandido", Icon: FaLinkedin },
-  { href: profile.instagram, label: "Instagram", handle: "@douglazcandido", Icon: FaInstagram },
 ];
 
 export default function Contact() {

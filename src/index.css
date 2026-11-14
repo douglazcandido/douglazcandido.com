@@ -354,14 +354,9 @@ html.theme-fade *::after {
   color: var(--color-accent);
 }
 
-/* Tech stack: items run inline as text, separated by commas. The comma is drawn here (not in the
-   markup) so each <li> stays a clean item for assistive tech. */
+/* Tech stack: items run inline as text; the commas are real text inside each <li>. */
 .stack-list > li {
   display: inline;
-}
-
-.stack-list > li:not(:last-child)::after {
-  content: ", ";
 }
 
 /* ------------------------------------------------------------------ */

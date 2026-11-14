@@ -63,7 +63,7 @@ export default function Contact() {
           ))}
         </ul>
 
-        <div className="mt-[clamp(32px,4vw,56px)] flex flex-wrap items-center justify-between gap-4 text-[11px] tracking-[0.16em] text-neutral-600 capitalize">
+        <div className="mt-[clamp(32px,4vw,56px)] flex flex-wrap items-center justify-between gap-4 text-[11px] tracking-[0.16em] text-neutral-600">
           <p className="m-0">
             © {profile.year} {profile.name}. {t.contact.rights}
           </p>

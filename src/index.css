@@ -281,6 +281,8 @@ html.theme-fade *::after {
 .hero-tower {
   /* Same value as the hero headline font-size in Hero.tsx: the tower is as tall as the name (2 lines). */
   --hero-fs: clamp(60px, 11vw, 196px);
+  /* How far the tower sits in from the right margin: none at 900px, growing with the screen. */
+  --tower-inset: clamp(0px, calc(12vw - 108px), 200px);
   position: absolute;
   top: 0;
   right: 0;
@@ -295,8 +297,8 @@ html.theme-fade *::after {
   top: 50%;
   right: 0;
   height: 135%;
-  /* --tower-bleed (set inline) lines the tower's right edge up with the page margin. */
-  translate: var(--tower-bleed, 0%) -50%;
+  /* --tower-bleed (set inline) lines the tower's right edge up with the page margin; --tower-inset pulls it in. */
+  translate: calc(var(--tower-bleed, 0%) - var(--tower-inset)) -50%;
 }
 
 .hero-tower__svg,

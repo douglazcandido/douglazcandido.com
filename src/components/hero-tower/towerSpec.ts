@@ -16,11 +16,11 @@ export const GAP_COUNT = DISC_COUNT - 1;
 export const GROUP_BY_GAP: readonly SkillGroupId[] = ["cloud", "storage", "data", "web", "automation", "languages"];
 
 /** Outer radius of the lowest and of the highest disc (the tower is wider at the top). */
-export const RADIUS_BOTTOM = 0.5;
-export const RADIUS_TOP = 0.64;
+export const RADIUS_BOTTOM = 0.46;
+export const RADIUS_TOP = 0.86;
 /** Radius of the central hole of each disc, and of the column that runs through them. */
-export const HOLE_RADIUS = 0.17;
-export const COLUMN_RADIUS = 0.085;
+export const HOLE_RADIUS = 0.2;
+export const COLUMN_RADIUS = 0.09;
 export const COLUMN_SIDES = 6;
 
 export const DISC_HEIGHT = 0.09;
@@ -29,7 +29,7 @@ export const GAP_HEIGHT = 0.22;
 export const COLUMN_OVERHANG = 0.1;
 
 /** Segmented outer rim: number of teeth and how deep they cut into the rim. */
-export const TEETH = 20;
+export const TEETH = 24;
 export const TOOTH_DEPTH = 0.06;
 
 /** Each opening grows to this many times its resting height while hovered. */
@@ -41,11 +41,11 @@ export const CAMERA_DISTANCE = 9;
 export const FRAME_HEIGHT = 3.1;
 
 /** Width / height of the stage (the box that holds the canvas, or the SVG). */
-export const STAGE_ASPECT = 0.54;
+export const STAGE_ASPECT = 0.68;
 
 /**
  * The stage is a bit wider than the tower; shifting it right by this fraction of its own width puts
- * the tower's right edge on the page's right margin, in line with the rest of the content.
+ * the tower's right edge on the page's right margin. The CSS then pulls it back by --tower-inset.
  */
 export const STAGE_BLEED = (1 - (2 * RADIUS_TOP) / (FRAME_HEIGHT * STAGE_ASPECT)) / 2;
 

@@ -53,7 +53,7 @@ export default function Nav() {
               aria-label={t.nav.home}
               title={t.nav.home}
               aria-current={active === "inicio" ? "true" : undefined}
-              className={`relative inline-flex h-8 w-8 items-center justify-center transition-colors duration-300 ${
+              className={`relative inline-flex h-8 w-8 items-center justify-center transition-colors duration-300 before:absolute before:-inset-x-1 before:-inset-y-[18px] ${
                 active === "inicio" ? "text-accent" : "text-neutral-500 hover:text-neutral-100"
               }`}
             >
@@ -73,7 +73,7 @@ export default function Nav() {
                     <a
                       href={`#${s.id}`}
                       aria-current={isActive ? "true" : undefined}
-                      className={`group relative inline-flex items-baseline gap-2 py-1 text-[13px] leading-none font-medium tracking-[0.08em] uppercase transition-colors duration-300 ${
+                      className={`group relative inline-flex items-baseline gap-2 py-1 text-[13px] leading-none font-medium tracking-[0.08em] uppercase transition-colors duration-300 before:absolute before:-inset-x-3 before:-inset-y-6 ${
                         isActive ? "text-neutral-100" : "text-neutral-400 hover:text-neutral-100"
                       }`}
                     >
@@ -97,7 +97,7 @@ export default function Nav() {
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
               aria-controls="menu-overlay"
-              className="text-[13px] font-medium tracking-[0.08em] uppercase lg:hidden"
+              className="relative text-[13px] font-medium tracking-[0.08em] uppercase before:absolute before:-inset-x-2 before:-inset-y-6 lg:hidden"
             >
               {open ? t.nav.close : t.nav.menu}
             </button>

@@ -420,9 +420,9 @@ html.theme-fade *::after {
   /* Width of the middle column that holds the axis and the year markers. */
   --tl-axis: 96px;
   /* Lightning bolt that runs down the axis: length of the streak, duration and easing. */
-  --bolt-len: 130px;
-  --bolt-time: 1.9s;
-  --bolt-ease: cubic-bezier(0.45, 0.05, 0.3, 1);
+  --bolt-len: 120px;
+  --bolt-time: 5s;
+  --bolt-ease: cubic-bezier(0.3, 0.15, 0.4, 1);
   --bolt-core: color-mix(in srgb, var(--color-accent) 35%, white);
 }
 
@@ -445,8 +445,8 @@ html.theme-fade *::after {
   position: absolute;
   top: 10px;
   bottom: 10px;
-  left: 4px;
-  width: 1px;
+  left: 3.5px;
+  width: 2px;
   background: color-mix(in srgb, var(--color-accent) 60%, transparent);
   transform: scaleY(0);
   transform-origin: top;
@@ -466,16 +466,16 @@ html.theme-fade *::after {
   position: absolute;
   top: 10px;
   bottom: 10px;
-  left: 3px;
-  width: 3px;
+  left: 4px;
+  width: 1px;
   z-index: 1;
   pointer-events: none;
   opacity: 0;
-  background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--color-accent) 70%, transparent) 70%, var(--bolt-core)) no-repeat;
+  background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--color-accent) 65%, transparent) 70%, var(--bolt-core)) no-repeat;
   background-size: 100% var(--bolt-len);
   background-position: 0 calc(var(--bolt-len) * -1);
   border-radius: 9999px;
-  filter: drop-shadow(0 0 4px var(--color-accent)) drop-shadow(0 0 10px var(--color-accent));
+  filter: drop-shadow(0 0 3px var(--color-accent)) drop-shadow(0 0 8px color-mix(in srgb, var(--color-accent) 55%, transparent));
 }
 
 .tl.pipe-visible::after {
@@ -533,7 +533,7 @@ html.theme-fade *::after {
 
   /* Static grid items no longer take top/bottom/left: the streak keeps its own width. */
   .tl::after {
-    width: 3px;
+    width: 2px;
   }
 
   .tl-year {

@@ -1,6 +1,6 @@
 # douglazcandido.com
 
-My personal portfolio: about me, career, projects, skills and contact, in Portuguese, English and Spanish.
+My personal portfolio: about me, career, projects, tech stack and contact, in Portuguese, English and Spanish.
 
 ## Tech stack
 

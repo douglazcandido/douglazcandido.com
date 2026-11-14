@@ -354,13 +354,14 @@ html.theme-fade *::after {
   color: var(--color-accent);
 }
 
-/* Dark brand marks flattened to a single tone that contrasts with the page. */
-.logo-mono {
-  filter: brightness(0) invert(1);
+/* Tech stack: items run inline as text, separated by commas. The comma is drawn here (not in the
+   markup) so each <li> stays a clean item for assistive tech. */
+.stack-list > li {
+  display: inline;
 }
 
-:root[data-theme="light"] .logo-mono {
-  filter: brightness(0);
+.stack-list > li:not(:last-child)::after {
+  content: ", ";
 }
 
 /* ------------------------------------------------------------------ */

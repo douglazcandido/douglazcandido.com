@@ -1,7 +1,8 @@
 import { createContext, useContext } from "react";
 import type { Dict } from "./pt";
 
-export const LANGS = ["pt", "en", "es"] as const;
+/** Order of the language switcher in the menu. */
+export const LANGS = ["en", "es", "pt"] as const;
 export type Lang = (typeof LANGS)[number];
 
 /** BCP 47 tags for <html lang>, plus each language's own name for tooltips. */

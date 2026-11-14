@@ -1,6 +1,6 @@
 import { LANGS, LANG_META, useI18n } from "../i18n/context";
 
-/** PT / EN / ES selector; the active language is lit, the others recede. */
+/** EN / ES / PT selector; the active language is lit, the others recede. */
 export default function LanguageSwitcher() {
   const { lang, setLang, t } = useI18n();
 

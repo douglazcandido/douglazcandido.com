@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -8,26 +8,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Douglas Candido, Engenheiro de Dados & Backend. Pipelines, APIs e infraestrutura de dados em produção."
+      content="Douglas Candido, Data &amp; Backend Engineer. Pipelines, APIs and data infrastructure running in production."
     />
-    <title>Douglas Candido | Engenheiro de Dados & Backend</title>
+    <title>Douglas Candido | Data &amp; Backend Engineer</title>
 
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://douglazcandido.com/" />
-    <meta property="og:title" content="Douglas Candido | Engenheiro de Dados & Backend" />
+    <meta property="og:title" content="Douglas Candido | Data &amp; Backend Engineer" />
     <meta
       property="og:description"
-      content="Engenheiro de Dados & Backend. Pipelines, APIs e infraestrutura de dados em produção."
+      content="Data &amp; Backend Engineer. Pipelines, APIs and data infrastructure running in production."
     />
     <meta property="og:image" content="https://douglazcandido.com/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Douglas Candido | Engenheiro de Dados & Backend" />
+    <meta name="twitter:title" content="Douglas Candido | Data &amp; Backend Engineer" />
     <meta
       name="twitter:description"
-      content="Engenheiro de Dados & Backend. Pipelines, APIs e infraestrutura de dados em produção."
+      content="Data &amp; Backend Engineer. Pipelines, APIs and data infrastructure running in production."
     />
     <meta name="twitter:image" content="https://douglazcandido.com/og-image.png" />
 
@@ -35,7 +35,7 @@
       (function () {
         try {
           var stored = localStorage.getItem("theme");
-          var theme = stored || (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+          var theme = stored || "light"; // light is the default, whatever the OS prefers
           if (theme === "light") document.documentElement.setAttribute("data-theme", "light");
         } catch (e) {}
       })();

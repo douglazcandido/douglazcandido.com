@@ -8,7 +8,7 @@ import { es } from "./es";
 const dictionaries = { pt, en, es };
 const STORAGE_KEY = "lang";
 
-/** Portuguese is the default; only an explicit earlier choice overrides it. */
+/** English is the default; only an explicit earlier choice overrides it. */
 function getInitialLang(): Lang {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
@@ -16,7 +16,7 @@ function getInitialLang(): Lang {
   } catch {
     // localStorage unavailable (private mode, blocked storage) - fall back to the default.
   }
-  return "pt";
+  return "en";
 }
 
 export default function LanguageProvider({ children }: { children: ReactNode }) {

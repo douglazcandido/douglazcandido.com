@@ -267,9 +267,9 @@ html.theme-fade *::after {
 :root {
   /* Tones of the tower, close to what the 3D scene's light and shade give: lit top faces, walls from
      lit to shaded, and the dark notches of the rim. No outlines anywhere. */
-  --tower-top: color-mix(in srgb, var(--color-surface) 70%, var(--color-text));
-  --tower-lit: color-mix(in srgb, var(--color-surface) 80%, var(--color-text));
-  --tower-shade: color-mix(in srgb, var(--color-surface) 93%, var(--color-text));
+  --tower-top: color-mix(in srgb, var(--color-surface) 84%, var(--color-text));
+  --tower-lit: color-mix(in srgb, var(--color-surface) 90%, var(--color-text));
+  --tower-shade: color-mix(in srgb, var(--color-surface) 97%, var(--color-text));
 }
 
 :root[data-theme="light"] {

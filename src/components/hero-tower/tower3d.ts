@@ -283,7 +283,7 @@ function readPalette(): Palette {
   return {
     light,
     // Dark theme: dark gray faces. Light theme: pale faces, lighter than the page.
-    face: light ? mixSrgb(surface, white, 0.6) : mixSrgb(surface, text, 0.3),
+    face: light ? mixSrgb(surface, white, 0.6) : mixSrgb(surface, text, 0.14),
     tint: accent,
   };
 }
@@ -324,13 +324,18 @@ const VERTEX_MAIN = /* glsl */ `
 
 const FRAGMENT_PARS = /* glsl */ `
   uniform vec3 uTint;
+  uniform float uAdditive;
   varying float vTint;
 `;
 
-// Tint the lit color, keeping part of its own light and shade so the faces stay readable.
+// Pale faces (light theme) are tinted towards the accent, keeping part of their own light and shade.
+// Dark faces would turn muddy that way, so there the accent is added on top as light: the shade
+// underneath stays and the glow stays clean.
 const FRAGMENT_MAIN = /* glsl */ `
   float lum = dot(outgoingLight, vec3(0.299, 0.587, 0.114));
-  outgoingLight = mix(outgoingLight, uTint * (0.45 + 0.9 * lum), vTint);
+  vec3 tinted = mix(outgoingLight, uTint * (0.45 + 0.9 * lum), vTint);
+  vec3 lit = outgoingLight + uTint * vTint * 1.2;
+  outgoingLight = mix(tinted, lit, uAdditive);
 `;
 
 // ---------------------------------------------------------------------------------------------
@@ -383,6 +388,7 @@ export async function mountTower(opts: TowerOptions): Promise<TowerHandle> {
     uOffsets: offsets,
     uGlow: glow,
     uTint: { value: palette.tint.clone() },
+    uAdditive: { value: 0 },
     uPhase: { value: 0 },
     uBandWidth: { value: SHIMMER_WIDTH },
     uYMin: { value: -TOWER_HEIGHT / 2 },
@@ -434,10 +440,13 @@ export async function mountTower(opts: TowerOptions): Promise<TowerHandle> {
   function applyPalette(next: Palette): void {
     faceMaterial.color.copy(next.face);
     (uniforms.uTint.value as Color).copy(next.tint);
+    uniforms.uAdditive.value = next.light ? 0 : 1;
+    // Added light reads stronger than a mix, so the shimmer is gentler in the dark theme.
+    uniforms.uShimmer.value = next.light ? SHIMMER_STRENGTH : SHIMMER_STRENGTH * 0.6;
     // Lights (the Math.PI is the physically based light scale). Ambient keeps the shaded sides from
     // going flat black; the sun does the modelling. The pale faces get less of both, so they never clip.
-    ambient.intensity = Math.PI * (next.light ? 0.42 : 0.5);
-    sun.intensity = Math.PI * (next.light ? 0.85 : 1);
+    ambient.intensity = Math.PI * (next.light ? 0.42 : 0.55);
+    sun.intensity = Math.PI * (next.light ? 0.85 : 1.7);
   }
   applyPalette(palette);
 

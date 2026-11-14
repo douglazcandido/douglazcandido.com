@@ -281,6 +281,8 @@ html.theme-fade *::after {
 .hero-tower {
   /* Same value as the hero headline font-size in Hero.tsx: the tower is as tall as the name (2 lines). */
   --hero-fs: clamp(60px, 11vw, 196px);
+  /* The tower is sized from its own base: it keeps growing with the screen after the name stops at 196px. */
+  --tower-fs: clamp(60px, 12.5vw, 280px);
   /* How far the tower sits in from the right margin: none at 900px, growing with the screen. */
   --tower-inset: clamp(0px, calc(12vw - 108px), 200px);
   position: absolute;
@@ -296,7 +298,8 @@ html.theme-fade *::after {
   position: absolute;
   top: 50%;
   right: 0;
-  height: 135%;
+  /* Same proportion as before (135% of the two name lines), from --tower-fs. */
+  height: calc(var(--tower-fs) * 1.9 * 1.35);
   /* --tower-bleed (set inline) lines the tower's right edge up with the page margin; --tower-inset pulls it in. */
   translate: calc(var(--tower-bleed, 0%) - var(--tower-inset)) -50%;
 }

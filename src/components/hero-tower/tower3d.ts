@@ -76,9 +76,6 @@ export interface TowerHandle {
 /** One full turn of the tower every 50 seconds. */
 const TURN_SECONDS = 50;
 const BASE_SPEED = (Math.PI * 2) / TURN_SECONDS;
-/** How quickly the rotation eases to a stop / back up (1/s, exponential approach). */
-const STOP_RATE = 3.2;
-const RESUME_RATE = 1.6;
 /** How quickly an opening opens / closes (1/s). The result is also run through a smoothstep. */
 const OPEN_RATE = 6;
 /** Accent-colored glow that travels up the faces: seconds per sweep, half-width (tower units), strength 0..1. */
@@ -448,7 +445,6 @@ export async function mountTower(opts: TowerOptions): Promise<TowerHandle> {
   const open = new Float32Array(GAP_COUNT); // 0 closed .. 1 fully open, per opening
   let hovered = -1;
   let labelGap = -1;
-  let speed = BASE_SPEED;
   let clock = 0;
   let disposed = false;
   let lost = false;
@@ -493,11 +489,8 @@ export async function mountTower(opts: TowerOptions): Promise<TowerHandle> {
       if (Math.abs(target - open[k]) < 0.0005) open[k] = target;
     }
 
-    // Rotation: eases to a stop while an opening is hovered, and back up afterwards.
-    const targetSpeed = hovered >= 0 ? 0 : BASE_SPEED;
-    speed += (targetSpeed - speed) * (1 - Math.exp(-(hovered >= 0 ? STOP_RATE : RESUME_RATE) * dt));
-    if (Math.abs(targetSpeed - speed) < 1e-5) speed = targetSpeed;
-    tower.rotation.y += speed * dt;
+    // Constant, calm rotation: hovering an opening does not stop it.
+    tower.rotation.y += BASE_SPEED * dt;
 
     // Discs above an opening move up, discs below it move down, each by half of the extra height.
     const half = ((OPEN_FACTOR - 1) * GAP_HEIGHT) / 2;

@@ -259,6 +259,157 @@ html.theme-fade *::after {
 }
 
 /* ------------------------------------------------------------------ */
+/* Hero tower: decorative 3D element on the right side of the hero.     */
+/* The stage keeps a fixed aspect ratio (no layout shift); the static   */
+/* SVG is the placeholder, and the canvas cross-fades in over it.       */
+/* ------------------------------------------------------------------ */
+
+:root {
+  /* Tones of the tower, close to what the 3D scene's light and shade give: lit top faces, walls from
+     lit to shaded, and the dark notches of the rim. No outlines anywhere. */
+  --tower-top: color-mix(in srgb, var(--color-surface) 84%, var(--color-text));
+  --tower-lit: color-mix(in srgb, var(--color-surface) 90%, var(--color-text));
+  --tower-shade: color-mix(in srgb, var(--color-surface) 97%, var(--color-text));
+}
+
+:root[data-theme="light"] {
+  --tower-top: color-mix(in srgb, var(--color-surface) 35%, white);
+  --tower-lit: color-mix(in srgb, var(--color-surface) 75%, var(--color-bg));
+  --tower-shade: color-mix(in srgb, var(--color-bg) 78%, var(--color-text));
+}
+
+.hero-tower {
+  /* Same value as the hero headline font-size in Hero.tsx: the tower is as tall as the name (2 lines). */
+  --hero-fs: clamp(60px, 11vw, 196px);
+  /* The tower is sized from its own base: it keeps growing with the screen after the name stops at 196px. */
+  --tower-fs: clamp(60px, 12.5vw, 280px);
+  /* How far the tower sits in from the right margin: none at 900px, growing with the screen. */
+  --tower-inset: clamp(0px, calc(12vw - 108px), 200px);
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: calc(var(--hero-fs) * 1.9);
+  pointer-events: none;
+}
+
+/* Taller than the name, centered on it: room for an opening to grow without clipping. */
+.hero-tower__stage {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  /* Same proportion as before (135% of the two name lines), from --tower-fs. */
+  height: calc(var(--tower-fs) * 1.9 * 1.35);
+  /* --tower-bleed (set inline) lines the tower's right edge up with the page margin; --tower-inset pulls it in. */
+  translate: calc(var(--tower-bleed, 0%) - var(--tower-inset)) -50%;
+}
+
+.hero-tower__svg,
+.hero-tower__stage > canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  user-select: none;
+}
+
+.hero-tower__svg {
+  overflow: visible;
+  animation: tower-in 1.2s cubic-bezier(0.19, 1, 0.22, 1) 0.9s both;
+}
+
+.hero-tower__stage > canvas {
+  opacity: 0;
+  transition: opacity 0.9s ease;
+}
+
+.hero-tower[data-live="true"] .hero-tower__svg {
+  animation: none;
+  opacity: 0;
+  transition: opacity 0.9s ease;
+}
+
+.hero-tower[data-live="true"] .hero-tower__stage > canvas {
+  opacity: 1;
+}
+
+@keyframes tower-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tower-svg__top {
+  fill: var(--tower-top);
+}
+
+.tower-svg__stop-lit {
+  stop-color: var(--tower-lit);
+}
+
+.tower-svg__stop-shade {
+  stop-color: var(--tower-shade);
+}
+
+.tower-svg__notch {
+  fill: var(--tower-shade);
+  fill-opacity: 0.7;
+}
+
+.tower-svg__column {
+  fill: var(--tower-lit);
+}
+
+.tower-svg__column-shade {
+  fill: var(--tower-shade);
+}
+
+/* Label of the hovered opening: a pill like the site's tags, tied to the opening by a thin line.
+   --lx / --ly (set from tower3d.ts) are the point on the tower's left edge, relative to the stage. */
+.hero-tower__label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  padding-right: 6px;
+  translate: calc(var(--lx, 0px) - 100%) calc(var(--ly, 0px) - 50%);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.hero-tower__label[data-on="true"] {
+  opacity: 1;
+  transition-delay: 0.1s;
+}
+
+.hero-tower__tick {
+  position: relative;
+  width: 36px;
+  height: 1px;
+  background: color-mix(in srgb, var(--color-accent) 70%, transparent);
+}
+
+.hero-tower__tick::after {
+  content: "";
+  position: absolute;
+  top: -2.5px;
+  right: -3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--color-accent);
+}
+
+/* ------------------------------------------------------------------ */
 /* Card: static, no outline and no hover effect (cards are not buttons) */
 /* ------------------------------------------------------------------ */
 
@@ -636,6 +787,11 @@ html.theme-fade *::after {
 
   .hero-char,
   .fade-up {
+    animation: none;
+  }
+
+  /* The tower stays a still illustration (the 3D code is not even loaded). */
+  .hero-tower__svg {
     animation: none;
   }
 

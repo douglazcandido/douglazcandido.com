@@ -4,6 +4,7 @@ import ThemeToggle from "./ThemeToggle";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useActiveSection } from "../hooks/useActiveSection";
 import { useI18n } from "../i18n/context";
+import { profile } from "../data/profile";
 
 const sectionDefs = [
   { id: "sobre", key: "about" },
@@ -16,10 +17,14 @@ const sectionDefs = [
 // "inicio" is tracked too so nothing stays highlighted once you are back at the top.
 const sectionIds = ["inicio", ...sectionDefs.map((s) => s.id)];
 
+const navName = Array.from(profile.name);
+const firstNameLength = profile.name.indexOf(" ");
+
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const active = useActiveSection(sectionIds);
+  const atTop = active === "inicio";
   const { t } = useI18n();
   const sections = sectionDefs.map((s) => ({ id: s.id, label: t.nav[s.key] }));
 
@@ -47,6 +52,38 @@ export default function Nav() {
         }`}
       >
         <nav className="flex items-center justify-end py-[18px]">
+          {/* The hero already shows the name at the top; it only joins the menu once you leave it. */}
+          <a
+            href="#inicio"
+            aria-label={profile.name}
+            aria-hidden={atTop ? "true" : undefined}
+            tabIndex={atTop ? -1 : 0}
+            className={`display relative text-[24px] leading-none font-bold tracking-[-0.045em] whitespace-nowrap before:absolute before:-inset-x-2 before:-inset-y-[18px] sm:text-[28px] ${
+              atTop ? "pointer-events-none" : ""
+            }`}
+          >
+            {/* Letters fade in left to right and out right to left, a few ms apart. */}
+            {navName.map((char, i) => (
+              <span
+                key={i}
+                aria-hidden="true"
+                className={`inline-block transition-[opacity,transform] ${
+                  i >= firstNameLength + 1 ? "text-accent" : ""
+                } ${
+                  atTop
+                    ? "-translate-x-1 opacity-0 duration-[600ms] ease-in-out"
+                    : "translate-x-0 opacity-100 duration-[1200ms] ease-[cubic-bezier(0.25,0.1,0.25,1)]"
+                }`}
+                style={{
+                  transitionDelay: atTop
+                    ? `${(navName.length - 1 - i) * 30}ms`
+                    : `${250 + i * 70}ms`,
+                }}
+              >
+                {char === " " ? " " : char}
+              </span>
+            ))}
+          </a>
           <div className="ml-auto flex items-center gap-4 sm:gap-6 md:gap-8">
             <a
               href="#inicio"

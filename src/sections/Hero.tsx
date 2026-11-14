@@ -1,6 +1,7 @@
 import { profile } from "../data/profile";
 import { useI18n } from "../i18n/context";
 import { useParallax } from "../hooks/useParallax";
+import HeroTower from "../components/hero-tower/HeroTower";
 
 /** One headline line whose letters rise out of a clipped mask, staggered. */
 function HeroLine({ text, base, className = "" }: { text: string; base: number; className?: string }) {
@@ -21,7 +22,7 @@ export default function Hero() {
 
   return (
     <header id="inicio" className="screen px-page pt-[clamp(140px,32vh,320px)] pb-[clamp(48px,7vw,104px)]">
-      <div ref={titleRef} className="will-change-transform">
+      <div ref={titleRef} className="relative will-change-transform">
         <h1
           aria-label={profile.name}
           className="display m-0 text-[clamp(60px,11vw,196px)] leading-[0.95] font-semibold tracking-[-0.045em]"
@@ -35,6 +36,9 @@ export default function Hero() {
             {t.hero.summary}
           </p>
         </div>
+
+        {/* Decorative, absolutely positioned on the right: adds nothing to the layout of the text. */}
+        <HeroTower />
       </div>
     </header>
   );

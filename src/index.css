@@ -463,22 +463,27 @@ html.theme-fade *::after {
   display: none;
 }
 
-/* Phones only (below 768px; tablets keep the box above): a little smaller, and pushed right so the tower's
-   wide top (about 0.12 of the box on each side is empty stage) ends at the page margin instead of 18px short
-   of it. The box then sticks out past the margin by that much, and the label is pulled back to the margin.
-   The clearance from the name is recomputed for the shift: .589 = .709 - .12. */
+/* Phones only (below 768px; tablets keep the box above): a little smaller, and centered in the space
+   between the end of the name and the right edge of the screen, so the tower is the same distance from
+   both. "Tower" here is its widest part, the top disc: 0.391 of the box on each side of its center
+   (the stage has empty room around it). The name's ink ends 3.49 font sizes after the page margin (a bit
+   less than that once the name grows past 60px, hence the correction).
+   The box is shifted so its center sits halfway: --shift is the `right` offset that does it. */
 @media (max-width: 767.98px) {
   .hero-tower--compact {
-    --cap-name: calc((100vw - 268px) / 0.589);
+    /* Widest box that leaves at least 14px on each side of the tower. */
+    --cap-name: calc(((100vw - var(--page-pad) - (3.49 * var(--fs) - 0.385 * (var(--fs) - 60px))) / 2 - 14px) / 0.391);
     --tw: max(72px, min(38vw, 168px, var(--cap-name), var(--cap-top)));
-    right: calc(var(--tw) * -0.12 - 4px);
+    --shift: calc((100vw - var(--page-pad) - (3.49 * var(--fs) - 0.385 * (var(--fs) - 60px))) / 2 - var(--page-pad) - var(--tw) / 2);
+    right: var(--shift);
   }
 
-  /* On the narrowest screens the tower is short, so the label would land on the first line of the name:
-     lift it to stay 6px above the name (the name starts 112px - 1.161 * width above the box's top edge). */
+  /* The label keeps to the page margin, whatever the shift. On the narrowest screens the tower is short,
+     so the label would land on the first line of the name: lift it to stay 6px above the name (the name
+     starts 112px - 1.161 * width above the box's top edge). */
   .hero-tower--compact .hero-tower__label {
     top: min(-22px, calc(1.161 * var(--tw) - 138px));
-    right: calc(var(--tw) * 0.12 + 4px);
+    right: calc(var(--shift) * -1);
   }
 }
 

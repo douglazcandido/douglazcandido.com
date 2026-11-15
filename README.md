@@ -35,7 +35,11 @@ The social preview (`public/og-image-en-light-v2.png`, 1200x630) is generated fr
 node scripts/generate-og-image.mjs
 ```
 
-It needs Playwright's Chromium (`npx playwright install chromium`) and network access for the web font. When you redo the image, save it under a new file name and update `og:image` / `twitter:image` in `index.html`, so crawlers don't serve a cached copy.
+It needs Playwright's Chromium (`npx playwright install chromium`); the font is read from `src/assets/fonts`, so no network access is needed. When you redo the image, save it under a new file name and update `og:image` / `twitter:image` in `index.html`, so crawlers don't serve a cached copy.
+
+## Fonts
+
+Bricolage Grotesque is self-hosted: one variable WOFF2 (`opsz` and `wght` axes, latin subset, which covers PT, EN and ES) in `src/assets/fonts`, declared in `src/index.css`, with its license (SIL OFL 1.1) and notes next to it. The site makes no request to Google Fonts or any other third party. Vite hashes the file into `/assets/`, and `index.html` preloads it.
 
 ## Project structure
 

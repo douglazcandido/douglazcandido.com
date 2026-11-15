@@ -1,9 +1,81 @@
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&display=swap');
 @import "tailwindcss";
 
+/* ------------------------------------------------------------------ */
+/* Fonts: Bricolage Grotesque, served from this site (no third parties) */
+/* ------------------------------------------------------------------ */
+
+/* One variable file (opsz 12..96, wght 200..800) covers every weight and optical size the site uses. The latin
+   subset has every character of the PT, EN and ES texts (see src/assets/fonts/README.md). Vite hashes the file
+   and puts it in /assets/ with a long cache. */
+@font-face {
+  font-family: "Bricolage Grotesque";
+  font-style: normal;
+  font-weight: 300 800;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("./assets/fonts/bricolage-grotesque-latin-opsz-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Fallbacks shown only while the file loads (font-display: swap): a local Arial-like face scaled so its width and
+   line box match Bricolage Grotesque, so the swap moves as little as possible. The scale factors were measured on
+   the site's own text in the three languages. The text faces are for body copy (weights up to 500; 500 has its own
+   face because the real font is wider there). The display faces are for the headlines, which are narrower, and
+   mostly bold, hence a local Arial Bold. Vertical metrics are the font's (ascent 930, descent 270, line gap 0, in
+   1000 units per em) divided by size-adjust. The unicode-range is the same as above, so anything outside it still
+   falls through to system-ui, as before. */
+@font-face {
+  font-family: "Bricolage Grotesque Fallback";
+  font-weight: 100 400;
+  src: local("Arial"), local("Liberation Sans"), local("Arimo"), local("Helvetica");
+  size-adjust: 103%;
+  ascent-override: 90.29%;
+  descent-override: 26.21%;
+  line-gap-override: 0%;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Bricolage Grotesque Fallback";
+  font-weight: 500;
+  src: local("Arial"), local("Liberation Sans"), local("Arimo"), local("Helvetica");
+  size-adjust: 105.8%;
+  ascent-override: 87.90%;
+  descent-override: 25.52%;
+  line-gap-override: 0%;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Bricolage Grotesque Display Fallback";
+  font-weight: 100 500;
+  src: local("Arial"), local("Liberation Sans"), local("Arimo"), local("Helvetica");
+  size-adjust: 104%;
+  ascent-override: 89.42%;
+  descent-override: 25.96%;
+  line-gap-override: 0%;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Bricolage Grotesque Display Fallback";
+  font-weight: 501 900;
+  src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"), local("LiberationSans-Bold"), local("Arimo Bold"), local("Helvetica Bold"), local("Helvetica-Bold");
+  size-adjust: 97%;
+  ascent-override: 95.88%;
+  descent-override: 27.84%;
+  line-gap-override: 0%;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 @theme {
-  --font-display: "Bricolage Grotesque", system-ui, sans-serif;
-  --font-sans: "Bricolage Grotesque", system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque", "Bricolage Grotesque Display Fallback", system-ui, sans-serif;
+  --font-sans: "Bricolage Grotesque", "Bricolage Grotesque Fallback", system-ui, sans-serif;
 
   --color-bg: #000000;
   --color-surface: #0b0b0c;

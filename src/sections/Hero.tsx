@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { profile } from "../data/profile";
 import { useI18n } from "../i18n/context";
 import { useParallax } from "../hooks/useParallax";
@@ -19,11 +20,14 @@ function HeroLine({ text, base, className = "" }: { text: string; base: number; 
 export default function Hero() {
   const { t } = useI18n();
   const titleRef = useParallax<HTMLDivElement>({ y: 30 });
+  const nameRef = useRef<HTMLHeadingElement>(null);
 
   return (
     <header id="inicio" className="screen px-page pt-[clamp(140px,32vh,320px)] pb-[clamp(48px,7vw,104px)]">
-      <div ref={titleRef} className="relative will-change-transform">
+      {/* Below 900px (index.css) this is a grid: the name in the first column, the tower in a second one. */}
+      <div ref={titleRef} className="hero-stage relative will-change-transform">
         <h1
+          ref={nameRef}
           aria-label={profile.name}
           className="display m-0 text-[clamp(60px,11vw,196px)] leading-[0.95] font-semibold tracking-[-0.045em]"
         >
@@ -31,14 +35,14 @@ export default function Hero() {
           <HeroLine text="Candido" base={380} className="text-accent" />
         </h1>
 
-        <div className="fade-up mt-[clamp(24px,3vw,44px)]" style={{ "--d": "800ms" } as React.CSSProperties}>
+        <div className="hero-summary fade-up mt-[clamp(24px,3vw,44px)]" style={{ "--d": "800ms" } as React.CSSProperties}>
           <p className="m-0 max-w-[42ch] text-[clamp(20px,2.2vw,34px)] leading-[1.45] font-light text-neutral-300 text-pretty">
             {t.hero.summary}
           </p>
         </div>
 
-        {/* Decorative, absolutely positioned on the right: adds nothing to the layout of the text. */}
-        <HeroTower />
+        {/* Decorative: adds nothing to the height of the hero, and is not rendered at all when there is no room. */}
+        <HeroTower nameRef={nameRef} />
       </div>
     </header>
   );

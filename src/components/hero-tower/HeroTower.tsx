@@ -1,10 +1,19 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type RefObject } from "react";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
 import { useI18n } from "../../i18n/context";
 import TowerIllustration from "./TowerIllustration";
-import { GROUP_BY_GAP, STAGE_ASPECT, STAGE_BLEED } from "./towerSpec";
+import {
+  COMPACT_EDGE_SLACK,
+  COMPACT_MIN_WIDTH,
+  COMPACT_NAME_GAP,
+  COMPACT_STAGE_INSET,
+  GROUP_BY_GAP,
+  STAGE_ASPECT,
+  STAGE_BLEED,
+  compactStageWidth,
+} from "./towerSpec";
 
-/** From this width the tower sits in the hero's right margin; below it the compact version is used. */
+/** From this width the tower sits in the hero's right margin; below it the compact version is used (when it fits). */
 const WIDE_QUERY = "(min-width: 900px)";
 
 /**
@@ -56,13 +65,72 @@ function whenIdle(run: () => void): () => void {
 }
 
 /**
- * Decorative 3D tower in the hero: in the right margin from 900px up, a compact one next to the name
- * below that. With reduced motion, or when WebGL (or the device) is not up to it, it stays a static
- * illustration and Three.js is never downloaded.
+ * Free width (px) to the right of the name, below 900px: from the end of its longest line to the page margin.
+ * Measured at runtime (font, language and screen change it), and only once the web font is in, so the first
+ * answer is not made with a fallback font. `null` until then, and whenever the compact layout is not in use.
  */
-export default function HeroTower() {
+function useNameRoom(nameRef: RefObject<HTMLElement | null>, active: boolean): { room: number; pad: number } | null {
+  const [room, setRoom] = useState<{ room: number; pad: number } | null>(null);
+
+  useLayoutEffect(() => {
+    const name = nameRef.current;
+    // The hero's content wrapper (its ref is not attached yet when this runs: it wraps this component).
+    const wrap = name?.parentElement;
+    if (!active || !wrap || !name) {
+      setRoom(null);
+      return;
+    }
+    let ready = !document.fonts;
+    let cancelled = false;
+    const measure = () => {
+      if (!ready) return;
+      // Rounded down: the column is never claimed wider than it is.
+      const next = Math.floor(wrap.clientWidth - name.getBoundingClientRect().width);
+      const pad = parseFloat(getComputedStyle(wrap.parentElement ?? wrap).paddingRight) || 0;
+      setRoom((prev) => (prev && prev.room === next && prev.pad === pad ? prev : { room: next, pad }));
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(wrap);
+    observer.observe(name);
+    document.fonts?.ready.then(() => {
+      if (cancelled) return;
+      ready = true;
+      measure();
+    });
+    return () => {
+      cancelled = true;
+      observer.disconnect();
+    };
+  }, [nameRef, active]);
+
+  return room;
+}
+
+/**
+ * Decorative 3D tower in the hero: in the right margin from 900px up. Below that, in the free column to the
+ * right of the name (a grid column of the hero, so it can never overlap the text), as long as that column is
+ * wide enough; when it is not, nothing is rendered: no illustration, no 3D, and Three.js is never downloaded.
+ * With reduced motion, or when WebGL (or the device) is not up to it, it stays a static illustration.
+ *
+ * `nameRef` is the name, the first column of the hero's content wrapper (a grid below 900px).
+ */
+export default function HeroTower({ nameRef }: { nameRef: RefObject<HTMLElement | null> }) {
   const wide = useMediaQuery(WIDE_QUERY);
-  return <Tower key={wide ? "wide" : "compact"} compact={!wide} />;
+  const free = useNameRoom(nameRef, !wide);
+  if (wide) return <Tower key="wide" compact={false} />;
+  if (free === null) return null;
+  const { room, pad } = free;
+  const width = compactStageWidth(room, pad);
+  if (width < COMPACT_MIN_WIDTH) return null;
+  return (
+    <div
+      className="hero-tower-cell"
+      style={{ "--cell": `${room}px`, "--room": `${width}px`, "--inset": COMPACT_STAGE_INSET.toFixed(4), "--gap": `${COMPACT_NAME_GAP + COMPACT_EDGE_SLACK}px` } as React.CSSProperties}
+    >
+      <Tower key="compact" compact />
+    </div>
+  );
 }
 
 function Tower({ compact }: { compact: boolean }) {

@@ -113,10 +113,13 @@ export default function ShotStack({
   images,
   alts,
   active,
+  className = "",
 }: {
   images: readonly string[];
   alts: readonly string[];
   active: boolean;
+  /** Extra classes for the fan's own box (the project detail hides it on phones). */
+  className?: string;
 }) {
   const { t } = useI18n();
   const n = images.length;
@@ -155,7 +158,7 @@ export default function ShotStack({
 
   return (
     <>
-      <div className="flex min-w-0 flex-1 items-center justify-end py-1 max-sm:justify-start">
+      <div className={`flex min-w-0 flex-1 items-center justify-end py-1 max-sm:justify-start ${className}`}>
         <div
           onMouseEnter={() => setHovering(true)}
           onMouseLeave={() => setHovering(false)}

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { FiArrowUpRight, FiCopy } from "react-icons/fi";
+import { FiArrowUpRight, FiCheck, FiCopy } from "react-icons/fi";
 import { certifications, type Certification } from "../data/certifications";
 import { useI18n } from "../i18n/context";
 
@@ -29,7 +29,8 @@ async function copyText(text: string): Promise<boolean> {
   }
 }
 
-function CopyCodeButton({ code }: { code: string }) {
+/** Copy button for a certificate code. `size` and `showCheck` let the phone list make it a 44px target that swaps to a check mark. */
+function CopyCodeButton({ code, size = "h-7 w-7", showCheck = false }: { code: string; size?: string; showCheck?: boolean }) {
   const { t } = useI18n();
   const [copied, setCopied] = useState(false);
   const timer = useRef<number | undefined>(undefined);
@@ -52,11 +53,11 @@ function CopyCodeButton({ code }: { code: string }) {
         onClick={onClick}
         aria-label={t.career.certs.copyCode}
         title={label}
-        className={`inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-full transition-colors duration-700 ease-out ${
+        className={`inline-flex ${size} cursor-pointer items-center justify-center rounded-full transition-colors duration-700 ease-out ${
           copied ? "text-accent" : "text-neutral-600 hover:text-neutral-400"
         }`}
       >
-        <FiCopy aria-hidden="true" className="h-3.5 w-3.5" />
+        {showCheck && copied ? <FiCheck aria-hidden="true" className="h-4 w-4" /> : <FiCopy aria-hidden="true" className="h-3.5 w-3.5" />}
       </button>
       <span className="sr-only" aria-live="polite">
         {copied ? t.career.certs.copied : ""}
@@ -120,5 +121,57 @@ export default function CertificationStrip() {
         ))}
       </ul>
     </div>
+  );
+}
+
+/**
+ * Phone version of the strip: a compact list, one thin-ruled row per course (name, then issuer and
+ * date with the actions beside it, or under it when the line is too narrow). Every action is a 44px
+ * target; the pill keeps its look, only its hit area is taller.
+ */
+export function CertificationRows() {
+  const { t } = useI18n();
+  const { certs } = t.career;
+
+  return (
+    <ul className="m-0 list-none border-t border-divider p-0">
+      {certifications.map((cert) => {
+        const { verification: v } = cert;
+        const name = certs.names[cert.id];
+        return (
+          <li key={cert.id} className="border-b border-divider py-3">
+            <h4 className="m-0 font-display text-[15px] leading-[1.25] font-semibold tracking-[-0.02em] text-pretty">{name}</h4>
+            <div className="mt-1 flex flex-wrap items-center justify-between gap-x-3">
+              <p className="m-0 text-[13px] leading-[1.4] text-neutral-500">
+                {cert.issuer} · {certs.months[cert.month - 1]}/{cert.year}
+              </p>
+              <div className="ml-auto flex items-center">
+                {v.kind === "code" && (
+                  <>
+                    <span className="text-[13px] tracking-[0.04em] text-neutral-400 select-all">
+                      <span className="sr-only">{certs.codeLabel}: </span>
+                      {v.code}
+                    </span>
+                    <CopyCodeButton code={v.code} size="h-11 w-11" showCheck />
+                  </>
+                )}
+                <a
+                  href={v.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${certs.verify}: ${name}`}
+                  className="inline-flex min-h-11 min-w-11 items-center"
+                >
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/10 px-3 py-1 text-[12px] tracking-[0.12em] text-accent uppercase">
+                    {certs.verify}
+                    <FiArrowUpRight aria-hidden="true" className="h-3 w-3" />
+                  </span>
+                </a>
+              </div>
+            </div>
+          </li>
+        );
+      })}
+    </ul>
   );
 }

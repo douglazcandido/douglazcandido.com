@@ -49,7 +49,8 @@ function ProjectDetail({ project, active }: { project: Project; active: boolean 
   return (
     <div className="@container h-full">
       <div className="flex h-full flex-col gap-9">
-        <Step order={0} active={active}>
+        {/* On phones the open row in the list already shows this name: the heading stays for screen readers only. */}
+        <Step order={0} active={active} className="max-md:sr-only">
           <h3 className="m-0 font-display text-[clamp(26px,4.4cqw,58px)] leading-[1.05] font-semibold tracking-[-0.03em] text-pretty">
             {project.title}
           </h3>
@@ -68,7 +69,7 @@ function ProjectDetail({ project, active }: { project: Project; active: boolean 
                   href={project.repo}
                   target="_blank"
                   rel="noreferrer"
-                  className="group/repo inline-flex items-center gap-3 rounded-full border border-divider py-2.5 pr-4 pl-4 text-[13px] font-medium tracking-[0.04em] text-neutral-200 transition-colors duration-300 hover:border-accent hover:text-accent"
+                  className="group/repo inline-flex items-center gap-3 rounded-full border border-divider py-2.5 pr-4 pl-4 text-[13px] max-md:min-h-11 font-medium tracking-[0.04em] text-neutral-200 transition-colors duration-300 hover:border-accent hover:text-accent"
                 >
                   <FaGithub aria-hidden="true" className="h-[18px] w-[18px]" />
                   {t.projects.repoCta}
@@ -83,7 +84,8 @@ function ProjectDetail({ project, active }: { project: Project; active: boolean 
                   {t.projects.privateCode}
                 </span>
               ) : null}
-              {hasShots && <ShotStack images={images!} alts={project.shotAlts!} active={active} />}
+              {/* The thumbnail fan does not fit beside the button on phones (it ran past the edge): hidden there. */}
+              {hasShots && <ShotStack images={images!} alts={project.shotAlts!} active={active} className="max-md:hidden" />}
             </div>
           </Step>
         )}
@@ -93,7 +95,7 @@ function ProjectDetail({ project, active }: { project: Project; active: boolean 
             {project.tags.map((tag) => (
               <li
                 key={tag}
-                className="rounded-full bg-accent/10 px-3 py-1 text-[10.5px] tracking-[0.12em] text-accent uppercase"
+                className="rounded-full bg-accent/10 px-3 py-1 text-[10.5px] tracking-[0.12em] text-accent uppercase max-md:text-[12px] max-md:tracking-[0.1em]"
               >
                 {tag}
               </li>

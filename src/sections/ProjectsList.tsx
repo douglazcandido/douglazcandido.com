@@ -90,7 +90,7 @@ function ProjectDetail({ project, active }: { project: Project; active: boolean 
           </Step>
         )}
 
-        <Step order={hasLinks ? 3 : 2} active={active} className={hasLinks ? undefined : "mt-auto"}>
+        <Step order={hasLinks ? 3 : 2} active={active} className={hasLinks ? "max-md:hidden" : "mt-auto max-md:hidden"}>
           <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
             {project.tags.map((tag) => (
               <li

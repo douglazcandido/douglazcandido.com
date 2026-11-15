@@ -9,7 +9,8 @@
  *   hero's 3D scene at a chosen frame and captures the canvas with a transparent background. The result is
  *   the real hero tower (same silhouette, light and shade, no outlines), and it merges into the page gray
  *   without seams because the edges keep their alpha.
- * - Fonts come from the same Google Fonts stylesheet as the site; the capture waits for them.
+ * - The font is the site's own self-hosted Bricolage Grotesque file (src/assets/fonts, found through the
+ *   @font-face in src/index.css) and is embedded in the page as a data URI: nothing is fetched from the internet.
  * - Output: public/OUTPUT_NAME. When you redo the image, change OUTPUT_NAME (and og:image / twitter:image in
  *   index.html) so crawlers don't serve a cached one.
  */
@@ -49,9 +50,13 @@ const token = (name) => {
 };
 const colors = { bg: token("bg"), text: token("text"), accent: token("accent") };
 
-const fontsUrl = css.match(/@import url\('(https:\/\/fonts\.googleapis\.com[^']+)'\)/)?.[1];
-const fontFamily = css.match(/--font-display:\s*([^;]+);/)?.[1]?.trim();
-if (!fontsUrl || !fontFamily) throw new Error("Could not read the font settings from src/index.css");
+// The first @font-face of src/index.css is the site's Bricolage Grotesque (a variable file: opsz + wght).
+const fontFace = css.match(/@font-face\s*\{[^}]*font-family:\s*"([^"]+)"[^}]*url\("([^"]+\.woff2)"\)[^}]*\}/);
+if (!fontFace) throw new Error("Could not find the @font-face in src/index.css");
+const fontName = fontFace[1];
+const fontFile = resolve(root, "src", fontFace[2]);
+const fontDataUri = `data:font/woff2;base64,${readFileSync(fontFile).toString("base64")}`;
+const fontFamily = `"${fontName}", system-ui, sans-serif`;
 
 /* ------------------------- the hero tower (capture) ------------------------ */
 
@@ -180,10 +185,12 @@ function template(tower) {
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="${fontsUrl}">
 <style>
+  @font-face {
+    font-family: "${fontName}";
+    font-weight: 300 800;
+    src: url(${fontDataUri}) format("woff2");
+  }
   :root { --bg: ${colors.bg}; --text: ${colors.text}; --accent: ${colors.accent}; }
   * { box-sizing: border-box; margin: 0; }
   html, body { width: ${WIDTH}px; height: ${HEIGHT}px; overflow: hidden; }
@@ -245,7 +252,7 @@ try {
     await document.querySelector(".tower").decode();
   });
   const loaded = await page.evaluate(() => [...document.fonts].filter((f) => f.status === "loaded").length);
-  if (loaded === 0) throw new Error("Web fonts did not load (offline?). Refusing to write a fallback-font image.");
+  if (loaded === 0) throw new Error("The font did not load. Refusing to write a fallback-font image.");
   await page.screenshot({ path: out, type: "png" });
 } finally {
   await browser.close();

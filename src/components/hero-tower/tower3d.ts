@@ -33,6 +33,7 @@ import {
   CAMERA_ELEVATION_DEG,
   COLUMN_RADIUS,
   COLUMN_SIDES,
+  COMPACT_FRAME_HEIGHT,
   DISC_COUNT,
   DISC_HEIGHT,
   FRAME_HEIGHT,
@@ -63,6 +64,11 @@ export interface TowerOptions {
   onLost: () => void;
   /** Aborting it while the scene is still being set up disposes everything and stops the setup. */
   signal: AbortSignal;
+  /**
+   * Phone / tablet version (below 900px): a tighter camera frame, no faces nobody can see, a lower frame
+   * rate cap, and touch: a short tap opens the nearest opening and pauses the rotation, see "touch" below.
+   */
+  compact?: boolean;
 }
 
 export interface TowerHandle {
@@ -88,6 +94,13 @@ const GLOW_STRENGTH = 0.7;
 const HIT_PAD = DISC_HEIGHT * 0.25;
 /** Never render faster than this (keeps 120/144 Hz screens at ~60 fps). */
 const MIN_FRAME_MS = 12;
+/** The compact version is capped lower: it is small, and phones should not run hot for it. */
+const COMPACT_MIN_FRAME_MS = 20;
+/** How quickly the rotation stops and picks up again around a touch-opened opening (1/s). */
+const SPIN_RATE = 2.5;
+/** A touch counts as a tap when it moves less than this (px) and ends within this time (ms). */
+const TAP_SLOP = 10;
+const TAP_MS = 600;
 
 // ---------------------------------------------------------------------------------------------
 // Geometry
@@ -149,7 +162,7 @@ const INNER_GLOW = 0.25;
 /** Baked shade of the outer wall segment that starts at profile point `k % 4`: flank, tip, flank, notch floor. */
 const WALL_SHADE = [0.9, 1, 0.9, 0.7];
 
-function addDisc(faces: FaceBuilder, i: number): void {
+function addDisc(faces: FaceBuilder, i: number, withBottom: boolean): void {
   const yTop = discCenterY(i) + DISC_HEIGHT / 2;
   const yBottom = discCenterY(i) - DISC_HEIGHT / 2;
   const profile = rimProfile(discRadius(i));
@@ -192,14 +205,16 @@ function addDisc(faces: FaceBuilder, i: number): void {
       vertex(innerAt(k, yTop), up, 0.72, rimAbove, INNER_GLOW),
       i,
     );
-    // Bottom face.
-    faces.quad(
-      vertex(outerAt(k, yBottom), down, 0.55, rimBelow),
-      vertex(outerAt(k1, yBottom), down, 0.55, rimBelow),
-      vertex(innerAt(k1, yBottom), down, 0.4, rimBelow, INNER_GLOW),
-      vertex(innerAt(k, yBottom), down, 0.4, rimBelow, INNER_GLOW),
-      i,
-    );
+    // Bottom face (the camera always looks down on the tower, so it is never seen: the compact version leaves it out).
+    if (withBottom) {
+      faces.quad(
+        vertex(outerAt(k, yBottom), down, 0.55, rimBelow),
+        vertex(outerAt(k1, yBottom), down, 0.55, rimBelow),
+        vertex(innerAt(k1, yBottom), down, 0.4, rimBelow, INNER_GLOW),
+        vertex(innerAt(k, yBottom), down, 0.4, rimBelow, INNER_GLOW),
+        i,
+      );
+    }
 
     // Wall of the hole, smooth, normal pointing at the axis: the darkest part of the disc.
     const n0: Vec3 = [-Math.cos(profile[k][0]), 0, -Math.sin(profile[k][0])];
@@ -348,7 +363,9 @@ const smoothstep = (x: number): number => x * x * (3 - 2 * x);
 const nextTask = (): Promise<void> => new Promise((resolve) => setTimeout(resolve, 0));
 
 export async function mountTower(opts: TowerOptions): Promise<TowerHandle> {
-  const { host, interactionRoot, label, onHover, onReady, onLost, signal } = opts;
+  const { host, interactionRoot, label, onHover, onReady, onLost, signal, compact = false } = opts;
+  const frameHeight = compact ? COMPACT_FRAME_HEIGHT : FRAME_HEIGHT;
+  const minFrameMs = compact ? COMPACT_MIN_FRAME_MS : MIN_FRAME_MS;
 
   const renderer = new WebGLRenderer({ antialias: true, alpha: true, powerPreference: "low-power" });
   renderer.setClearColor(0x000000, 0);
@@ -361,12 +378,12 @@ export async function mountTower(opts: TowerOptions): Promise<TowerHandle> {
   const elevation = (CAMERA_ELEVATION_DEG * Math.PI) / 180;
   camera.position.set(0, CAMERA_DISTANCE * Math.sin(elevation), CAMERA_DISTANCE * Math.cos(elevation));
   camera.lookAt(0, 0, 0);
-  camera.fov = (2 * Math.atan(FRAME_HEIGHT / 2 / CAMERA_DISTANCE) * 180) / Math.PI;
+  camera.fov = (2 * Math.atan(frameHeight / 2 / CAMERA_DISTANCE) * 180) / Math.PI;
   camera.updateMatrixWorld();
 
   // --- geometry -----------------------------------------------------------------------------
   const faces = new FaceBuilder();
-  for (let i = 0; i < DISC_COUNT; i++) addDisc(faces, i);
+  for (let i = 0; i < DISC_COUNT; i++) addDisc(faces, i, !compact);
   addColumn(faces);
 
   const faceGeometry = new BufferGeometry();
@@ -455,6 +472,8 @@ export async function mountTower(opts: TowerOptions): Promise<TowerHandle> {
   let hovered = -1;
   let labelGap = -1;
   let clock = 0;
+  let spin = 1; // rotation speed factor: 1 turning, 0 paused (only a touch-opened opening pauses it)
+  let touchOpen = false; // the open opening was chosen by a tap, so the pointer logic leaves it alone
   let disposed = false;
   let lost = false;
   let armed = false; // the loop only runs once the shaders are compiled
@@ -488,7 +507,7 @@ export async function mountTower(opts: TowerOptions): Promise<TowerHandle> {
 
   function step(dt: number): void {
     clock += dt;
-    if (interactive) pickOpening();
+    if (interactive && !touchOpen) pickOpening();
 
     // Openings ease towards their target; the smoothstep on top gives the ease-in/out.
     const openBlend = 1 - Math.exp(-OPEN_RATE * dt);
@@ -498,8 +517,12 @@ export async function mountTower(opts: TowerOptions): Promise<TowerHandle> {
       if (Math.abs(target - open[k]) < 0.0005) open[k] = target;
     }
 
-    // Constant, calm rotation: hovering an opening does not stop it.
-    tower.rotation.y += BASE_SPEED * dt;
+    // Constant, calm rotation: hovering an opening does not stop it. A tapped opening does (touch has no
+    // "leave" to resume from), and the rotation eases back in when it closes instead of jumping.
+    const spinTarget = touchOpen ? 0 : 1;
+    spin += (spinTarget - spin) * (1 - Math.exp(-SPIN_RATE * dt));
+    if (Math.abs(spinTarget - spin) < 0.001) spin = spinTarget;
+    tower.rotation.y += BASE_SPEED * dt * spin;
 
     // Discs above an opening move up, discs below it move down, each by half of the extra height.
     const half = ((OPEN_FACTOR - 1) * GAP_HEIGHT) / 2;
@@ -545,7 +568,7 @@ export async function mountTower(opts: TowerOptions): Promise<TowerHandle> {
   function tick(now: number): void {
     raf = requestAnimationFrame(tick);
     const elapsed = now - last;
-    if (elapsed < MIN_FRAME_MS) return;
+    if (elapsed < minFrameMs) return;
     last = now;
     step(Math.min(elapsed / 1000, 0.1));
     renderer.render(scene, camera);
@@ -557,9 +580,10 @@ export async function mountTower(opts: TowerOptions): Promise<TowerHandle> {
 
   let onScreen = true;
   let tabVisible = !document.hidden;
+  let menuOpen = false; // the full-screen menu (phones) covers the hero: nothing to draw
 
   function syncLoop(): void {
-    const shouldRun = armed && onScreen && tabVisible && !disposed && !lost;
+    const shouldRun = armed && onScreen && tabVisible && !menuOpen && !disposed && !lost;
     if (shouldRun && !running) {
       running = true;
       last = performance.now();
@@ -569,6 +593,7 @@ export async function mountTower(opts: TowerOptions): Promise<TowerHandle> {
       cancelAnimationFrame(raf);
       // Leave nothing half-open behind: the next time it is seen, it starts calm.
       open.fill(0);
+      touchOpen = false;
       setHover(-1);
     }
   }
@@ -585,12 +610,22 @@ export async function mountTower(opts: TowerOptions): Promise<TowerHandle> {
   };
   document.addEventListener("visibilitychange", onVisibility);
 
+  // The menu overlay marks <html data-menu-open> while it is open (only the compact version reacts to it).
+  const menuObserver = new MutationObserver(() => {
+    menuOpen = document.documentElement.hasAttribute("data-menu-open");
+    syncLoop();
+  });
+  if (compact) {
+    menuOpen = document.documentElement.hasAttribute("data-menu-open");
+    menuObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-menu-open"] });
+  }
+
   // --- size ---------------------------------------------------------------------------------
   function resize(): void {
     const w = host.clientWidth;
     const h = host.clientHeight;
     if (!w || !h) return;
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); // never more than 2x, on any screen
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
@@ -640,6 +675,68 @@ export async function mountTower(opts: TowerOptions): Promise<TowerHandle> {
   syncInteractive();
   noHover.addEventListener("change", syncInteractive);
 
+  // --- touch (compact version) ----------------------------------------------------------------
+  // The canvas never takes touches (pointer-events: none), so the page scrolls under the finger as usual and
+  // a drag that starts on the tower scrolls it. Taps are read from the window instead: a touch that barely
+  // moves and ends quickly is a tap; the browser cancels the pointer when it takes over for scrolling.
+  // Instead of exact hit volumes (an opening is ~35px tall on a phone) the tower's height is split into six
+  // bands, one per opening, and the band nearest to the tap wins.
+  let tap: { id: number; x: number; y: number; t: number; moved: boolean } | null = null;
+
+  const onTapDown = (e: PointerEvent) => {
+    if (e.pointerType === "mouse" || !e.isPrimary) return;
+    tap = { id: e.pointerId, x: e.clientX, y: e.clientY, t: performance.now(), moved: false };
+  };
+  const onTapMove = (e: PointerEvent) => {
+    if (!tap || e.pointerId !== tap.id) return;
+    if (Math.hypot(e.clientX - tap.x, e.clientY - tap.y) > TAP_SLOP) tap.moved = true;
+  };
+  const onTapCancel = () => {
+    tap = null;
+  };
+
+  /** The opening whose band holds a tap at (x, y), or -1 when the tap is not on the tower. */
+  function bandAt(x: number, y: number): number {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width <= 0 || x < rect.left || x > rect.right) return -1;
+    const toPx = (wy: number, z: number): number => {
+      probe.set(0, wy, z).project(camera);
+      return rect.top + (-probe.y * 0.5 + 0.5) * rect.height;
+    };
+    // Vertical extent of the tower on screen (the far edge of the top disc to the near edge of the bottom one),
+    // split into six equal bands: the lowest band is the lowest opening.
+    const top = toPx(TOWER_HEIGHT / 2, -discRadius(DISC_COUNT - 1));
+    const bottom = toPx(-TOWER_HEIGHT / 2, discRadius(0));
+    const pad = 8;
+    if (y < top - pad || y > bottom + pad) return -1;
+    const fromBottom = (bottom - y) / (bottom - top);
+    const best = Math.min(GAP_COUNT - 1, Math.max(0, Math.floor(fromBottom * GAP_COUNT)));
+    return best;
+  }
+
+  const onTapUp = (e: PointerEvent) => {
+    if (!tap || e.pointerId !== tap.id) return;
+    const done = tap;
+    tap = null;
+    if (done.moved || performance.now() - done.t > TAP_MS || !running) return;
+    const gap = bandAt(e.clientX, e.clientY);
+    if (gap < 0 || gap === hovered) {
+      // Outside the tower, or the same opening again: close.
+      touchOpen = false;
+      setHover(-1);
+    } else {
+      touchOpen = true;
+      setHover(gap);
+    }
+  };
+
+  if (compact) {
+    window.addEventListener("pointerdown", onTapDown, { passive: true });
+    window.addEventListener("pointermove", onTapMove, { passive: true });
+    window.addEventListener("pointerup", onTapUp, { passive: true });
+    window.addEventListener("pointercancel", onTapCancel, { passive: true });
+  }
+
   // --- context loss -------------------------------------------------------------------------
   const onContextLost = (e: Event) => {
     e.preventDefault();
@@ -658,6 +755,11 @@ export async function mountTower(opts: TowerOptions): Promise<TowerHandle> {
     intersection.disconnect();
     resizeObserver.disconnect();
     themeObserver.disconnect();
+    menuObserver.disconnect();
+    window.removeEventListener("pointerdown", onTapDown);
+    window.removeEventListener("pointermove", onTapMove);
+    window.removeEventListener("pointerup", onTapUp);
+    window.removeEventListener("pointercancel", onTapCancel);
     document.removeEventListener("visibilitychange", onVisibility);
     noHover.removeEventListener("change", syncInteractive);
     window.removeEventListener("pointermove", onPointerMove);

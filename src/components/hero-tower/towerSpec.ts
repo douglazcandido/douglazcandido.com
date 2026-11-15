@@ -44,6 +44,14 @@ export const FRAME_HEIGHT = 3.1;
 export const STAGE_ASPECT = 0.68;
 
 /**
+ * Compact stage (phones and tablets, below 900px): a box 1 : 1.27 and a tighter camera frame, so the
+ * tower fills the box instead of floating in the room the desktop layout leaves for the opening labels.
+ */
+export const COMPACT_STAGE_ASPECT = 1 / 1.27;
+// 2.43 units of it is the tower at rest; an open opening grows the tower by 0.35 (OPEN_FACTOR), which has to fit too.
+export const COMPACT_FRAME_HEIGHT = 2.8;
+
+/**
  * The stage is a bit wider than the tower; shifting it right by this fraction of its own width puts
  * the tower's right edge on the page's right margin. The CSS then pulls it back by --tower-inset.
  */

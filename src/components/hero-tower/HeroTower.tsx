@@ -4,8 +4,22 @@ import { useI18n } from "../../i18n/context";
 import TowerIllustration from "./TowerIllustration";
 import { GROUP_BY_GAP, STAGE_ASPECT, STAGE_BLEED } from "./towerSpec";
 
-/** Below this width the tower is not rendered at all (and Three.js is never downloaded). */
-const MIN_WIDTH_QUERY = "(min-width: 900px)";
+/** From this width the tower sits in the hero's right margin; below it the compact version is used. */
+const WIDE_QUERY = "(min-width: 900px)";
+
+/**
+ * The compact (phone / tablet) tower always shows the static illustration, but only becomes 3D on a
+ * device that can afford it: WebGL, no data saver, and (when the browser says) more than 2 GB of
+ * memory and more than 3 cores. Reduced motion is checked by the caller.
+ */
+function canRunCompact3d(): boolean {
+  if (!("WebGL2RenderingContext" in window)) return false;
+  const nav = navigator as Navigator & { connection?: { saveData?: boolean }; deviceMemory?: number };
+  if (nav.connection?.saveData) return false;
+  if (nav.deviceMemory !== undefined && nav.deviceMemory <= 2) return false;
+  if (navigator.hardwareConcurrency !== undefined && navigator.hardwareConcurrency <= 3) return false;
+  return true;
+}
 
 /** Slightly longer than the label's opacity transition in index.css (0.3s), so the fade-out is never cut short. */
 const LABEL_FADE_MS = 400;
@@ -42,15 +56,16 @@ function whenIdle(run: () => void): () => void {
 }
 
 /**
- * Decorative 3D tower on the right side of the hero. Renders nothing on narrow screens; with
- * reduced motion, or when WebGL is unavailable, it stays a static illustration.
+ * Decorative 3D tower in the hero: in the right margin from 900px up, a compact one next to the name
+ * below that. With reduced motion, or when WebGL (or the device) is not up to it, it stays a static
+ * illustration and Three.js is never downloaded.
  */
 export default function HeroTower() {
-  const wide = useMediaQuery(MIN_WIDTH_QUERY);
-  return wide ? <Tower /> : null;
+  const wide = useMediaQuery(WIDE_QUERY);
+  return <Tower key={wide ? "wide" : "compact"} compact={!wide} />;
 }
 
-function Tower() {
+function Tower({ compact }: { compact: boolean }) {
   const { t } = useI18n();
   const reducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
 
@@ -90,6 +105,7 @@ function Tower() {
     const stage = stageRef.current;
     const hero = rootRef.current?.closest("header");
     if (!stage || !hero || reducedMotion || !("WebGL2RenderingContext" in window)) return;
+    if (compact && !canRunCompact3d()) return;
 
     const abort = new AbortController();
     let dispose: (() => void) | undefined;
@@ -111,6 +127,7 @@ function Tower() {
             onReady: () => setLive(true),
             onLost: () => setLive(false),
             signal: abort.signal,
+            compact,
           });
           dispose = handle.dispose;
           if (abort.signal.aborted) handle.dispose();
@@ -127,12 +144,16 @@ function Tower() {
       setLive(false);
       handleHover(null);
     };
-  }, [reducedMotion, handleHover]);
+  }, [reducedMotion, handleHover, compact]);
 
   return (
-    <div ref={rootRef} className="hero-tower" data-live={live} aria-hidden="true">
-      <div ref={stageRef} className="hero-tower__stage" style={{ aspectRatio: STAGE_ASPECT, "--tower-bleed": `${STAGE_BLEED * 100}%` } as React.CSSProperties}>
-        <TowerIllustration className="hero-tower__svg" />
+    <div ref={rootRef} className={compact ? "hero-tower hero-tower--compact" : "hero-tower"} data-live={live} aria-hidden="true">
+      <div
+        ref={stageRef}
+        className="hero-tower__stage"
+        style={compact ? undefined : ({ aspectRatio: STAGE_ASPECT, "--tower-bleed": `${STAGE_BLEED * 100}%` } as React.CSSProperties)}
+      >
+        <TowerIllustration className="hero-tower__svg" compact={compact} />
         <div ref={labelRef} className="hero-tower__label" data-on={shown} hidden={!present} aria-hidden="true">
           <span className="rounded-full bg-accent/10 px-3 py-1 text-[12px] leading-none tracking-[0.12em] text-accent uppercase">
             {present ? t.skills.groups[GROUP_BY_GAP[hover.gap]] : ""}

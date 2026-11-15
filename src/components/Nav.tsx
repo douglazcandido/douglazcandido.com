@@ -42,8 +42,11 @@ export default function Nav() {
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
+    // Lets the hero tower stop drawing while the menu covers it.
+    document.documentElement.toggleAttribute("data-menu-open", open);
     return () => {
       document.body.style.overflow = "";
+      document.documentElement.removeAttribute("data-menu-open");
     };
   }, [open]);
 
@@ -186,7 +189,7 @@ export default function Nav() {
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
               aria-controls="menu-overlay"
-              className="relative text-[13px] font-medium tracking-[0.08em] uppercase before:absolute before:-inset-x-2 before:-inset-y-6 max-md:inline-flex max-md:min-h-11 max-md:min-w-11 max-md:items-center max-md:justify-center lg:hidden"
+              className="relative text-[13px] font-medium tracking-[0.08em] uppercase before:absolute before:-inset-x-2 before:-inset-y-6 max-md:before:hidden max-md:inline-flex max-md:min-h-11 max-md:min-w-11 max-md:items-center max-md:justify-center lg:hidden"
             >
               {open ? t.nav.close : t.nav.menu}
             </button>

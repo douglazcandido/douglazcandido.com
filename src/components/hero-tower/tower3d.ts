@@ -66,7 +66,7 @@ export interface TowerOptions {
   signal: AbortSignal;
   /**
    * Phone / tablet version (below 900px): a tighter camera frame, no faces nobody can see, a lower frame
-   * rate cap, and touch: a short tap opens the nearest opening and pauses the rotation, see "touch" below.
+   * rate cap, and touch: a short tap opens the nearest opening (the tower keeps turning), see "touch" below.
    */
   compact?: boolean;
 }
@@ -96,8 +96,6 @@ const HIT_PAD = DISC_HEIGHT * 0.25;
 const MIN_FRAME_MS = 12;
 /** The compact version is capped lower: it is small, and phones should not run hot for it. */
 const COMPACT_MIN_FRAME_MS = 20;
-/** How quickly the rotation stops and picks up again around a touch-opened opening (1/s). */
-const SPIN_RATE = 2.5;
 /** A touch counts as a tap when it moves less than this (px) and ends within this time (ms). */
 const TAP_SLOP = 10;
 const TAP_MS = 600;
@@ -472,7 +470,6 @@ export async function mountTower(opts: TowerOptions): Promise<TowerHandle> {
   let hovered = -1;
   let labelGap = -1;
   let clock = 0;
-  let spin = 1; // rotation speed factor: 1 turning, 0 paused (only a touch-opened opening pauses it)
   let touchOpen = false; // the open opening was chosen by a tap, so the pointer logic leaves it alone
   let disposed = false;
   let lost = false;
@@ -517,12 +514,8 @@ export async function mountTower(opts: TowerOptions): Promise<TowerHandle> {
       if (Math.abs(target - open[k]) < 0.0005) open[k] = target;
     }
 
-    // Constant, calm rotation: hovering an opening does not stop it. A tapped opening does (touch has no
-    // "leave" to resume from), and the rotation eases back in when it closes instead of jumping.
-    const spinTarget = touchOpen ? 0 : 1;
-    spin += (spinTarget - spin) * (1 - Math.exp(-SPIN_RATE * dt));
-    if (Math.abs(spinTarget - spin) < 0.001) spin = spinTarget;
-    tower.rotation.y += BASE_SPEED * dt * spin;
+    // Constant, calm rotation: neither hovering nor tapping an opening stops it.
+    tower.rotation.y += BASE_SPEED * dt;
 
     // Discs above an opening move up, discs below it move down, each by half of the extra height.
     const half = ((OPEN_FACTOR - 1) * GAP_HEIGHT) / 2;

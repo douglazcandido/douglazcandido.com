@@ -463,6 +463,25 @@ html.theme-fade *::after {
   display: none;
 }
 
+/* Phones only (below 768px; tablets keep the box above): a little smaller, and pushed right so the tower's
+   wide top (about 0.12 of the box on each side is empty stage) ends at the page margin instead of 18px short
+   of it. The box then sticks out past the margin by that much, and the label is pulled back to the margin.
+   The clearance from the name is recomputed for the shift: .589 = .709 - .12. */
+@media (max-width: 767.98px) {
+  .hero-tower--compact {
+    --cap-name: calc((100vw - 268px) / 0.589);
+    --tw: max(72px, min(38vw, 168px, var(--cap-name), var(--cap-top)));
+    right: calc(var(--tw) * -0.12 - 4px);
+  }
+
+  /* On the narrowest screens the tower is short, so the label would land on the first line of the name:
+     lift it to stay 6px above the name (the name starts 112px - 1.161 * width above the box's top edge). */
+  .hero-tower--compact .hero-tower__label {
+    top: min(-22px, calc(1.161 * var(--tw) - 138px));
+    right: calc(var(--tw) * 0.12 + 4px);
+  }
+}
+
 /* ------------------------------------------------------------------ */
 /* Card: static, no outline and no hover effect (cards are not buttons) */
 /* ------------------------------------------------------------------ */

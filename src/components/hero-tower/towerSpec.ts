@@ -91,3 +91,37 @@ export function rimProfile(radius: number): Array<[number, number]> {
   }
   return out;
 }
+
+/**
+ * Compact layout (below 900px): the tower sits in the free column to the right of the name.
+ * The widest part of the tower (the top disc) spans this fraction of the stage's width, so the stage has an
+ * empty margin of COMPACT_STAGE_INSET of its width on each side of the silhouette. The 3D camera is a
+ * perspective one, which magnifies the top disc (it is nearer to the camera than the center of the frame).
+ */
+const TOP_DISC_Y = discCenterY(DISC_COUNT - 1) + DISC_HEIGHT / 2;
+const PERSPECTIVE = CAMERA_DISTANCE / (CAMERA_DISTANCE - TOP_DISC_Y * Math.sin((CAMERA_ELEVATION_DEG * Math.PI) / 180));
+export const COMPACT_TOWER_SPAN = (2 * RADIUS_TOP * PERSPECTIVE) / (COMPACT_FRAME_HEIGHT * COMPACT_STAGE_ASPECT);
+export const COMPACT_STAGE_INSET = (1 - COMPACT_TOWER_SPAN) / 2;
+
+/** Least air (px) between the silhouette of the compact tower and the letters of the name. */
+export const COMPACT_NAME_GAP = 16;
+/** Extra px kept on each side of the silhouette, for the antialiased edge and sub-pixel rounding of the render. */
+export const COMPACT_EDGE_SLACK = 1;
+
+/** Below this stage width (px) the compact tower is not rendered at all (no SVG, no 3D, no Three.js download). */
+export const COMPACT_MIN_WIDTH = 110;
+
+/**
+ * Widest compact stage (px) for a free column `room` px wide (from the end of the longest line of the name to
+ * the page margin; `pad` is the page margin, the most the stage may hang into it). The stage never overlaps
+ * the name (its left edge stays inside the column), the silhouette keeps COMPACT_NAME_GAP from the name and does
+ * not go past the page margin (the stage's empty margin may hang into it, but never out of the screen).
+ * With i = COMPACT_STAGE_INSET, s = COMPACT_EDGE_SLACK and W the width:
+ * W <= room + min(i W - s, pad) - max(0, gap + s - i W), which is the smallest of four closed forms.
+ */
+export function compactStageWidth(room: number, pad: number): number {
+  const i = COMPACT_STAGE_INSET;
+  const g = COMPACT_NAME_GAP + COMPACT_EDGE_SLACK;
+  const s = COMPACT_EDGE_SLACK;
+  return Math.min((room - s) / (1 - i), room + pad, (room - g - s) / (1 - 2 * i), (room + pad - g) / (1 - i));
+}

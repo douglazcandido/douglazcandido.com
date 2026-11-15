@@ -413,26 +413,55 @@ html.theme-fade *::after {
   background: var(--color-accent);
 }
 
-/* Compact tower (below 900px, phones and tablets): a box 1 : 1.27 on the right margin, beside the name,
-   its foot level with the bottom of the name ("Candido") and its wide top rising above the name into the
-   empty space under the header. The summary stays below both; nothing in the layout moves because the
-   box is absolutely positioned.
-   The box is 43vw wide (80px to 190px). It gets narrower on small screens so the tower keeps a few px
-   from the letters, and never so tall that its top (or the label above it) reaches the header.
-   The numbers: the name ends 222px from the left up to 545px wide, its two lines are 1.98 font sizes
-   tall; the tower's foot is 0.086 of the box height above the box's bottom edge; at the height of the
-   first line the tower is (0.46 * w + 43px) / 2.2 wide on each side of its center. */
+/* Hero below 900px (phones and tablets): the content wrapper is a grid. The name takes its own width (the
+   longest of its two lines) in the first column and the tower, when there is room for it, the rest of the row
+   in the second one, so the tower's box can never overlap the name; the summary spans both columns below.
+   Nothing here moves the text: the name keeps its size and place, and the tower's cell adds no height. */
+@media (max-width: 899.98px) {
+  .hero-stage {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+  }
+
+  .hero-stage > h1 {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .hero-stage > .hero-summary {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+}
+
+/* The tower's cell: the free column to the right of the name, as tall as the name. Only a positioning
+   context for the box (HeroTower.tsx does not render it when the column is too narrow); it takes no touch.
+   --cell is its width, --room the widest box that fits (compactStageWidth), --gap the least air between the
+   silhouette and the name, --inset the empty margin of the box around the silhouette, as a fraction of its width. */
+.hero-tower-cell {
+  grid-column: 2;
+  grid-row: 1;
+  position: relative;
+  pointer-events: none;
+}
+
+/* Compact tower: a box 1 : 1.27 inside the cell, its foot level with the bottom of the name ("Candido") and
+   its wide top rising above the name into the empty space under the header. The box is absolutely positioned,
+   so it does not change the height of the hero, and it stays within the cell, which holds no text.
+   The numbers: the tower's foot is 0.109 of the box width above the box's bottom edge (minus 2px, the old
+   anchor), which is how far the box hangs below the name: less than the gap to the summary (24px or more). */
 .hero-tower--compact {
-  /* Same expressions as in Hero.tsx: the name's font size, and where the name starts. */
-  --fs: clamp(60px, 11vw, 196px);
   --pad-top: clamp(140px, 32vh, 320px);
-  /* Widest box that keeps ~6px between the tower and the first line of the name. */
-  --cap-name: calc((100vw - 272px) / 0.709);
   /* Widest box whose top (and the label above it) still clears the header. */
   --cap-top: calc((var(--pad-top) + 26px) / 1.161);
-  --tw: max(80px, min(43vw, 190px, var(--cap-name), var(--cap-top)));
-  /* Bottom edge of the box = bottom of the name + the empty foot margin of the stage - 2px. */
-  top: calc(1.98 * var(--fs) - 2px - var(--tw) * 1.161);
+  /* Tablets: up to 43vw / 190px, against the page margin. */
+  --tw: min(var(--room), 43vw, 190px, var(--cap-top));
+  /* Distance of the box from the cell's right edge (the page margin); negative = hanging into the margin. */
+  --s: 0px;
+  position: absolute;
+  top: auto;
+  right: var(--s);
+  bottom: calc(var(--tw) * -0.109 + 2px);
   width: var(--tw);
   height: calc(var(--tw) * 1.27);
 }
@@ -450,10 +479,12 @@ html.theme-fade *::after {
   touch-action: pan-y;
 }
 
-/* The label of the open opening: a small pill just above the tower, on the right margin. */
+/* The label of the open opening: a small pill just above the tower, aligned to the right page margin (the
+   cell's right edge, whatever the box's shift). The box rises above the name by at least 15px, so the pill
+   (which ends where the box starts) never covers the name. */
 .hero-tower--compact .hero-tower__label {
   top: -22px;
-  right: 0;
+  right: calc(var(--s) * -1);
   left: auto;
   padding-right: 0;
   translate: none;
@@ -463,27 +494,16 @@ html.theme-fade *::after {
   display: none;
 }
 
-/* Phones only (below 768px; tablets keep the box above): a little smaller, and centered in the space
-   between the end of the name and the right edge of the screen, so the tower is the same distance from
-   both. "Tower" here is its widest part, the top disc: 0.391 of the box on each side of its center
-   (the stage has empty room around it). The name's ink ends 3.49 font sizes after the page margin (a bit
-   less than that once the name grows past 60px, hence the correction).
-   The box is shifted so its center sits halfway: --shift is the `right` offset that does it. */
+/* Phones (below 768px): a little smaller, and centered in the free column so the silhouette is the same
+   distance from the name and from the page margin, but never closer to the name than --gap, and never out
+   of the screen (when the box fills the column, its empty margin hangs into the page margin). */
 @media (max-width: 767.98px) {
   .hero-tower--compact {
-    /* Widest box that leaves at least 14px on each side of the tower. */
-    --cap-name: calc(((100vw - var(--page-pad) - (3.49 * var(--fs) - 0.385 * (var(--fs) - 60px))) / 2 - 14px) / 0.391);
-    --tw: max(72px, min(38vw, 168px, var(--cap-name), var(--cap-top)));
-    --shift: calc((100vw - var(--page-pad) - (3.49 * var(--fs) - 0.385 * (var(--fs) - 60px))) / 2 - var(--page-pad) - var(--tw) / 2);
-    right: var(--shift);
-  }
-
-  /* The label keeps to the page margin, whatever the shift. On the narrowest screens the tower is short,
-     so the label would land on the first line of the name: lift it to stay 6px above the name (the name
-     starts 112px - 1.161 * width above the box's top edge). */
-  .hero-tower--compact .hero-tower__label {
-    top: min(-22px, calc(1.161 * var(--tw) - 138px));
-    right: calc(var(--shift) * -1);
+    --tw: min(var(--room), 38vw, 168px, var(--cap-top));
+    --s: max(
+      var(--page-pad) * -1,
+      min((var(--cell) - var(--tw)) / 2, var(--cell) - var(--tw) - max(0px, var(--gap) - var(--tw) * var(--inset)))
+    );
   }
 }
 

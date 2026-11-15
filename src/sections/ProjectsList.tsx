@@ -112,7 +112,7 @@ function ProjectDetail({ project, active }: { project: Project; active: boolean 
  * On desktop, hovering a row (or focusing it) opens it; the panel keeps the last one
  * until another is hovered. On narrow or touch screens each row opens in place on click.
  */
-export default function ProjectsList() {
+export default function ProjectsList({ id }: { id?: string }) {
   const { t } = useI18n();
   const items = t.projects.items;
   const [current, setCurrent] = useState(0);
@@ -137,7 +137,7 @@ export default function ProjectsList() {
   };
 
   return (
-    <Section id="projetos" title={t.projects.title}>
+    <Section id={id} title={t.projects.title}>
       <div className="grid grid-cols-1 gap-x-[clamp(32px,5vw,88px)] lg:grid-cols-12">
         <ul
           className="m-0 list-none border-t border-divider p-0 lg:col-span-5 lg:self-start"

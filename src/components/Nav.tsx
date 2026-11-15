@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { FiHome } from "react-icons/fi";
+import { HomeIcon } from "./icons";
 import ThemeToggle from "./ThemeToggle";
 import LanguageSwitcher from "./LanguageSwitcher";
 import MenuPreferences from "./MenuPreferences";
@@ -145,7 +145,7 @@ export default function Nav() {
                 active === "inicio" ? "text-accent" : "text-neutral-500 hover:text-neutral-100"
               }`}
             >
-              <FiHome aria-hidden="true" className="h-[15px] w-[15px]" strokeWidth={1.5} />
+              <HomeIcon aria-hidden="true" className="h-[15px] w-[15px]" strokeWidth={1.5} />
               <span
                 aria-hidden="true"
                 className={`absolute inset-x-1 bottom-0 h-[2px] origin-left bg-accent transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${

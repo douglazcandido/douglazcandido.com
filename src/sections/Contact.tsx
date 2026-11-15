@@ -11,12 +11,12 @@ const socials = [
   { href: profile.linkedin, label: "LinkedIn", handle: "in/douglazcandido", Icon: FaLinkedin },
 ];
 
-export default function Contact() {
+export default function Contact({ id }: { id?: string }) {
   const { t } = useI18n();
   const { ref, isInView } = useInView<HTMLDivElement>();
 
   return (
-    <section id="contato" className="screen relative overflow-hidden pt-[clamp(56px,8vw,112px)] pb-[clamp(24px,3vw,40px)]">
+    <section id={id} className="screen relative overflow-hidden pt-[clamp(56px,8vw,112px)] pb-[clamp(24px,3vw,40px)]">
       <SectionRule />
       <div className="px-page">
         <div ref={ref} className={isInView ? "mask-visible" : ""}>

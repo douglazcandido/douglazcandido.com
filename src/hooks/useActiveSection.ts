@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
+import { sectionsVersion, subscribeSections } from "../lib/lazySections";
 
 /** Id of the section currently crossing the middle of the viewport. */
 export function useActiveSection(ids: readonly string[]): string {
   const [active, setActive] = useState(ids[0] ?? "");
+  // Sections that load lazily swap their placeholder for the real element: observe the new one.
+  const version = useSyncExternalStore(subscribeSections, sectionsVersion, () => 0);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -18,7 +21,7 @@ export function useActiveSection(ids: readonly string[]): string {
       if (el) observer.observe(el);
     }
     return () => observer.disconnect();
-  }, [ids]);
+  }, [ids, version]);
 
   return active;
 }

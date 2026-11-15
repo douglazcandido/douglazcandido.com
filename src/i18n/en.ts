@@ -30,6 +30,7 @@ export const en: Dict = {
     home: "home",
     menu: "menu",
     close: "close",
+    theme: "Theme",
   },
   hero: {
     summary:
@@ -83,6 +84,10 @@ export const en: Dict = {
     ],
     professionalLabel: "Professional",
     academicLabel: "Academic",
+    coursesLabel: "Courses",
+    seeMore: "See more",
+    seeLess: "See less",
+    tabsLabel: "Career sections",
     academic: [
       {
         period: "2020 - 2021",

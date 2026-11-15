@@ -32,6 +32,7 @@ export const pt = {
     home: "início",
     menu: "menu",
     close: "fechar",
+    theme: "Tema",
   },
   hero: {
     summary:
@@ -85,6 +86,10 @@ export const pt = {
     ],
     professionalLabel: "Profissional",
     academicLabel: "Acadêmico",
+    coursesLabel: "Cursos",
+    seeMore: "Ver mais",
+    seeLess: "Ver menos",
+    tabsLabel: "Seções da carreira",
     academic: [
       {
         period: "2020 - 2021",

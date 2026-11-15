@@ -1,6 +1,8 @@
 import {
   CAMERA_ELEVATION_DEG,
   COLUMN_RADIUS,
+  COMPACT_FRAME_HEIGHT,
+  COMPACT_STAGE_ASPECT,
   DISC_COUNT,
   DISC_HEIGHT,
   FRAME_HEIGHT,
@@ -23,18 +25,14 @@ import {
  */
 
 const VIEW_H = 1000;
-const VIEW_W = VIEW_H * STAGE_ASPECT;
-const SCALE = VIEW_H / FRAME_HEIGHT;
-const CX = VIEW_W / 2;
 const SIN_E = Math.sin((CAMERA_ELEVATION_DEG * Math.PI) / 180);
 const COS_E = Math.cos((CAMERA_ELEVATION_DEG * Math.PI) / 180);
 
 const f = (n: number) => n.toFixed(1);
-const sy = (y: number) => VIEW_H / 2 - y * COS_E * SCALE;
 
-/** Closed ellipse (centered at CX, cy) as a path. */
-function ellipse(cy: number, rx: number, ry: number): string {
-  return `M${f(CX - rx)} ${f(cy)}A${f(rx)} ${f(ry)} 0 1 0 ${f(CX + rx)} ${f(cy)}A${f(rx)} ${f(ry)} 0 1 0 ${f(CX - rx)} ${f(cy)}Z`;
+/** Closed ellipse (centered at cx, cy) as a path. */
+function ellipse(cx: number, cy: number, rx: number, ry: number): string {
+  return `M${f(cx - rx)} ${f(cy)}A${f(rx)} ${f(ry)} 0 1 0 ${f(cx + rx)} ${f(cy)}A${f(rx)} ${f(ry)} 0 1 0 ${f(cx - rx)} ${f(cy)}Z`;
 }
 
 interface DiscShape {
@@ -46,49 +44,70 @@ interface DiscShape {
   notches: string;
 }
 
-function disc(i: number): DiscShape {
-  const radius = discRadius(i);
-  const yTop = sy(discCenterY(i) + DISC_HEIGHT / 2);
-  const yBottom = sy(discCenterY(i) - DISC_HEIGHT / 2);
-  const profile = rimProfile(radius);
-  const span = (Math.PI * 2) / TEETH;
-
-  // A point of the rim (angle a, radius rr) at the height of a face, seen from the camera.
-  const at = (a: number, rr: number, y: number): string => `${f(CX + rr * SCALE * Math.cos(a))} ${f(y + rr * SCALE * SIN_E * Math.sin(a))}`;
-
-  // Front half only (angles 0..PI), closed off at both ends on the floor of a notch.
-  const root = radius - TOOTH_DEPTH;
-  const front: Array<[number, number]> = [[0, root], ...profile.filter(([a]) => Math.sin(a) > 0), [Math.PI, root]];
-  const topFront = front.map(([a, rr]) => at(a, rr, yTop));
-  const bottomFront = front.map(([a, rr]) => at(a, rr, yBottom)).reverse();
-  const side = `M${topFront.join("L")}L${bottomFront.join("L")}Z`;
-
-  const rim = `M${profile.map(([a, rr]) => at(a, rr, yTop)).join("L")}Z`;
-  const hole = ellipse(yTop, HOLE_RADIUS * SCALE, HOLE_RADIUS * SCALE * SIN_E);
-  const top = rim + hole;
-
-  let notches = "";
-  for (let j = 0; j < TEETH; j++) {
-    // The notch floor is where the rim dips between two teeth (same fractions as rimProfile).
-    const a1 = (j + 0.86) * span;
-    const a2 = (j + 1.14) * span;
-    if (Math.sin(a1) <= 0.05 || Math.sin(a2) <= 0.05) continue; // back half: hidden
-    notches += `M${at(a1, root, yTop)}L${at(a2, root, yTop)}L${at(a2, root, yBottom)}L${at(a1, root, yBottom)}Z`;
-  }
-  return { side, top, notches };
+interface Drawing {
+  viewW: number;
+  shapes: DiscShape[];
+  column: { x: number; w: number; shadeX: number; y: number; h: number };
 }
 
-const shapes: DiscShape[] = Array.from({ length: DISC_COUNT }, (_, i) => disc(i));
+/** Draws the tower for a camera frame of `frameHeight` world units and a stage `aspect` (width / height). */
+function draw(frameHeight: number, aspect: number): Drawing {
+  const viewW = VIEW_H * aspect;
+  const scale = VIEW_H / frameHeight;
+  const cx = viewW / 2;
+  const sy = (y: number) => VIEW_H / 2 - y * COS_E * scale;
 
-const columnX = COLUMN_RADIUS * SCALE;
-const columnTop = sy(TOWER_HEIGHT / 2);
-const columnBottom = sy(-TOWER_HEIGHT / 2);
+  function disc(i: number): DiscShape {
+    const radius = discRadius(i);
+    const yTop = sy(discCenterY(i) + DISC_HEIGHT / 2);
+    const yBottom = sy(discCenterY(i) - DISC_HEIGHT / 2);
+    const profile = rimProfile(radius);
+    const span = (Math.PI * 2) / TEETH;
 
-export default function TowerIllustration({ className = "" }: { className?: string }) {
+    // A point of the rim (angle a, radius rr) at the height of a face, seen from the camera.
+    const at = (a: number, rr: number, y: number): string => `${f(cx + rr * scale * Math.cos(a))} ${f(y + rr * scale * SIN_E * Math.sin(a))}`;
+
+    // Front half only (angles 0..PI), closed off at both ends on the floor of a notch.
+    const root = radius - TOOTH_DEPTH;
+    const front: Array<[number, number]> = [[0, root], ...profile.filter(([a]) => Math.sin(a) > 0), [Math.PI, root]];
+    const topFront = front.map(([a, rr]) => at(a, rr, yTop));
+    const bottomFront = front.map(([a, rr]) => at(a, rr, yBottom)).reverse();
+    const side = `M${topFront.join("L")}L${bottomFront.join("L")}Z`;
+
+    const rim = `M${profile.map(([a, rr]) => at(a, rr, yTop)).join("L")}Z`;
+    const hole = ellipse(cx, yTop, HOLE_RADIUS * scale, HOLE_RADIUS * scale * SIN_E);
+    const top = rim + hole;
+
+    let notches = "";
+    for (let j = 0; j < TEETH; j++) {
+      // The notch floor is where the rim dips between two teeth (same fractions as rimProfile).
+      const a1 = (j + 0.86) * span;
+      const a2 = (j + 1.14) * span;
+      if (Math.sin(a1) <= 0.05 || Math.sin(a2) <= 0.05) continue; // back half: hidden
+      notches += `M${at(a1, root, yTop)}L${at(a2, root, yTop)}L${at(a2, root, yBottom)}L${at(a1, root, yBottom)}Z`;
+    }
+    return { side, top, notches };
+  }
+
+  const columnX = COLUMN_RADIUS * scale;
+  const columnTop = sy(TOWER_HEIGHT / 2);
+  const columnBottom = sy(-TOWER_HEIGHT / 2);
+  return {
+    viewW,
+    shapes: Array.from({ length: DISC_COUNT }, (_, i) => disc(i)),
+    column: { x: cx - columnX, w: columnX * 2, shadeX: cx, y: columnTop, h: columnBottom - columnTop },
+  };
+}
+
+const wideDrawing = draw(FRAME_HEIGHT, STAGE_ASPECT);
+const compactDrawing = draw(COMPACT_FRAME_HEIGHT, COMPACT_STAGE_ASPECT);
+
+export default function TowerIllustration({ className = "", compact = false }: { className?: string; compact?: boolean }) {
+  const { viewW, shapes, column } = compact ? compactDrawing : wideDrawing;
   return (
     <svg
       className={className}
-      viewBox={`0 0 ${f(VIEW_W)} ${VIEW_H}`}
+      viewBox={`0 0 ${f(viewW)} ${VIEW_H}`}
       aria-hidden="true"
       focusable="false"
       preserveAspectRatio="xMidYMid meet"
@@ -103,8 +122,8 @@ export default function TowerIllustration({ className = "" }: { className?: stri
       </defs>
       <g>
         {/* Column first, so the discs slide over it. */}
-        <rect className="tower-svg__column" x={f(CX - columnX)} y={f(columnTop)} width={f(columnX * 2)} height={f(columnBottom - columnTop)} />
-        <rect className="tower-svg__column-shade" x={f(CX)} y={f(columnTop)} width={f(columnX)} height={f(columnBottom - columnTop)} />
+        <rect className="tower-svg__column" x={f(column.x)} y={f(column.y)} width={f(column.w)} height={f(column.h)} />
+        <rect className="tower-svg__column-shade" x={f(column.shadeX)} y={f(column.y)} width={f(column.w / 2)} height={f(column.h)} />
         {shapes.map((s, i) => (
           <g key={i}>
             <path fill="url(#tower-wall)" d={s.side} />

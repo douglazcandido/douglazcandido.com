@@ -33,10 +33,10 @@ export default function Contact() {
         <Reveal className="mt-[clamp(28px,4vw,56px)] flex flex-wrap items-center gap-x-6 gap-y-4">
           <a
             href={`mailto:${profile.email}`}
-            className="group relative font-display text-[clamp(20px,3.2vw,52px)] leading-none font-medium tracking-[-0.03em] break-all"
+            className="group relative font-display text-[clamp(20px,3.2vw,52px)] leading-none font-medium tracking-[-0.03em] break-all max-md:-my-3 max-md:py-3"
           >
             {profile.email}
-            <span className="absolute -bottom-2 left-0 h-[3px] w-full origin-left scale-x-0 bg-accent transition-transform duration-500 ease-out group-hover:scale-x-100" />
+            <span className="absolute -bottom-2 left-0 h-[3px] w-full max-md:-bottom-5 origin-left scale-x-0 bg-accent transition-transform duration-500 ease-out group-hover:scale-x-100" />
           </a>
         </Reveal>
 
@@ -63,7 +63,7 @@ export default function Contact() {
           ))}
         </ul>
 
-        <div className="mt-[clamp(32px,4vw,56px)] flex flex-wrap items-center justify-between gap-4 text-[11px] tracking-[0.16em] text-neutral-600">
+        <div className="mt-[clamp(32px,4vw,56px)] flex flex-wrap items-center justify-between gap-4 text-[11px] tracking-[0.16em] text-neutral-600 max-md:text-[12px] max-md:tracking-[0.1em]">
           <p className="m-0">
             © {profile.year} {profile.name}. {t.contact.rights}
           </p>

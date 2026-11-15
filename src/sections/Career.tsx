@@ -2,7 +2,9 @@ import Section from "../components/Section";
 import Reveal from "../components/Reveal";
 import SpotlightCard from "../components/SpotlightCard";
 import CertificationStrip from "../components/CertificationStrip";
+import CareerTabs from "../components/CareerTabs";
 import { useInView } from "../hooks/useInView";
+import { PHONE_QUERY, useMediaQuery } from "../hooks/useMediaQuery";
 import { FIRST_YEAR, timeline, years, type TimelineEntry } from "../data/timeline";
 import { profile } from "../data/profile";
 import { useI18n } from "../i18n/context";
@@ -21,10 +23,20 @@ function rowsFor(entry: TimelineEntry, i: number) {
  * year line it starts in. A card is as tall as its content, never as tall as the time it covers:
  * the empty space between cards is the time passing. Below 768px it collapses to one column with
  * the axis on the left and a label on each card.
+ * On phones (below md) the timeline gives way to three tabs, see CareerTabs.
  */
 export default function Career() {
   const { t } = useI18n();
+  const phone = useMediaQuery(PHONE_QUERY);
   const { ref, isInView } = useInView<HTMLOListElement>({ threshold: 0.05 });
+
+  if (phone) {
+    return (
+      <Section id="carreira" title={t.career.title}>
+        <CareerTabs />
+      </Section>
+    );
+  }
 
   return (
     <Section id="carreira" title={t.career.title}>

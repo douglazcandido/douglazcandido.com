@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FiHome } from "react-icons/fi";
 import ThemeToggle from "./ThemeToggle";
 import LanguageSwitcher from "./LanguageSwitcher";
+import MenuPreferences from "./MenuPreferences";
 import { useActiveSection } from "../hooks/useActiveSection";
+import { PHONE_QUERY, useMediaQuery } from "../hooks/useMediaQuery";
 import { useI18n } from "../i18n/context";
 import { profile } from "../data/profile";
 
@@ -26,6 +28,9 @@ export default function Nav() {
   const active = useActiveSection(sectionIds);
   const atTop = active === "inicio";
   const { t } = useI18n();
+  const phone = useMediaQuery(PHONE_QUERY);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
   const sections = sectionDefs.map((s) => ({ id: s.id, label: t.nav[s.key] }));
 
   useEffect(() => {
@@ -37,28 +42,74 @@ export default function Nav() {
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
+    // Lets the hero tower stop drawing while the menu covers it.
+    document.documentElement.toggleAttribute("data-menu-open", open);
     return () => {
       document.body.style.overflow = "";
+      document.documentElement.removeAttribute("data-menu-open");
     };
   }, [open]);
+
+  // Phones only: the open menu behaves as a modal. Esc closes it, Tab stays inside it (the page behind
+  // is inert), and focus goes back to the MENU button when it closes.
+  useEffect(() => {
+    if (!open || !phone) return;
+    const button = menuButtonRef.current;
+    const overlay = overlayRef.current;
+    const main = document.querySelector("main");
+    main?.setAttribute("inert", "");
+    overlay?.querySelector<HTMLElement>("a[href]")?.focus({ preventScroll: true });
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        setOpen(false);
+        return;
+      }
+      if (e.key !== "Tab" || !button || !overlay) return;
+      const items = [button, ...overlay.querySelectorAll<HTMLElement>("a[href], button:not([disabled])")];
+      const first = items[0];
+      const last = items[items.length - 1];
+      const current = document.activeElement as HTMLElement | null;
+      if (e.shiftKey && current === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && current === last) {
+        e.preventDefault();
+        first.focus();
+      } else if (!current || !items.includes(current)) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      main?.removeAttribute("inert");
+      button?.focus({ preventScroll: true });
+    };
+  }, [open, phone]);
 
   return (
     <>
       <header
+        id="site-header"
+        data-lenis-prevent={open && phone ? "" : undefined}
         className={`px-nav fixed inset-x-0 top-0 z-50 border-b transition-[background-color,border-color,backdrop-filter] duration-500 ease-out ${
           scrolled || open
             ? "border-divider bg-bg/80 backdrop-blur-md"
             : "border-transparent"
         }`}
       >
-        <nav className="flex items-center justify-end py-[18px]">
+        <nav className="flex items-center justify-end py-[18px] max-md:justify-between max-md:py-2">
           {/* The hero already shows the name at the top; it only joins the menu once you leave it. */}
           <a
             href="#inicio"
             aria-label={profile.name}
             aria-hidden={atTop ? "true" : undefined}
-            tabIndex={atTop ? -1 : 0}
-            className={`display relative text-[24px] leading-none font-bold tracking-[-0.045em] whitespace-nowrap before:absolute before:-inset-x-2 before:-inset-y-[18px] sm:text-[28px] ${
+            tabIndex={atTop || (open && phone) ? -1 : 0}
+            className={`display relative shrink-0 text-[24px] leading-none font-bold tracking-[-0.045em] whitespace-nowrap max-md:py-[10px] before:absolute before:-inset-x-2 before:-inset-y-[18px] sm:text-[28px] ${
               atTop ? "pointer-events-none" : ""
             }`}
           >
@@ -90,7 +141,7 @@ export default function Nav() {
               aria-label={t.nav.home}
               title={t.nav.home}
               aria-current={active === "inicio" ? "true" : undefined}
-              className={`relative inline-flex h-8 w-8 items-center justify-center transition-colors duration-300 before:absolute before:-inset-x-1 before:-inset-y-[18px] ${
+              className={`relative inline-flex h-8 w-8 items-center justify-center transition-colors duration-300 before:absolute before:-inset-x-1 before:-inset-y-[18px] max-md:hidden ${
                 active === "inicio" ? "text-accent" : "text-neutral-500 hover:text-neutral-100"
               }`}
             >
@@ -127,14 +178,18 @@ export default function Nav() {
               })}
             </ul>
             <span aria-hidden="true" className="hidden h-3.5 w-px bg-divider lg:block" />
-            <LanguageSwitcher />
-            <ThemeToggle />
+            {/* On phones language and theme live inside the full-screen menu (MenuPreferences). */}
+            <div className="contents max-md:hidden">
+              <LanguageSwitcher />
+              <ThemeToggle />
+            </div>
             <button
+              ref={menuButtonRef}
               type="button"
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
               aria-controls="menu-overlay"
-              className="relative text-[13px] font-medium tracking-[0.08em] uppercase before:absolute before:-inset-x-2 before:-inset-y-6 lg:hidden"
+              className="relative text-[13px] font-medium tracking-[0.08em] uppercase before:absolute before:-inset-x-2 before:-inset-y-6 max-md:before:hidden max-md:inline-flex max-md:min-h-11 max-md:min-w-11 max-md:items-center max-md:justify-center lg:hidden"
             >
               {open ? t.nav.close : t.nav.menu}
             </button>
@@ -150,7 +205,10 @@ export default function Nav() {
 
       <div
         id="menu-overlay"
-        className={`fixed inset-0 z-40 flex flex-col justify-center bg-bg px-[var(--gutter)] transition-[clip-path] duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] lg:hidden ${
+        ref={overlayRef}
+        inert={!open}
+        data-lenis-prevent
+        className={`fixed inset-0 z-40 flex flex-col justify-center bg-bg px-[var(--gutter)] max-md:overflow-y-auto max-md:overscroll-contain max-md:py-20 max-md:[justify-content:safe_center] transition-[clip-path] duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] lg:hidden ${
           open ? "[clip-path:inset(0_0_0_0)]" : "pointer-events-none [clip-path:inset(0_0_100%_0)]"
         }`}
       >
@@ -172,6 +230,7 @@ export default function Nav() {
             </li>
           ))}
         </ul>
+        <MenuPreferences interactive={open} />
       </div>
     </>
   );

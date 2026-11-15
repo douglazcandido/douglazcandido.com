@@ -413,26 +413,26 @@ html.theme-fade *::after {
   background: var(--color-accent);
 }
 
-/* Compact tower (below 900px, phones and tablets): a box 1 : 1.27 in the empty space above the name,
-   on the right margin, 24px under the header. The name is on the left of it and the summary below
-   both, as before; nothing in the layout moves because the box is absolutely positioned.
-   The box is never wider than 190px nor narrower than 120px, and gets narrower (before it gets
-   closer to the name) on small screens so the tapering foot keeps 16px from the letters; when even
-   120px is too wide for a short screen, the box also rises a little (never above the header's
-   bottom edge). The numbers: the name ends 227px from the left up to 545px wide; the lowest disc is
-   0.231 of the box wide on each side of its center; 0.731 = 0.5 + 0.231. */
+/* Compact tower (below 900px, phones and tablets): a box 1 : 1.27 on the right margin, beside the name,
+   its foot level with the bottom of the name ("Candido") and its wide top rising above the name into the
+   empty space under the header. The summary stays below both; nothing in the layout moves because the
+   box is absolutely positioned.
+   The box is 43vw wide (80px to 190px). It gets narrower on small screens so the tower keeps a few px
+   from the letters, and never so tall that its top (or the label above it) reaches the header.
+   The numbers: the name ends 222px from the left up to 545px wide, its two lines are 1.98 font sizes
+   tall; the tower's foot is 0.086 of the box height above the box's bottom edge; at the height of the
+   first line the tower is (0.46 * w + 43px) / 2.2 wide on each side of its center. */
 .hero-tower--compact {
-  /* Same expression as the hero's padding-top: where the name starts. */
+  /* Same expressions as in Hero.tsx: the name's font size, and where the name starts. */
+  --fs: clamp(60px, 11vw, 196px);
   --pad-top: clamp(140px, 32vh, 320px);
-  /* Widest box for which the foot clears the name (beside it) or does not reach its rows (above it). */
-  --cap: max(calc((100vw - 272px + var(--pad-top) * 0.165) / 0.9406), calc((var(--pad-top) - 79px) / 1.27));
-  /* Landscape phones: the box must also stay above the summary (name height + gap, as in Hero.tsx). */
-  --cap-summary: calc((var(--pad-top) + 1.9 * clamp(60px, 11vw, 196px) + clamp(24px, 3vw, 44px) - 92px) / 1.27);
-  --min-w: 120px;
-  --tw: clamp(var(--min-w), min(43vw, var(--cap), var(--cap-summary)), 190px);
-  /* Only when --min-w is what holds the box up (--cap below it): rise by up to 27px, never past the header. */
-  --lift: clamp(0px, calc((var(--min-w) - var(--cap)) * 2.5), min(27px, calc(232px - var(--pad-top))));
-  top: calc(90px - var(--lift) - var(--pad-top)); /* 90 = 84 + the 6px the name block sits above the padding edge */
+  /* Widest box that keeps ~6px between the tower and the first line of the name. */
+  --cap-name: calc((100vw - 272px) / 0.709);
+  /* Widest box whose top (and the label above it) still clears the header. */
+  --cap-top: calc((var(--pad-top) + 26px) / 1.161);
+  --tw: max(80px, min(43vw, 190px, var(--cap-name), var(--cap-top)));
+  /* Bottom edge of the box = bottom of the name + the empty foot margin of the stage - 2px. */
+  top: calc(1.98 * var(--fs) - 2px - var(--tw) * 1.161);
   width: var(--tw);
   height: calc(var(--tw) * 1.27);
 }
@@ -445,21 +445,14 @@ html.theme-fade *::after {
   translate: none;
 }
 
-/* Very short screens (a 320x568 phone): the foot would meet the name even at the smallest box, so allow a smaller one. */
-@media (max-height: 599px) {
-  .hero-tower--compact {
-    --min-w: 100px;
-  }
-}
-
 /* Never takes a touch: the page scrolls under the finger (taps are read from the window, in tower3d.ts). */
 .hero-tower--compact .hero-tower__stage > canvas {
   touch-action: pan-y;
 }
 
-/* The label of the open opening: a small pill above the tower, on the right margin, just under the header. */
+/* The label of the open opening: a small pill just above the tower, on the right margin. */
 .hero-tower--compact .hero-tower__label {
-  top: calc(var(--lift) - 20px);
+  top: -22px;
   right: 0;
   left: auto;
   padding-right: 0;

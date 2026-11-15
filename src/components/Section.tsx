@@ -3,7 +3,8 @@ import { useInView } from "../hooks/useInView";
 import SectionRule from "./SectionRule";
 
 interface SectionProps {
-  id: string;
+  /** Anchor id; the sections that load lazily get theirs from their LazySection wrapper instead. */
+  id?: string;
   /** Giant heading. */
   title: string;
   children: ReactNode;

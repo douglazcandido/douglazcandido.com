@@ -8,11 +8,11 @@ import { useI18n } from "../i18n/context";
  * running text separated by commas. Semantically each group is a titled <ul>; the commas are
  * real text inside each <li>, so they survive text extraction (crawlers, copy/paste, screen readers).
  */
-export default function Skills() {
+export default function Skills({ id }: { id?: string }) {
   const { t } = useI18n();
 
   return (
-    <Section id="skills" title={t.skills.title}>
+    <Section id={id} title={t.skills.title}>
       <div className="grid grid-cols-1 gap-x-[clamp(32px,4vw,64px)] gap-y-[clamp(28px,3.4vw,48px)] md:grid-cols-2 lg:grid-cols-3">
         {skillGroups.map((group, i) => {
           const headingId = `stack-${group.id}`;

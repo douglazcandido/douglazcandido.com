@@ -25,21 +25,21 @@ function rowsFor(entry: TimelineEntry, i: number) {
  * the axis on the left and a label on each card.
  * On phones (below md) the timeline gives way to three tabs, see CareerTabs.
  */
-export default function Career() {
+export default function Career({ id }: { id?: string }) {
   const { t } = useI18n();
   const phone = useMediaQuery(PHONE_QUERY);
   const { ref, isInView } = useInView<HTMLOListElement>({ threshold: 0.05 });
 
   if (phone) {
     return (
-      <Section id="carreira" title={t.career.title}>
+      <Section id={id} title={t.career.title}>
         <CareerTabs />
       </Section>
     );
   }
 
   return (
-    <Section id="carreira" title={t.career.title}>
+    <Section id={id} title={t.career.title}>
       {/* Column captions, next to the axis (desktop only; on mobile each card carries its own label). */}
       <div aria-hidden="true" className="mb-7 hidden grid-cols-[minmax(0,1fr)_var(--tl-axis)_minmax(0,1fr)] text-[11px] tracking-[0.18em] text-neutral-500 uppercase md:grid">
         <span className="text-right">{t.career.professionalLabel}</span>

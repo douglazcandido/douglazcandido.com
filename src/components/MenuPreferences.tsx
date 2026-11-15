@@ -1,4 +1,4 @@
-import { FiMoon, FiSun } from "react-icons/fi";
+import { MoonIcon, SunIcon } from "./icons";
 import { LANGS, LANG_META, useI18n } from "../i18n/context";
 import { useTheme } from "../hooks/useTheme";
 
@@ -62,7 +62,7 @@ export default function MenuPreferences({ interactive }: { interactive: boolean 
           title={theme === "dark" ? t.a11y.lightTheme : t.a11y.darkTheme}
           className="ml-auto flex min-h-11 min-w-11 items-center justify-center text-neutral-400 transition-colors duration-300"
         >
-          {theme === "dark" ? <FiSun aria-hidden="true" className="h-[18px] w-[18px]" strokeWidth={1.5} /> : <FiMoon aria-hidden="true" className="h-[18px] w-[18px]" strokeWidth={1.5} />}
+          {theme === "dark" ? <SunIcon aria-hidden="true" className="h-[18px] w-[18px]" strokeWidth={1.5} /> : <MoonIcon aria-hidden="true" className="h-[18px] w-[18px]" strokeWidth={1.5} />}
         </button>
       </div>
     </div>

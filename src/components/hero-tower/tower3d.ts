@@ -96,6 +96,8 @@ const HIT_PAD = DISC_HEIGHT * 0.25;
 const MIN_FRAME_MS = 12;
 /** The compact version is capped lower: it is small, and phones should not run hot for it. */
 const COMPACT_MIN_FRAME_MS = 20;
+/** Longest stretch (ms) of the tower's setup that runs without handing the main thread back. */
+const SLICE_MS = 8;
 /** A touch counts as a tap when it moves less than this (px) and ends within this time (ms). */
 const TAP_SLOP = 10;
 const TAP_MS = 600;
@@ -137,15 +139,23 @@ class FaceBuilder {
     const vx = c.p[0] - a.p[0], vy = c.p[1] - a.p[1], vz = c.p[2] - a.p[2];
     const cx = uy * vz - uz * vy, cy = uz * vx - ux * vz, cz = ux * vy - uy * vx;
     const facing = cx * (a.n[0] + b.n[0] + c.n[0]) + cy * (a.n[1] + b.n[1] + c.n[1]) + cz * (a.n[2] + b.n[2] + c.n[2]);
-    if (facing < 0) [b, c] = [c, b];
-    for (const v of [a, b, c]) {
-      this.position.push(v.p[0], v.p[1], v.p[2]);
-      this.normal.push(v.n[0], v.n[1], v.n[2]);
-      this.color.push(v.shade, v.shade, v.shade);
-      this.disc.push(disc);
-      this.rim.push(v.rim);
-      this.glow.push(v.glow);
+    if (facing < 0) {
+      const swap = b;
+      b = c;
+      c = swap;
     }
+    this.push(a, disc);
+    this.push(b, disc);
+    this.push(c, disc);
+  }
+
+  private push(v: Vertex, disc: number): void {
+    this.position.push(v.p[0], v.p[1], v.p[2]);
+    this.normal.push(v.n[0], v.n[1], v.n[2]);
+    this.color.push(v.shade, v.shade, v.shade);
+    this.disc.push(disc);
+    this.rim.push(v.rim);
+    this.glow.push(v.glow);
   }
 
   quad(a: Vertex, b: Vertex, c: Vertex, d: Vertex, disc: number): void {
@@ -357,8 +367,14 @@ const FRAGMENT_MAIN = /* glsl */ `
 
 const smoothstep = (x: number): number => x * x * (3 - 2 * x);
 
-/** Lets the browser run other tasks (input, painting) before the next heavy step. */
-const nextTask = (): Promise<void> => new Promise((resolve) => setTimeout(resolve, 0));
+/**
+ * Lets the browser run other tasks (input, painting) before the next heavy step. `scheduler.yield()` where it
+ * exists (the rest of this function then goes ahead of other queued tasks), a zero timer elsewhere.
+ */
+const nextTask = (): Promise<void> => {
+  const scheduler = (globalThis as { scheduler?: { yield?: () => Promise<void> } }).scheduler;
+  return scheduler?.yield ? scheduler.yield() : new Promise((resolve) => setTimeout(resolve, 0));
+};
 
 export async function mountTower(opts: TowerOptions): Promise<TowerHandle> {
   const { host, interactionRoot, label, onHover, onReady, onLost, signal, compact = false } = opts;
@@ -379,9 +395,29 @@ export async function mountTower(opts: TowerOptions): Promise<TowerHandle> {
   camera.fov = (2 * Math.atan(frameHeight / 2 / CAMERA_DISTANCE) * 180) / Math.PI;
   camera.updateMatrixWorld();
 
+  // Creating the WebGL context is one task, building the geometry another, the rest of the scene a third:
+  // none of them holds the main thread for long, and an abort in between stops the work (see `bail`).
+  const bail = (): TowerHandle => {
+    renderer.dispose();
+    renderer.forceContextLoss();
+    canvas.remove();
+    return { dispose: () => {} };
+  };
+  await nextTask();
+  if (signal.aborted) return bail();
+
   // --- geometry -----------------------------------------------------------------------------
+  // Built a disc at a time, handing the main thread back whenever a slice has used up its budget.
   const faces = new FaceBuilder();
-  for (let i = 0; i < DISC_COUNT; i++) addDisc(faces, i, !compact);
+  let sliceStart = performance.now();
+  for (let i = 0; i < DISC_COUNT; i++) {
+    addDisc(faces, i, !compact);
+    if (performance.now() - sliceStart > SLICE_MS) {
+      await nextTask();
+      if (signal.aborted) return bail();
+      sliceStart = performance.now();
+    }
+  }
   addColumn(faces);
 
   const faceGeometry = new BufferGeometry();
@@ -391,6 +427,12 @@ export async function mountTower(opts: TowerOptions): Promise<TowerHandle> {
   faceGeometry.setAttribute("aDisc", toAttribute(faces.disc, 1));
   faceGeometry.setAttribute("aRim", toAttribute(faces.rim, 1));
   faceGeometry.setAttribute("aGlow", toAttribute(faces.glow, 1));
+
+  await nextTask();
+  if (signal.aborted) {
+    faceGeometry.dispose();
+    return bail();
+  }
 
   // --- materials ----------------------------------------------------------------------------
   const palette = readPalette();
@@ -623,8 +665,18 @@ export async function mountTower(opts: TowerOptions): Promise<TowerHandle> {
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
   }
-  resize();
-  const resizeObserver = new ResizeObserver(resize);
+  // The first size comes from the observer (it always reports once, after the browser has laid the page out),
+  // not from reading `clientWidth` right after appending the canvas, which would force a layout in the middle of
+  // this task. A timer keeps a host without a box from holding the tower back.
+  let sizeKnown: () => void = () => {};
+  const firstSize = new Promise<void>((resolve) => {
+    sizeKnown = resolve;
+    setTimeout(resolve, 500);
+  });
+  const resizeObserver = new ResizeObserver(() => {
+    resize();
+    sizeKnown();
+  });
   resizeObserver.observe(host);
 
   // --- theme --------------------------------------------------------------------------------
@@ -772,6 +824,7 @@ export async function mountTower(opts: TowerOptions): Promise<TowerHandle> {
   try {
     await nextTask();
     if (!signal.aborted) await renderer.compileAsync(scene, camera); // parallel shader compile where supported
+    if (!signal.aborted) await firstSize;
   } catch (error) {
     dispose();
     throw error; // the caller keeps the static illustration

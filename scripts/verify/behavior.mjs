@@ -160,11 +160,11 @@ for (const lang of LANGS) {
     await settle(page);
 
     // theme
-    const before = await page.evaluate(() => document.documentElement.getAttribute("data-theme"));
-    await page.locator("#site-header button:not([aria-pressed]):not([aria-expanded])").first().click();
-    const afterTheme = await page.evaluate(() => document.documentElement.getAttribute("data-theme"));
-    check(`[${lang}] theme toggle flips data-theme`, before !== afterTheme, `${before} -> ${afterTheme}`);
-    await page.locator("#site-header button:not([aria-pressed]):not([aria-expanded])").first().click();
+    // DARK-THEME-DISABLED: the context saves theme "dark" (see newPage); the page must ignore it and have no toggle.
+    // With the dark theme re-enabled (src/config/theme.ts) this check is expected to fail: restore the toggle test then.
+    const theme = await page.evaluate(() => document.documentElement.getAttribute("data-theme"));
+    const toggles = await page.locator("#site-header button:not([aria-pressed]):not([aria-expanded])").count();
+    check(`[${lang}] light theme only: data-theme is light and there is no theme toggle`, theme === "light" && toggles === 0, `data-theme ${theme}, toggles ${toggles}`);
 
     // language switch (also re-renders the sections that arrived lazily)
     const other = LANGS.find((l) => l !== lang);
@@ -276,10 +276,9 @@ for (const lang of LANGS) {
   await page.waitForTimeout(900);
   const open = await page.evaluate(() => !document.getElementById("menu-overlay").hasAttribute("inert") && document.querySelector('button[aria-controls="menu-overlay"]').getAttribute("aria-expanded") === "true");
   check(`[${lang}] phone: the full-screen menu opens`, open);
-  const theme0 = await page.evaluate(() => document.documentElement.getAttribute("data-theme"));
-  await page.locator("#menu-overlay button:not([aria-pressed])").click();
-  const theme1 = await page.evaluate(() => document.documentElement.getAttribute("data-theme"));
-  check(`[${lang}] phone: theme toggle inside the menu`, theme0 !== theme1, `${theme0} -> ${theme1}`);
+  // DARK-THEME-DISABLED: no theme control in the menu; the language buttons stay (44 px touch targets).
+  const prefs = await page.evaluate(() => [...document.querySelectorAll("#menu-overlay button")].map((b) => ({ pressed: b.hasAttribute("aria-pressed"), w: Math.round(b.getBoundingClientRect().width), h: Math.round(b.getBoundingClientRect().height) })));
+  check(`[${lang}] phone: the menu has only the 3 language buttons (44 px) and no theme control`, prefs.length === 3 && prefs.every((p) => p.pressed && p.w >= 44 && p.h >= 44), JSON.stringify(prefs));
   await page.locator("#menu-overlay a[href='#carreira']").click();
   await settle(page, 700, 10000);
   const closed = await page.evaluate(() => document.querySelector('button[aria-controls="menu-overlay"]').getAttribute("aria-expanded") === "false");

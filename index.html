@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -11,8 +11,8 @@
       content="Data and software engineer. From data model to deploy: modeling, pipeline, API and infrastructure."
     />
     <link rel="canonical" href="https://douglazcandido.com/" />
-    <meta name="theme-color" content="#d6d9de" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+    <!-- color-scheme and theme-color metas: generated from src/config/theme.ts (DARK-THEME-DISABLED -> light only) -->
+    <!--theme-head-->
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Douglas Candido" />
@@ -61,12 +61,21 @@
     </script>
 
     <script>
+      // Runs before the first paint. The flag below is filled in at build time from src/config/theme.ts
+      // (DARK-THEME-DISABLED: false -> always light; a saved "dark" is ignored and removed).
       (function () {
+        var darkEnabled = __DARK_THEME_ENABLED__;
+        var root = document.documentElement;
         try {
           var stored = localStorage.getItem("theme");
-          var theme = stored || "light"; // light is the default, whatever the OS prefers
-          if (theme === "light") document.documentElement.setAttribute("data-theme", "light");
+          if (!darkEnabled) {
+            if (stored === "dark") localStorage.removeItem("theme");
+          } else if (stored && stored !== "light") {
+            root.removeAttribute("data-theme"); // dark is the CSS default; light is the default, whatever the OS prefers
+            return;
+          }
         } catch (e) {}
+        root.setAttribute("data-theme", "light");
       })();
     </script>
   </head>

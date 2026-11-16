@@ -48,6 +48,8 @@ import {
   gapRadius,
   rimProfile,
 } from "./towerSpec";
+import { DARK_THEME_ENABLED } from "../../config/theme";
+import { readTheme } from "../../lib/theme";
 
 export interface TowerOptions {
   /** The stage: the canvas is appended to it and fills it. */
@@ -298,7 +300,8 @@ interface Palette {
 }
 
 function readPalette(): Palette {
-  const light = document.documentElement.getAttribute("data-theme") === "light";
+  // DARK-THEME-DISABLED: readTheme() answers "light" while the dark theme is off (src/config/theme.ts).
+  const light = readTheme() === "light";
   const accent = readColor("--color-accent", light ? "#0b4f26" : "#f5c542");
   const surface = readColor("--color-surface", light ? "#e0e2e7" : "#0b0b0c");
   const text = readColor("--color-text", light ? "#14151a" : "#e9e9ed");
@@ -680,11 +683,12 @@ export async function mountTower(opts: TowerOptions): Promise<TowerHandle> {
   resizeObserver.observe(host);
 
   // --- theme --------------------------------------------------------------------------------
+  // DARK-THEME-DISABLED: the theme cannot change while the dark theme is off, so there is nothing to watch.
   const themeObserver = new MutationObserver(() => {
     applyPalette(readPalette());
     if (!running && !disposed && !lost) renderer.render(scene, camera);
   });
-  themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  if (DARK_THEME_ENABLED) themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
   // --- pointer ------------------------------------------------------------------------------
   const noHover = window.matchMedia("(hover: none)");

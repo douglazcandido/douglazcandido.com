@@ -1,0 +1,11 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "douglazcandido",
+  "compatibility_date": "2026-11-15",
+  // Static files only (no Worker script): the Vite build in ./dist is served as is.
+  "assets": {
+    "directory": "./dist",
+    // The site has no path routes (only #anchors on the home page), so an unknown path gets a real 404 with dist/404.html.
+    "not_found_handling": "404-page"
+  }
+}

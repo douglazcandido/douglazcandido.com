@@ -2,6 +2,60 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig, type Plugin, type PluginOption } from 'vite'
 import { visualizer } from 'rollup-plugin-visualizer'
+import { existsSync, readFileSync, writeFileSync } from 'node:fs'
+import { resolve } from 'node:path'
+import { DARK_THEME_ENABLED } from './src/config/theme.ts'
+
+/**
+ * Fills in the theme parts of index.html from the single switch in src/config/theme.ts (DARK_THEME_ENABLED), so the
+ * <head> cannot disagree with the app:
+ *  - <!--theme-head--> becomes the color-scheme and theme-color metas (light only, or light + dark variants);
+ *  - __DARK_THEME_ENABLED__ (in the inline script that runs before the first paint) becomes true or false.
+ * Runs in dev and in the build.
+ */
+function themeHead(): Plugin {
+  const head = DARK_THEME_ENABLED
+    ? [
+        '<meta name="color-scheme" content="light dark" />',
+        '<meta name="theme-color" content="#d6d9de" media="(prefers-color-scheme: light)" />',
+        '<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />',
+      ]
+    : ['<meta name="color-scheme" content="light" />', '<meta name="theme-color" content="#d6d9de" />']
+  return {
+    name: 'theme-head',
+    transformIndexHtml: {
+      order: 'pre',
+      handler(html) {
+        const out = html.replaceAll('<!--theme-head-->', head.join('\n    ')).replaceAll('__DARK_THEME_ENABLED__', String(DARK_THEME_ENABLED))
+        // A token left behind would break the inline script (a ReferenceError before the first paint): fail loudly.
+        if (/__DARK_THEME_ENABLED__|<!--theme-head-->/.test(out)) throw new Error('[theme-head] a theme placeholder was not replaced.')
+        return out
+      },
+    },
+  }
+}
+
+/**
+ * public/404.html is a plain static page, so it cannot know the hashed name Vite gives the font in /assets/. After
+ * the bundle is written, this swaps the __FONT_URL__ placeholder for the real file (the one the site already ships:
+ * nothing is downloaded or duplicated). Fails the build if the font or the placeholder goes missing.
+ */
+function notFoundFont(): Plugin {
+  return {
+    name: 'not-found-font',
+    apply: 'build',
+    writeBundle(options, bundle) {
+      const page = resolve(options.dir ?? 'dist', '404.html')
+      if (!existsSync(page)) return
+      const font = Object.keys(bundle).find((name) => /^assets\/bricolage-grotesque-.*\.woff2$/.test(name))
+      const html = readFileSync(page, 'utf8')
+      if (!font || !html.includes('__FONT_URL__')) {
+        this.error('[not-found-font] 404.html needs the __FONT_URL__ placeholder and the site font in the bundle.')
+      }
+      writeFileSync(page, html.replace('__FONT_URL__', `/${font}`))
+    },
+  }
+}
 
 /**
  * Production only: puts the stylesheet inside index.html (<style>, in the place of the <link>) and drops the
@@ -68,7 +122,7 @@ const analyze: PluginOption[] = process.env.ANALYZE
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss(), inlineCss(), ...analyze],
+  plugins: [react(), tailwindcss(), themeHead(), inlineCss(), notFoundFont(), ...analyze],
   build: {
     // A single stylesheet (it is inlined into index.html anyway). With per-chunk CSS splitting, the shared entry
     // chunk carries the CSS, and every dynamic import that depends on it (Lightbox) lists that .css file in its

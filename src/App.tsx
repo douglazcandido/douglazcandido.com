@@ -6,14 +6,12 @@ import Hero from "./sections/Hero";
 import About from "./sections/About";
 import { useScrollProgress } from "./hooks/useScrollProgress";
 import { useSmoothScroll } from "./hooks/useSmoothScroll";
-import { useDocumentTitle } from "./hooks/useDocumentTitle";
 import { guardAnchors } from "./lib/anchorGuard";
 import { startLazySections } from "./lib/lazySections";
 
 export default function App() {
   useScrollProgress();
   useSmoothScroll();
-  useDocumentTitle();
 
   // Below the first screen the sections are separate chunks, fetched in idle time right after the first paint.
   useEffect(() => {

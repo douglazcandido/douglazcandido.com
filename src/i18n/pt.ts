@@ -6,7 +6,7 @@ export const pt = {
   meta: {
     title: "Douglas Candido | Engenheiro de Dados e Software",
     description:
-      "Engenheiro de dados e software. Do modelo de dados ao deploy: modelagem, pipeline, API e infraestrutura.",
+      "Douglas Candido, engenheiro de dados e software. PostgreSQL, Python e AWS: do modelo de dados ao deploy, com pipelines, APIs e infraestrutura.",
   },
   a11y: {
     progress: "Progresso da página",

@@ -4,7 +4,7 @@ export const en: Dict = {
   meta: {
     title: "Douglas Candido | Data and Software Engineer",
     description:
-      "Data and software engineer. From data model to deploy: modeling, pipeline, API and infrastructure.",
+      "Douglas Candido, data and software engineer. PostgreSQL, Python and AWS: from data model to deploy, with pipelines, APIs and infrastructure.",
   },
   a11y: {
     progress: "Page progress",

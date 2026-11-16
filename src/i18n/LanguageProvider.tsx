@@ -8,13 +8,25 @@ import { es } from "./es";
 const dictionaries = { pt, en, es };
 const STORAGE_KEY = "lang";
 
-/** English is the default; only an explicit earlier choice overrides it. */
+/** Languages the site is translated into, matched against the start of a browser language tag ("pt-BR", "es-ES", "en-US"...). */
+const BROWSER_LANG = /^(pt|es|en)(?:[-_]|$)/i;
+
+/**
+ * Initial language, in this order: (1) a choice saved earlier; (2) the first of the browser's preferred languages
+ * (navigator.languages) that is Portuguese, Spanish or English; (3) English: also for any other language, and for
+ * crawlers or browsers that report none.
+ */
 function getInitialLang(): Lang {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored && (LANGS as readonly string[]).includes(stored)) return stored as Lang;
   } catch {
-    // localStorage unavailable (private mode, blocked storage) - fall back to the default.
+    // localStorage unavailable (private mode, blocked storage) - fall through to the browser language.
+  }
+  const preferred = typeof navigator !== "undefined" ? navigator.languages : undefined;
+  for (const tag of preferred ?? []) {
+    const match = BROWSER_LANG.exec(tag);
+    if (match) return match[1].toLowerCase() as Lang;
   }
   return "en";
 }
@@ -47,10 +59,12 @@ export default function LanguageProvider({ children }: { children: ReactNode }) 
 
   const t = dictionaries[lang];
 
-  // Keep the document in sync: <html lang> and meta description
-  // (the tab title follows the active section, see useDocumentTitle).
+  // Keep the document in sync with the language: <html lang>, the title and the meta description. The title is the
+  // same full one in every section (it only changes with the language); the og: and twitter: tags stay static in
+  // English in index.html, since link-preview crawlers do not run JavaScript.
   useEffect(() => {
     document.documentElement.lang = LANG_META[lang].htmlLang;
+    document.title = t.meta.title;
     document.querySelector('meta[name="description"]')?.setAttribute("content", t.meta.description);
   }, [lang, t]);
 

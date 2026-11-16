@@ -3,6 +3,7 @@ import { HomeIcon } from "./icons";
 import ThemeToggle from "./ThemeToggle";
 import LanguageSwitcher from "./LanguageSwitcher";
 import MenuPreferences from "./MenuPreferences";
+import { DARK_THEME_ENABLED } from "../config/theme";
 import { useActiveSection } from "../hooks/useActiveSection";
 import { PHONE_QUERY, useMediaQuery } from "../hooks/useMediaQuery";
 import { useI18n } from "../i18n/context";
@@ -181,7 +182,8 @@ export default function Nav() {
             {/* On phones language and theme live inside the full-screen menu (MenuPreferences). */}
             <div className="contents max-md:hidden">
               <LanguageSwitcher />
-              <ThemeToggle />
+              {/* DARK-THEME-DISABLED: no toggle while the dark theme is off (src/config/theme.ts). */}
+              {DARK_THEME_ENABLED && <ThemeToggle />}
             </div>
             <button
               ref={menuButtonRef}

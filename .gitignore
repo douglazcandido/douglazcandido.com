@@ -30,3 +30,6 @@ dist-ssr
 
 # Bundle analysis output (ANALYZE=1 npm run build)
 stats
+
+# Wrangler local state
+.wrangler/

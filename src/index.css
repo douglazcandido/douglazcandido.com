@@ -118,6 +118,16 @@
   --color-neutral-900: #c6c9d1;
 }
 
+/* Browser-drawn UI (scrollbars, form fields) follows the theme. DARK-THEME-DISABLED: <html> always carries
+   data-theme="light" while the dark theme is off (src/config/theme.ts), so the second rule never matches. */
+:root {
+  color-scheme: light;
+}
+
+:root:not([data-theme="light"]) {
+  color-scheme: dark;
+}
+
 :root {
   --gutter: clamp(16px, 3vw, 44px);
 }

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#d6d9de">
+<title>Page not found | Douglas Candido</title>
+<style>
+@font-face{font-family:"Bricolage Grotesque";font-weight:300 800;font-display:swap;src:url(__FONT_URL__) format("woff2")}
+:root{color-scheme:light;--bg:#d6d9de;--text:#14151a;--muted:#616370;--accent:#0b4f26;--font:"Bricolage Grotesque",system-ui,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;min-height:100svh;display:grid;place-items:center;padding:24px;background:var(--bg);color:var(--text);font-family:var(--font);-webkit-font-smoothing:antialiased}
+main{max-width:34rem}
+.code{margin:0;font-size:clamp(72px,22vw,168px);font-weight:600;line-height:1;letter-spacing:-.035em;color:var(--accent)}
+h1{margin:.4em 0 .3em;font-size:clamp(24px,5vw,32px);font-weight:600;letter-spacing:-.02em}
+p{margin:0;color:var(--muted);font-size:17px;line-height:1.5}
+a{display:inline-block;margin-top:1.6em;padding:.3em 0;color:var(--text);font-weight:500;text-decoration:none;border-bottom:2px solid var(--accent)}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+</style>
+</head>
+<body>
+<main>
+<p class="code" aria-hidden="true">404</p>
+<h1 id="t">Page not found</h1>
+<p id="m">The address you opened does not exist on this site.</p>
+<a id="a" href="/">Back to the home page</a>
+</main>
+<script>
+(function () {
+  var text = {
+    pt: ["Página não encontrada", "O endereço que você abriu não existe neste site.", "Voltar à página inicial"],
+    en: ["Page not found", "The address you opened does not exist on this site.", "Back to the home page"],
+    es: ["Página no encontrada", "La dirección que abriste no existe en este sitio.", "Volver a la página de inicio"]
+  };
+  var lang = "";
+  try { lang = localStorage.getItem("lang") || ""; } catch (e) {}
+  if (!text[lang]) lang = /^(pt|es)/i.test(navigator.language || "") ? navigator.language.slice(0, 2).toLowerCase() : "en";
+  var t = text[lang];
+  document.documentElement.lang = lang;
+  document.title = t[0] + " | Douglas Candido";
+  document.getElementById("t").textContent = t[0];
+  document.getElementById("m").textContent = t[1];
+  document.getElementById("a").textContent = t[2];
+})();
+</script>
+</body>
+</html>

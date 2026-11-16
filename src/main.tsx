@@ -3,6 +3,10 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 import LanguageProvider from './i18n/LanguageProvider.tsx'
+import { enforceTheme } from './lib/theme.ts'
+
+// DARK-THEME-DISABLED: pins the light theme (and drops a saved "dark"); a no-op once the dark theme is re-enabled.
+enforceTheme()
 
 // Stale deploy guard: a cached (old) HTML/entry points to chunk files that a newer deploy has already removed, so a
 // dynamic import fails ("vite:preloadError"). Reloading once fetches the fresh HTML and its chunks. The timestamp in

@@ -1,6 +1,7 @@
 import { MoonIcon, SunIcon } from "./icons";
 import { LANGS, LANG_META, useI18n } from "../i18n/context";
 import { useTheme } from "../hooks/useTheme";
+import { DARK_THEME_ENABLED } from "../config/theme";
 
 /**
  * Language and theme controls for the full-screen menu on phones (the header no longer has room
@@ -50,21 +51,24 @@ export default function MenuPreferences({ interactive }: { interactive: boolean 
         </div>
       </div>
 
-      <div>
-        <p className={`${label} text-right`}>
-          {t.nav.theme}
-        </p>
-        <button
-          type="button"
-          onClick={toggle}
-          tabIndex={tab}
-          aria-label={theme === "dark" ? t.a11y.toLightTheme : t.a11y.toDarkTheme}
-          title={theme === "dark" ? t.a11y.lightTheme : t.a11y.darkTheme}
-          className="ml-auto flex min-h-11 min-w-11 items-center justify-center text-neutral-400 transition-colors duration-300"
-        >
-          {theme === "dark" ? <SunIcon aria-hidden="true" className="h-[18px] w-[18px]" strokeWidth={1.5} /> : <MoonIcon aria-hidden="true" className="h-[18px] w-[18px]" strokeWidth={1.5} />}
-        </button>
-      </div>
+      {/* DARK-THEME-DISABLED: no theme control while the dark theme is off (src/config/theme.ts). */}
+      {DARK_THEME_ENABLED && (
+        <div>
+          <p className={`${label} text-right`}>
+            {t.nav.theme}
+          </p>
+          <button
+            type="button"
+            onClick={toggle}
+            tabIndex={tab}
+            aria-label={theme === "dark" ? t.a11y.toLightTheme : t.a11y.toDarkTheme}
+            title={theme === "dark" ? t.a11y.lightTheme : t.a11y.darkTheme}
+            className="ml-auto flex min-h-11 min-w-11 items-center justify-center text-neutral-400 transition-colors duration-300"
+          >
+            {theme === "dark" ? <SunIcon aria-hidden="true" className="h-[18px] w-[18px]" strokeWidth={1.5} /> : <MoonIcon aria-hidden="true" className="h-[18px] w-[18px]" strokeWidth={1.5} />}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

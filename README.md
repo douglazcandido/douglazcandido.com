@@ -26,6 +26,24 @@ The site opens at `http://localhost:5173`.
 | `npm run build`   | Type-checks and builds into `dist/`  |
 | `npm run preview` | Serves the production build locally  |
 | `npm run lint`    | Runs the linter                      |
+| `npm run cf:dev`  | Serves `dist/` locally the way Cloudflare does (`wrangler dev`) |
+| `npm run cf:deploy` | `wrangler deploy`; meant for Workers Builds only, not for running by hand |
+
+## Deployment
+
+The site is published as static files on Cloudflare Workers Static Assets, built by Workers Builds from the `main` branch (`npm run build`, output in `dist/`, Node 22 from `.node-version`). There is no Worker script.
+
+- `wrangler.jsonc` names the project, points the assets at `./dist` and turns on `404-page`: the site has no path routes (only `#anchors`), so an unknown address gets a real 404 with `dist/404.html` instead of the home page.
+- `public/_headers` is copied to `dist/` by the build: one-year `immutable` cache for the hashed files in `/assets/`, and security headers on everything. HTML and the other files keep the default (revalidated on every visit).
+- `public/404.html` is a tiny standalone page (PT, EN or ES, from the language saved by the app). The build points it at the site's own font file.
+
+To try it locally, run `npm run build` and then `npm run cf:dev` (it serves `dist/` on `http://localhost:8787`, no deploy, no login).
+
+## Theme
+
+The dark theme is temporarily disabled: the site is light only, the toggle is hidden and a saved or OS-level dark preference is ignored.
+To bring it back, set `DARK_THEME_ENABLED = true` in `src/config/theme.ts` (the one switch, also used to build `index.html`) and rebuild.
+Search for `DARK-THEME-DISABLED` to see every place that reacts to it.
 
 ## Share image
 

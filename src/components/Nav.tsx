@@ -221,7 +221,7 @@ export default function Nav() {
                 href={`#${s.id}`}
                 onClick={() => setOpen(false)}
                 tabIndex={open ? 0 : -1}
-                className="display flex items-baseline gap-4 text-[clamp(44px,14vw,88px)] leading-[1.02] transition-transform duration-700 ease-[cubic-bezier(0.19,1,0.22,1)]"
+                className="display flex items-baseline gap-4 lowercase text-[clamp(44px,14vw,88px)] leading-[1.02] transition-transform duration-700 ease-[cubic-bezier(0.19,1,0.22,1)]"
                 style={{
                   transform: open ? "translateY(0)" : "translateY(110%)",
                   transitionDelay: open ? `${150 + i * 60}ms` : "0ms",

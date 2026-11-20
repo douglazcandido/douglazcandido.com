@@ -2,8 +2,6 @@ import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { FaGithub } from "react-icons/fa";
 import { FiArrowRight, FiArrowUpRight, FiLock } from "react-icons/fi";
 import Section from "../components/Section";
-import ShotStack from "../components/ShotStack";
-import { projectMedia } from "../data/projectMedia";
 import { useI18n } from "../i18n/context";
 
 interface Project {
@@ -14,9 +12,6 @@ interface Project {
   repo?: string;
   /** Closed-source project: shows a non-interactive "private code" badge instead of a link. */
   private?: boolean;
-  /** Key into `projectMedia` and the matching alt texts, when there are screenshots. */
-  media?: string;
-  shotAlts?: readonly string[];
 }
 
 const EASE = "ease-[cubic-bezier(0.19,1,0.22,1)]";
@@ -36,15 +31,13 @@ function Step({ order, active, className = "", children }: { order: number; acti
 }
 
 /**
- * Everything about one project: title, text, links (repository, screenshots) and tags.
+ * Everything about one project: title, text, link (repository) and tags.
  * The text runs the full width of the card, and its size follows the card's own width
  * (container query units), so a wide card gets larger type instead of an empty right side.
  */
 function ProjectDetail({ project, active }: { project: Project; active: boolean }) {
   const { t } = useI18n();
-  const images = project.media ? projectMedia[project.media] : undefined;
-  const hasShots = !!(images && project.shotAlts);
-  const hasLinks = !!project.repo || !!project.private || hasShots;
+  const hasLinks = !!project.repo || !!project.private;
 
   return (
     <div className="@container h-full">
@@ -62,8 +55,8 @@ function ProjectDetail({ project, active }: { project: Project; active: boolean 
 
         {hasLinks && (
           <Step order={2} active={active} className="mt-auto">
-            {/* The row sits directly above the tags (not under the text), so it lines up across projects. min-h matches the row height the screenshot fan gives the GitHub project, so the pill sits at the same place in both */}
-            <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-5 @min-[29rem]:min-h-[71px]">
+            {/* The link sits directly above the tags (not under the text), so it lines up across projects. */}
+            <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-5">
               {project.repo ? (
                 <a
                   href={project.repo}
@@ -84,8 +77,6 @@ function ProjectDetail({ project, active }: { project: Project; active: boolean 
                   {t.projects.privateCode}
                 </span>
               ) : null}
-              {/* The thumbnail fan does not fit beside the button on phones (it ran past the edge): hidden there. */}
-              {hasShots && <ShotStack images={images!} alts={project.shotAlts!} active={active} className="max-md:hidden" />}
             </div>
           </Step>
         )}

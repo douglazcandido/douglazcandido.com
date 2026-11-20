@@ -62,9 +62,8 @@ Bricolage Grotesque is self-hosted: one variable WOFF2 (`opsz` and `wght` axes, 
 ## Performance notes
 
 - **CSS** is inlined into `index.html` at build time (`inlineCss` in `vite.config.ts`): no render-blocking request.
-- **Code splitting:** the first screen (nav, hero, about) is the main chunk. Career, Projects, Stack and Contact are separate chunks (`src/lib/lazySections.ts`), fetched right after the first paint in idle time, not when they scroll into view. Until a chunk is in, `LazySection` keeps its place with an empty block as tall as the real section (language and width aware). Lenis, the screenshot viewer and Three.js are loaded the same way, on their own.
+- **Code splitting:** the first screen (nav, hero, about) is the main chunk. Career, Projects, Stack and Contact are separate chunks (`src/lib/lazySections.ts`), fetched right after the first paint in idle time, not when they scroll into view. Until a chunk is in, `LazySection` keeps its place with an empty block as tall as the real section (language and width aware). Lenis and Three.js are loaded the same way, on their own.
 - **Placeholder heights** come from `src/lib/sectionHeights.generated.ts`, measured on the real page. Run `npm run build && node scripts/measure-sections.mjs` again whenever the copy or the layout of those four sections changes.
-- **Sentinel screenshots:** the 1920x1200 PNG originals live in `assets-src/sentinel/` (not part of the build). `node scripts/optimize-sentinel.mjs` writes the WebP variants the site uses to `src/assets/projects/sentinel/` (needs `sharp`, a dev dependency).
 - **Bundle analysis:** `ANALYZE=1 npm run build` writes `stats/stats.json` and `stats/stats.html` (not part of `dist/`).
 - **Checks** (Playwright, against any running build): `scripts/verify/` has the visual capture and comparison, the behavior checks, the placeholder accuracy check and a blocking-time measurement. Each file starts with a comment on how to run it.
 

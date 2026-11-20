@@ -125,7 +125,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss(), themeHead(), inlineCss(), notFoundFont(), ...analyze],
   build: {
     // A single stylesheet (it is inlined into index.html anyway). With per-chunk CSS splitting, the shared entry
-    // chunk carries the CSS, and every dynamic import that depends on it (Lightbox) lists that .css file in its
+    // chunk carries the CSS, and every dynamic import that depends on it lists that .css file in its
     // preload map; since the file is deleted from the output, the preload helper rejects with a 404.
     cssCodeSplit: false,
     // The Sentinel thumbnails are a few KB each: inlined as base64 they would swell the Projects chunk with bytes

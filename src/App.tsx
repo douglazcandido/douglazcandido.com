@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import Nav from "./components/Nav";
-import ScrollRail from "./components/ScrollRail";
 import LazySection from "./components/LazySection";
 import Hero from "./sections/Hero";
 import About from "./sections/About";
@@ -23,7 +22,6 @@ export default function App() {
   return (
     <div className="relative isolate min-h-screen overflow-x-clip bg-bg text-text">
       <Nav />
-      <ScrollRail />
       <main className="relative">
         <Hero />
         <About />

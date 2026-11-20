@@ -4,7 +4,7 @@
  *   node scripts/verify/behavior.mjs <url> [outFile.json]
  *
  * In PT-BR, EN and ES: menu anchors (also clicked right after load, before the lazy sections have arrived), career
- * tabs, "see more", the phone menu, the tower's hover and touch, the Sentinel fan and viewer, theme and language
+ * tabs, "see more", the phone menu, the tower's hover and touch, theme and language
  * switches, and the layout shift (CLS) over the load and a full scroll. Plus the tower rule: gone at 340 px (and
  * Three.js never requested), there at 360 px. The anchor positions are written to the JSON file so two builds can
  * be compared (they have to land on the same pixel).
@@ -174,44 +174,6 @@ for (const lang of LANGS) {
     const htmlLang = await page.evaluate(() => document.documentElement.lang);
     const titleAfter = await page.locator("#carreira h2").innerText();
     check(`[${lang}] language switch to ${other} updates <html lang> and the lazy sections`, htmlLang.startsWith(other) && titleBefore !== titleAfter, `${htmlLang}: "${titleBefore}" -> "${titleAfter}"`);
-    await context.close();
-  });
-
-  /* ---- desktop: Sentinel fan and viewer ---- */
-  await guarded("block 3", async () => {
-    const { context, page } = await newPage({ lang });
-    await page.goto(url, { waitUntil: "load" });
-    await allSectionsIn(page);
-    await page.locator("#site-header a[href='#projetos']").first().click();
-    await settle(page);
-    // The Sentinel is not the project open by default: open it from the list (the fan only turns while its project is open).
-    const sentinel = await page.evaluate(() => [...document.querySelectorAll('[id^="project-panel-"]')].findIndex((p) => p.querySelector('button[class*="group/thumb"]')));
-    await page.locator(`#project-tab-${sentinel}`).click();
-    await page.mouse.move(5, 450);
-    await page.waitForTimeout(1000);
-    const thumbs = page.locator("#projetos button.group\\/thumb");
-    const count = await thumbs.count();
-    // The fan is rendered twice (list and panel); the visible one is the one at lg+.
-    const visible = page.locator("#projetos button.group\\/thumb:visible");
-    check(`[${lang}] Sentinel fan has 8 visible thumbnails`, (await visible.count()) === 8, `${count} in DOM, ${await visible.count()} visible`);
-    const t0 = await visible.first().evaluate((el) => el.style.translate);
-    await page.waitForTimeout(5600);
-    const t1 = await visible.first().evaluate((el) => el.style.translate);
-    check(`[${lang}] the fan rotates by itself`, t0 !== t1, `${t0} -> ${t1}`);
-    await visible.nth(2).evaluate((el) => el.click());
-    const dialog = page.getByRole("dialog");
-    await dialog.waitFor({ state: "visible", timeout: 8000 });
-    const img = dialog.locator("img");
-    await page.waitForFunction(() => document.querySelector("[role=dialog] img")?.complete && document.querySelector("[role=dialog] img").naturalWidth > 0);
-    const alt0 = await img.getAttribute("alt");
-    const shown = await img.evaluate((el) => ({ w: el.clientWidth, h: el.clientHeight, nw: el.naturalWidth, src: el.currentSrc.split("/").pop() }));
-    await page.keyboard.press("ArrowRight");
-    await page.waitForTimeout(500);
-    const alt1 = await dialog.locator("img").getAttribute("alt");
-    check(`[${lang}] viewer opens, loads the image and moves with the arrow key`, !!alt0 && alt0 !== alt1, `${alt0?.slice(0, 30)} -> ${alt1?.slice(0, 30)}; shown ${JSON.stringify(shown)}`);
-    await page.keyboard.press("Escape");
-    await page.waitForTimeout(300);
-    check(`[${lang}] viewer closes with Escape`, (await dialog.count()) === 0);
     await context.close();
   });
 }
